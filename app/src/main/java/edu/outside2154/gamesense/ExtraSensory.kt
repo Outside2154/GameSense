@@ -5,13 +5,13 @@ import android.os.Environment
 import org.json.JSONObject
 import java.io.File
 
-private val FILE_PREFIX_UUID_DIR = "extrasensory.labels."
-private val FILE_SUFFIX_SERVER_PREDICTIONS = ".server_predictions.json"
-private val FILE_SUFFIX_USER_REPORTED_LABELS = ".user_reported_labels.json"
+const val FILE_PREFIX_UUID_DIR = "extrasensory.labels."
+const val FILE_SUFFIX_SERVER_PREDICTIONS = ".server_predictions.json"
+const val FILE_SUFFIX_USER_REPORTED_LABELS = ".user_reported_labels.json"
 
-private val JSON_FIELD_LABEL_NAMES = "label_names"
-private val JSON_FIELD_LABEL_PROBABILITIES = "label_probs"
-private val JSON_FIELD_LOCATION_COORDINATES = "location_lat_long"
+const val JSON_FIELD_LABEL_NAMES = "label_names"
+const val JSON_FIELD_LABEL_PROBABILITIES = "label_probs"
+const val JSON_FIELD_LOCATION_COORDINATES = "location_lat_long"
 
 /**
  * Manages ExtraSensory resources.
