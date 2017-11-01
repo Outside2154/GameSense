@@ -16,12 +16,11 @@ class MainActivity : AppCompatActivity() {
                 true) ?: return
         val labelsAndProbs = parseServerPredictionLabelProbabilities(fileContent) ?: return
         val latLong = parseLocationLatitudeLongitude(fileContent) ?: return
-        val latlongstr = "(${latLong.size}): <${latLong[0]}, ${latLong[1]}>"
-        val pairsStr = "${labelsAndProbs.size} labels:\n" + labelsAndProbs.map {
-            "${it.first}: ${it.second}"
+        val pairsStr = "${labelsAndProbs.size} labels:\n" + labelsAndProbs.entries.map {
+            "${it.key}: ${it.value}"
         }
-        val top = labelsAndProbs.maxBy { it.second }?.first ?: "None"
-        val textToPresent = "LatLong: ${latlongstr}\n\nServer predictions:\n${pairsStr}\n\nTop: ${top}"
+        val top = labelsAndProbs.maxBy { it.value }?.key ?: "None"
+        val textToPresent = "LatLong: ${latLong.toString()}\n\nServer predictions:\n${pairsStr}\n\nTop: ${top}"
         val hw = findViewById<TextView>(R.id.hello_world)
         hw.setText(textToPresent)
     }
