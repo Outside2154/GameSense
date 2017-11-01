@@ -2,11 +2,10 @@ package edu.outside2154.gamesense
 
 import android.content.Context
 import android.os.Environment
-
 import org.json.JSONObject
-
 import java.io.File
 
+private val FILE_PREFIX_UUID_DIR = "extrasensory.labels."
 private val FILE_SUFFIX_SERVER_PREDICTIONS = ".server_predictions.json"
 private val FILE_SUFFIX_USER_REPORTED_LABELS = ".user_reported_labels.json"
 
@@ -15,85 +14,92 @@ private val JSON_FIELD_LABEL_PROBABILITIES = "label_probs"
 private val JSON_FIELD_LOCATION_COORDINATES = "location_lat_long"
 
 /**
- * Return the directory, where a user's ExtraSensory-App label files should be
- * @param ctx The return value of getApplicationContext()
- * @param uuidPrefix The prefix (8 characters) of the user's UUID
- * @return The user's files' directory
+ * Manages ExtraSensory resources.
+ * @param ctx The return value of [Context.getApplicationContext].
  */
-fun getUserFilesDirectory(ctx: Context, uuidPrefix: String): File? {
-    val esCtx = ctx.createPackageContext("edu.ucsd.calab.extrasensory", 0)
-    val esDir = File(
-            esCtx.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS),
-            "extrasensory.labels." + uuidPrefix)
-    return if (esDir.exists()) esDir else null
+class ExtraSensory(private val ctx: Context) {
+    private val esCtx = ctx.createPackageContext("edu.ucsd.calab.extrasensory", 0)
+
+    /**
+     * The ExtraSensory directory.
+     */
+    private val directory: File? by lazy {
+        val esDir = esCtx.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)
+        if (esDir.exists()) esDir else null
+    }
+
+    /**
+     * All the available [ExtraSensoryUser]s.
+     */
+    val users : List<ExtraSensoryUser>?
+        get() = directory?.list { _, s ->
+            s.startsWith(FILE_PREFIX_UUID_DIR)
+        }?.map {
+            ExtraSensoryUser(File(directory, it), it.removePrefix(FILE_PREFIX_UUID_DIR))
+        }
 }
 
 /**
- * Get the list of timestamps, for which this user has saved files from ExtraSensory App.
- * @param ctx The return value of getApplicationContext()
- * @param uuidPrefix The prefix (8 characters) of the user's UUID
- * @return List of timestamps (strings), each representing a minute that has a file for this user.
- * The list will be sorted from earliest to latest.
- * In case the user's directory was not found, null will be returned.
+ * Corresponds to a user of ExtraSensory.
+ * @param directory The directory of the corresponding user.
+ * @param uuid The UUID of the corresponding user.
  */
-fun getTimestampsForUser(ctx: Context, uuidPrefix: String): List<String>? {
-    // Filter out so only timestamp files remain, then get the timestamps (chars 0-9).
-    return getUserFilesDirectory(ctx, uuidPrefix)?.list { _, s ->
-        s.endsWith(FILE_SUFFIX_SERVER_PREDICTIONS) || s.endsWith(FILE_SUFFIX_USER_REPORTED_LABELS)
-    }?.map { it.slice(0..9) }
+class ExtraSensoryUser internal constructor(private val directory: File, val uuid: String) {
+
+    /**
+     * [ExtraSensoryFile]s for all recorded data for an [ExtraSensoryUser].
+     * Includes both server predictions and user-reported labels.
+     */
+    val files: List<ExtraSensoryFile>
+        get() = directory.list { _, s ->
+            s.endsWith(FILE_SUFFIX_SERVER_PREDICTIONS) ||
+                    s.endsWith(FILE_SUFFIX_USER_REPORTED_LABELS)
+        }.map {
+            ExtraSensoryFile(
+                    File(directory, it),
+                    it.slice(0..9),
+                    it.endsWith(FILE_SUFFIX_SERVER_PREDICTIONS))
+        }
 }
 
 /**
- * Read text from the label file saved by ExtraSensory App, for a particualr minute-example.
- * @param ctx The return value of getApplicationContext()
- * @param uuidPrefix The prefix (8 characters) of the user's UUID
- * @param timestamp The timestamp of the desired minute example
- * @param useServerPreds Read the server-predictions if true, and the user-reported labels if false
- * @return The text inside the file, or null if had trouble finding or reading the file
+ * Holds ExtraSensory reading file information.
+ * @property timestamp The associated timestamp.
+ * @property isServer If true, is a server prediction. Otherwise, is a user reported label.
+ * @property file The associated [File].
  */
-fun readESALabelsFileForMinute(ctx: Context, uuidPrefix: String, timestamp: String,
-                               useServerPreds: Boolean): String? {
-    val esaFilesDir = getUserFilesDirectory(ctx, uuidPrefix) ?: return null
+class ExtraSensoryFile internal constructor(private val file: File,
+                                            val timestamp: String,
+                                            val isServer: Boolean) {
 
-    val fileSuffix = if (useServerPreds) FILE_SUFFIX_SERVER_PREDICTIONS
-    else FILE_SUFFIX_USER_REPORTED_LABELS
+    /**
+     * The associated [ExtraSensoryPrediction].
+     */
+    val prediction: ExtraSensoryPrediction?
+        get() {
+            val json = JSONObject(file.readText())
+            val json_labels = json.getJSONArray(JSON_FIELD_LABEL_NAMES) ?: return null
+            val json_probs = json.getJSONArray(JSON_FIELD_LABEL_PROBABILITIES) ?: return null
+            val json_loc = json.getJSONArray(JSON_FIELD_LOCATION_COORDINATES) ?: return null
 
-    val file = File(esaFilesDir, timestamp + fileSuffix)
+            // Sanity check the JSON.
+            if (json_labels.length() != json_probs.length()) return null
+            if (json_loc.length() != 2) return null
 
-    return file.toString()
+            val preds = (0 until json_labels.length()).map {
+                Pair(json_labels.getString(it), json_probs.getDouble(it))
+            }.toMap()
+            val loc = Pair(json_loc.getDouble(0), json_loc.getDouble(1))
+            return ExtraSensoryPrediction(preds, loc)
+        }
 }
 
 /**
- * Prse the content of a minute's server-prediction file to extract the labels and probabilities
- * assigned to the labels.
- * @param predictionFileContent The content of a specific minute server-prediction file
- * @return List of label name and probability pairs, or null if had trouble.
+ * Holds information for an ExtraSensory file.
+ * @property predictions A mapping of labels to confidence level.
+ * @property location A latitude/longitude pair.
  */
-fun parseServerPredictionLabelProbabilities(predictionFileContent: String): Map<String, Double>? {
-    val json = JSONObject(predictionFileContent)
-    val labels = json.getJSONArray(JSON_FIELD_LABEL_NAMES) ?: return null
-    val probs = json.getJSONArray(JSON_FIELD_LABEL_PROBABILITIES) ?: return null
-    if (labels.length() != probs.length()) return null
-
-    return (0 until labels.length()).map {
-        Pair(labels.getString(it), probs.getDouble(it))
-    }.toMap()
-}
-
-/**
- * Parse the content of a minute's server-prediction file to extract the representative location
- * coordinates for that minute.
- * @param predictionFileContent The content of a specific minute server-prediction file
- * @return An array of 2 numbers (or null if had trouble parsing the file or if there were no
- * coordinates available).
- * The numbers are decimal degrees values for latitude and longitude geographic coordinates.
- */
-fun parseLocationLatitudeLongitude(predictionFileContent: String): Pair<Double, Double>? {
-    val jsonObject = JSONObject(predictionFileContent)
-    val loc = jsonObject.getJSONArray(JSON_FIELD_LOCATION_COORDINATES) ?: return null
-
-    // Expect 2 values.
-    if (loc.length() != 2) return null
-
-    return Pair(loc.getDouble(0), loc.getDouble(1))
-}
+data class ExtraSensoryPrediction
+internal constructor(
+        val predictions: Map<String, Double>,
+        val location: Pair<Double, Double>)
