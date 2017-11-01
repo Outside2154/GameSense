@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "857762939271",
+    "firebase_url": "https://gamesense-aa889.firebaseio.com",
+    "project_id": "gamesense-aa889",
+    "storage_bucket": "gamesense-aa889.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:857762939271:android:1d78075c25598824",
+        "android_client_info": {
+          "package_name": "edu.outside2154.gamesense"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "857762939271-hlr5b27ueiebc708s9mqopqis9vpmr7r.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB5rWS9oT3rfaygpPcnJtZY-Gbol5HH1ec"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
