@@ -5,10 +5,10 @@ import android.os.Environment
 import org.json.JSONObject
 import java.io.File
 
+const val ES_PACKAGE_NAME = "edu.ucsd.calab.extrasensory"
 const val FILE_PREFIX_UUID_DIR = "extrasensory.labels."
 const val FILE_SUFFIX_SERVER_PREDICTIONS = ".server_predictions.json"
 const val FILE_SUFFIX_USER_REPORTED_LABELS = ".user_reported_labels.json"
-
 const val JSON_FIELD_LABEL_NAMES = "label_names"
 const val JSON_FIELD_LABEL_PROBABILITIES = "label_probs"
 const val JSON_FIELD_LOCATION_COORDINATES = "location_lat_long"
@@ -18,7 +18,7 @@ const val JSON_FIELD_LOCATION_COORDINATES = "location_lat_long"
  * @param ctx The return value of [Context.getApplicationContext].
  */
 class ExtraSensory(private val ctx: Context) {
-    private val esCtx = ctx.createPackageContext("edu.ucsd.calab.extrasensory", 0)
+    private val esCtx = ctx.createPackageContext(ES_PACKAGE_NAME, 0)
 
     /**
      * The ExtraSensory directory.
@@ -65,7 +65,7 @@ class ExtraSensoryUser internal constructor(private val directory: File, val uui
 /**
  * Holds ExtraSensory reading file information.
  * @property timestamp The associated timestamp.
- * @property isServer If true, is a server prediction. Otherwise, is a user reported label.
+ * @property isServer If true, is a server info. Otherwise, is a user reported label.
  * @property file The associated [File].
  */
 class ExtraSensoryFile internal constructor(private val file: File,
@@ -73,9 +73,9 @@ class ExtraSensoryFile internal constructor(private val file: File,
                                             val isServer: Boolean) {
 
     /**
-     * The associated [ExtraSensoryPrediction].
+     * The associated [ExtraSensoryInfo].
      */
-    val prediction: ExtraSensoryPrediction?
+    val info: ExtraSensoryInfo?
         get() {
             val json = JSONObject(file.readText())
             val json_labels = json.getJSONArray(JSON_FIELD_LABEL_NAMES) ?: return null
@@ -90,7 +90,7 @@ class ExtraSensoryFile internal constructor(private val file: File,
                 Pair(json_labels.getString(it), json_probs.getDouble(it))
             }.toMap()
             val loc = Pair(json_loc.getDouble(0), json_loc.getDouble(1))
-            return ExtraSensoryPrediction(preds, loc)
+            return ExtraSensoryInfo(preds, loc)
         }
 }
 
@@ -99,7 +99,7 @@ class ExtraSensoryFile internal constructor(private val file: File,
  * @property predictions A mapping of labels to confidence level.
  * @property location A latitude/longitude pair.
  */
-data class ExtraSensoryPrediction
+data class ExtraSensoryInfo
 internal constructor(
         val predictions: Map<String, Double>,
         val location: Pair<Double, Double>)

@@ -9,7 +9,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val latest = ExtraSensory(applicationContext).users?.first()?.files?.first()?.prediction
+        val latest = ExtraSensory(applicationContext).users?.first()?.files?.first()?.info
         val hw = findViewById<TextView>(R.id.hello_world)
         hw.text = latest.toString()
     }
