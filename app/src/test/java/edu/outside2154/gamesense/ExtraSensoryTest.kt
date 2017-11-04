@@ -4,6 +4,7 @@ import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 import java.io.File
+import java.util.*
 
 private const val ES_USER = "6DF0201C"
 
@@ -31,7 +32,7 @@ class ExtraSensoryUserTest {
 class ExtraSensoryInfoTest {
     @Test
     fun testTopPrediction() {
-        val info = ExtraSensoryInfo(mapOf(
+        val info = ExtraSensoryInfo(Date(0), mapOf(
                 "activity1" to 0.5,
                 "activity2" to 0.9,
                 "activity3" to 0.7

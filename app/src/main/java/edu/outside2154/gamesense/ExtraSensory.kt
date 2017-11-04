@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Environment
 import org.json.JSONObject
 import java.io.File
+import java.util.*
 
 const val ES_PACKAGE_NAME = "edu.ucsd.calab.extrasensory"
 const val FILE_PREFIX_UUID_DIR = "extrasensory.labels."
@@ -69,14 +70,15 @@ class ExtraSensoryUser constructor(private val directory: File, val uuid: String
  * @property file The associated [File].
  */
 class ExtraSensoryFile constructor(private val file: File,
-                                            val timestamp: String,
-                                            val isServer: Boolean) {
+                                   val timestamp: String,
+                                   val isServer: Boolean) {
 
     /**
      * The associated [ExtraSensoryInfo].
      */
     val info: ExtraSensoryInfo?
         get() {
+            val time = timestamp.toLong()
             val json = JSONObject(file.readText())
             val json_labels = json.getJSONArray(JSON_FIELD_LABEL_NAMES) ?: return null
             val json_probs = json.getJSONArray(JSON_FIELD_LABEL_PROBABILITIES) ?: return null
@@ -90,16 +92,18 @@ class ExtraSensoryFile constructor(private val file: File,
                 json_labels.getString(it) to json_probs.getDouble(it)
             }.toMap()
             val loc = json_loc.getDouble(0) to json_loc.getDouble(1)
-            return ExtraSensoryInfo(preds, loc)
+            return ExtraSensoryInfo(Date(time * 1000), preds, loc)
         }
 }
 
 /**
  * Holds information for an ExtraSensory file.
+ * @property time A [Date] object representing the timestamp of the file.
  * @property predictions A mapping of labels to confidence level.
  * @property location A latitude/longitude pair.
  */
 data class ExtraSensoryInfo constructor(
+        val time: Date,
         val predictions: Map<String, Double>,
         val location: Pair<Double, Double>) {
     val topPrediction: String?
