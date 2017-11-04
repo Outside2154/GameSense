@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Environment
 import org.json.JSONObject
 import java.io.File
+import java.util.*
 
 const val ES_PACKAGE_NAME = "edu.ucsd.calab.extrasensory"
 const val FILE_PREFIX_UUID_DIR = "extrasensory.labels."
@@ -57,20 +58,20 @@ class ExtraSensoryUser constructor(private val directory: File, val uuid: String
         }.map {
             ExtraSensoryFile(
                     File(directory, it),
-                    it.slice(0..9),
+                    Date(it.slice(0..9).toLong() * 1000),
                     it.endsWith(FILE_SUFFIX_SERVER_PREDICTIONS))
         }
 }
 
 /**
  * Holds ExtraSensory reading file information.
- * @property timestamp The associated timestamp.
- * @property isServer If true, is a server info. Otherwise, is a user reported label.
  * @property file The associated [File].
+ * @property creationTime A [Date] object representing the time the file was created.
+ * @property isServer If true, is a server info. Otherwise, is a user reported label.
  */
 class ExtraSensoryFile constructor(private val file: File,
-                                            val timestamp: String,
-                                            val isServer: Boolean) {
+                                   val creationTime: Date,
+                                   val isServer: Boolean) {
 
     /**
      * The associated [ExtraSensoryInfo].
@@ -90,16 +91,18 @@ class ExtraSensoryFile constructor(private val file: File,
                 json_labels.getString(it) to json_probs.getDouble(it)
             }.toMap()
             val loc = json_loc.getDouble(0) to json_loc.getDouble(1)
-            return ExtraSensoryInfo(preds, loc)
+            return ExtraSensoryInfo(creationTime, preds, loc)
         }
 }
 
 /**
  * Holds information for an ExtraSensory file.
+ * @property creationTime A [Date] object representing the time the file for this info was created.
  * @property predictions A mapping of labels to confidence level.
  * @property location A latitude/longitude pair.
  */
 data class ExtraSensoryInfo constructor(
+        val creationTime: Date,
         val predictions: Map<String, Double>,
         val location: Pair<Double, Double>) {
     val topPrediction: String?
