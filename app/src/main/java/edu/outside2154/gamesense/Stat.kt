@@ -15,6 +15,10 @@ data class StatItems(val items: Map<String, Double>) {
     }
 }
 
+enum class StatType {
+    HEALTH, INT, ATK
+}
+
 public class Stat (initGoals: Map<String, Double>) {
 
     var goals = StatItems(mapOf())

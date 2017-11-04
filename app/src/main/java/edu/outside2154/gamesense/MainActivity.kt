@@ -16,4 +16,8 @@ class MainActivity : AppCompatActivity() {
         hw.text = latest.toString()
     }
 }
+<<<<<<< Updated upstream
 
+=======
+l
+>>>>>>> Stashed changes
