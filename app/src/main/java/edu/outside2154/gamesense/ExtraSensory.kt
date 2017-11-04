@@ -102,4 +102,7 @@ class ExtraSensoryFile internal constructor(private val file: File,
 data class ExtraSensoryInfo
 internal constructor(
         val predictions: Map<String, Double>,
-        val location: Pair<Double, Double>)
+        val location: Pair<Double, Double>) {
+    val topPrediction: String?
+        get() = predictions.maxBy { it.value }?.key
+}

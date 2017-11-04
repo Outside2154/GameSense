@@ -27,3 +27,15 @@ class ExtraSensoryUserTest {
         assertEquals(true, file.isServer)
     }
 }
+
+class ExtraSensoryInfoTest {
+    @Test
+    fun testTopPrediction() {
+        val info = ExtraSensoryInfo(mapOf(
+                "activity1" to 0.5,
+                "activity2" to 0.9,
+                "activity3" to 0.7
+        ), Pair(1.0, 2.0))
+        assertEquals("activity2", info.topPrediction)
+    }
+}
