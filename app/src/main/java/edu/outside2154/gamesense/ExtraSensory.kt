@@ -65,12 +65,12 @@ class ExtraSensoryUser constructor(private val directory: File, val uuid: String
 
 /**
  * Holds ExtraSensory reading file information.
- * @property time A [Date] object representing the time of the file.
- * @property isServer If true, is a server info. Otherwise, is a user reported label.
  * @property file The associated [File].
+ * @property creationTime A [Date] object representing the time the file was created.
+ * @property isServer If true, is a server info. Otherwise, is a user reported label.
  */
 class ExtraSensoryFile constructor(private val file: File,
-                                   val time: Date,
+                                   val creationTime: Date,
                                    val isServer: Boolean) {
 
     /**
@@ -91,18 +91,18 @@ class ExtraSensoryFile constructor(private val file: File,
                 json_labels.getString(it) to json_probs.getDouble(it)
             }.toMap()
             val loc = json_loc.getDouble(0) to json_loc.getDouble(1)
-            return ExtraSensoryInfo(time, preds, loc)
+            return ExtraSensoryInfo(creationTime, preds, loc)
         }
 }
 
 /**
  * Holds information for an ExtraSensory file.
- * @property time A [Date] object representing the time of the info.
+ * @property creationTime A [Date] object representing the time the file for this info was created.
  * @property predictions A mapping of labels to confidence level.
  * @property location A latitude/longitude pair.
  */
 data class ExtraSensoryInfo constructor(
-        val time: Date,
+        val creationTime: Date,
         val predictions: Map<String, Double>,
         val location: Pair<Double, Double>) {
     val topPrediction: String?

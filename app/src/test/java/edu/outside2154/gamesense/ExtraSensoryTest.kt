@@ -24,7 +24,7 @@ class ExtraSensoryFileTest {
         val time = Date(ES_TIME.toLong() * 1000)
         val info = ExtraSensoryFile(esFile, time, true).info ?:
                 throw AssertionError("Info is null.")
-        assertEquals(time, info.time)
+        assertEquals(time, info.creationTime)
         assertEquals(51, info.predictions.size)
         assertEquals(32.8703247, info.location.first, 1e-7)
         assertEquals(-117.2155813, info.location.second, 1e-7)
@@ -47,7 +47,7 @@ class ExtraSensoryUserTest {
         assertEquals(1, files.size)
 
         val file = files.first()
-        assertEquals(ES_TIME, (file.time.time / 1000).toString())
+        assertEquals(ES_TIME, (file.creationTime.time / 1000).toString())
         assertEquals(true, file.isServer)
     }
 }
