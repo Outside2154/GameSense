@@ -44,7 +44,7 @@ class ExtraSensory(private val ctx: Context) {
  * @param directory The directory of the corresponding user.
  * @param uuid The UUID of the corresponding user.
  */
-class ExtraSensoryUser internal constructor(private val directory: File, val uuid: String) {
+class ExtraSensoryUser constructor(private val directory: File, val uuid: String) {
 
     /**
      * [ExtraSensoryFile]s for all recorded data for an [ExtraSensoryUser].
@@ -68,7 +68,7 @@ class ExtraSensoryUser internal constructor(private val directory: File, val uui
  * @property isServer If true, is a server info. Otherwise, is a user reported label.
  * @property file The associated [File].
  */
-class ExtraSensoryFile internal constructor(private val file: File,
+class ExtraSensoryFile constructor(private val file: File,
                                             val timestamp: String,
                                             val isServer: Boolean) {
 
@@ -87,9 +87,9 @@ class ExtraSensoryFile internal constructor(private val file: File,
             if (json_loc.length() != 2) return null
 
             val preds = (0 until json_labels.length()).map {
-                Pair(json_labels.getString(it), json_probs.getDouble(it))
+                json_labels.getString(it) to json_probs.getDouble(it)
             }.toMap()
-            val loc = Pair(json_loc.getDouble(0), json_loc.getDouble(1))
+            val loc = json_loc.getDouble(0) to json_loc.getDouble(1)
             return ExtraSensoryInfo(preds, loc)
         }
 }
@@ -99,8 +99,7 @@ class ExtraSensoryFile internal constructor(private val file: File,
  * @property predictions A mapping of labels to confidence level.
  * @property location A latitude/longitude pair.
  */
-data class ExtraSensoryInfo
-internal constructor(
+data class ExtraSensoryInfo constructor(
         val predictions: Map<String, Double>,
         val location: Pair<Double, Double>) {
     val topPrediction: String?
