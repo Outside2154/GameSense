@@ -22,7 +22,7 @@ import edu.outside2154.gamesense.fragment.ChecklistFragment;
 import edu.outside2154.gamesense.fragment.HomeFragment;
 import edu.outside2154.gamesense.fragment.SettingsFragment;
 
-public class MainActivity extends AppCompatActivity {
+public class NavActivity extends AppCompatActivity {
     private DrawerLayout mDrawer;
     private Toolbar toolbar;
     private NavigationView nvDrawer;
@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_nav);
 
         // Set a Toolbar to replace the ActionBar.
         toolbar = (Toolbar) findViewById(R.id.toolbar);
