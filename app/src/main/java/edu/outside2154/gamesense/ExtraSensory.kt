@@ -79,18 +79,18 @@ class ExtraSensoryFile constructor(private val file: File,
     val info: ExtraSensoryInfo?
         get() {
             val json = JSONObject(file.readText())
-            val json_labels = json.getJSONArray(JSON_FIELD_LABEL_NAMES) ?: return null
-            val json_probs = json.getJSONArray(JSON_FIELD_LABEL_PROBABILITIES) ?: return null
-            val json_loc = json.getJSONArray(JSON_FIELD_LOCATION_COORDINATES) ?: return null
+            val jsonLabels = json.getJSONArray(JSON_FIELD_LABEL_NAMES) ?: return null
+            val jsonProbs = json.getJSONArray(JSON_FIELD_LABEL_PROBABILITIES) ?: return null
+            val jsonLoc = json.getJSONArray(JSON_FIELD_LOCATION_COORDINATES) ?: return null
 
             // Sanity check the JSON.
-            if (json_labels.length() != json_probs.length()) return null
-            if (json_loc.length() != 2) return null
+            if (jsonLabels.length() != jsonProbs.length()) return null
+            if (jsonLoc.length() != 2) return null
 
-            val preds = (0 until json_labels.length()).map {
-                json_labels.getString(it) to json_probs.getDouble(it)
+            val preds = (0 until jsonLabels.length()).map {
+                jsonLabels.getString(it) to jsonProbs.getDouble(it)
             }.toMap()
-            val loc = json_loc.getDouble(0) to json_loc.getDouble(1)
+            val loc = Pair(jsonLoc.getDouble(0), jsonLoc.getDouble(1))
             return ExtraSensoryInfo(creationTime, preds, loc)
         }
 }
