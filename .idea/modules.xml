@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Gamify.iml" filepath="$PROJECT_DIR$/.idea/modules/Gamify.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Gamify.iml" filepath="$PROJECT_DIR$/Gamify.iml" />
+      <module fileurl="file://C:\Users\Gokul\AndroidStudioProjects\Gamify\.idea\modules\Gamify.iml" filepath="C:\Users\Gokul\AndroidStudioProjects\Gamify\.idea\modules\Gamify.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
