@@ -2,17 +2,19 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <group android:checkableBehavior="single">
+        <!-- TODO: replace these ic_menu_send icons -->
+        <!-- TODO: don't hardcode text -->
         <item
             android:id="@+id/nav_first_fragment"
-            android:icon="@drawable/ic_one"
+            android:icon="@drawable/ic_menu_send"
             android:title="Home">@style/customActionBar</item>
         <item
             android:id="@+id/nav_second_fragment"
-            android:icon="@drawable/ic_two"
+            android:icon="@drawable/ic_menu_send"
             android:title="Settings" />
         <item
             android:id="@+id/nav_third_fragment"
-            android:icon="@drawable/ic_three"
+            android:icon="@drawable/ic_menu_send"
             android:title="Checklist" />
     </group>
 </menu>
