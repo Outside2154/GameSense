@@ -28,25 +28,20 @@ class ChecklistFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (arguments != null) {
-            mParam1 = arguments.getString(ARG_PARAM1)
-            mParam2 = arguments.getString(ARG_PARAM2)
+        arguments?.run {
+            mParam1 = getString(ARG_PARAM1)
+            mParam2 = getString(ARG_PARAM2)
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
-        return inflater!!.inflate(R.layout.fragment_checklist, container, false)
+        return inflater.inflate(R.layout.fragment_checklist, container, false)
     }
 
     // TODO: Rename method, update argument and hook method into UI event
-    fun onButtonPressed(uri: Uri) {
-        if (mListener != null) {
-            mListener!!.onFragmentInteraction(uri)
-        }
-    }
-
+    fun onButtonPressed(uri: Uri) = mListener?.onFragmentInteraction(uri)
 
     override fun onDetach() {
         super.onDetach()
@@ -84,10 +79,10 @@ class ChecklistFragment : Fragment() {
         // TODO: Rename and change types and number of parameters
         fun newInstance(param1: String, param2: String): ChecklistFragment {
             val fragment = ChecklistFragment()
-            val args = Bundle()
-            args.putString(ARG_PARAM1, param1)
-            args.putString(ARG_PARAM2, param2)
-            fragment.arguments = args
+            fragment.arguments = Bundle().apply {
+                putString(ARG_PARAM1, param1)
+                putString(ARG_PARAM2, param2)
+            }
             return fragment
         }
     }

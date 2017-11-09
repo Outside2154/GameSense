@@ -38,15 +38,17 @@ class HomeFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (arguments != null) {
-            mParam1 = arguments.getString(ARG_PARAM1)
-            mParam2 = arguments.getString(ARG_PARAM2)
+        arguments?.run {
+            mParam1 = getString(ARG_PARAM1)
+            mParam2 = getString(ARG_PARAM2)
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        val v = inflater!!.inflate(R.layout.fragment_home, container, false)
+        val v = inflater.inflate(R.layout.fragment_home, container, false)
+
+        // TODO: Don't hardcode.
         val atkLevel = 20
         atkPb = v.findViewById(R.id.atk_pb)
         atkPb.progress = atkLevel
@@ -62,17 +64,13 @@ class HomeFragment : Fragment() {
         hthPb.progress = hthLevel
         hthAmt = v.findViewById(R.id.hth_amt)
         hthAmt.text = hthLevel.toString() + "%"
+
         // Inflate the layout for this fragment
         return v
     }
 
     // TODO: Rename method, update argument and hook method into UI event
-    fun onButtonPressed(uri: Uri) {
-        if (mListener != null) {
-            mListener!!.onFragmentInteraction(uri)
-        }
-    }
-
+    fun onButtonPressed(uri: Uri) = mListener?.onFragmentInteraction(uri)
 
 
     override fun onDetach() {
@@ -111,10 +109,10 @@ class HomeFragment : Fragment() {
         // TODO: Rename and change types and number of parameters
         fun newInstance(param1: String, param2: String): HomeFragment {
             val fragment = HomeFragment()
-            val args = Bundle()
-            args.putString(ARG_PARAM1, param1)
-            args.putString(ARG_PARAM2, param2)
-            fragment.arguments = args
+            fragment.arguments = Bundle().apply {
+                putString(ARG_PARAM1, param1)
+                putString(ARG_PARAM2, param2)
+            }
             return fragment
         }
     }
