@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Environment
 import org.json.JSONObject
 import java.io.File
+import java.util.*
 
 const val ES_PACKAGE_NAME = "edu.ucsd.calab.extrasensory"
 const val FILE_PREFIX_UUID_DIR = "extrasensory.labels."
@@ -44,7 +45,7 @@ class ExtraSensory(private val ctx: Context) {
  * @param directory The directory of the corresponding user.
  * @param uuid The UUID of the corresponding user.
  */
-class ExtraSensoryUser internal constructor(private val directory: File, val uuid: String) {
+class ExtraSensoryUser constructor(private val directory: File, val uuid: String) {
 
     /**
      * [ExtraSensoryFile]s for all recorded data for an [ExtraSensoryUser].
@@ -57,20 +58,20 @@ class ExtraSensoryUser internal constructor(private val directory: File, val uui
         }.map {
             ExtraSensoryFile(
                     File(directory, it),
-                    it.slice(0..9),
+                    Date(it.slice(0..9).toLong() * 1000),
                     it.endsWith(FILE_SUFFIX_SERVER_PREDICTIONS))
         }
 }
 
 /**
  * Holds ExtraSensory reading file information.
- * @property timestamp The associated timestamp.
- * @property isServer If true, is a server info. Otherwise, is a user reported label.
  * @property file The associated [File].
+ * @property creationTime A [Date] object representing the time the file was created.
+ * @property isServer If true, is a server info. Otherwise, is a user reported label.
  */
-class ExtraSensoryFile internal constructor(private val file: File,
-                                            val timestamp: String,
-                                            val isServer: Boolean) {
+class ExtraSensoryFile constructor(private val file: File,
+                                   val creationTime: Date,
+                                   val isServer: Boolean) {
 
     /**
      * The associated [ExtraSensoryInfo].
@@ -78,28 +79,32 @@ class ExtraSensoryFile internal constructor(private val file: File,
     val info: ExtraSensoryInfo?
         get() {
             val json = JSONObject(file.readText())
-            val json_labels = json.getJSONArray(JSON_FIELD_LABEL_NAMES) ?: return null
-            val json_probs = json.getJSONArray(JSON_FIELD_LABEL_PROBABILITIES) ?: return null
-            val json_loc = json.getJSONArray(JSON_FIELD_LOCATION_COORDINATES) ?: return null
+            val jsonLabels = json.getJSONArray(JSON_FIELD_LABEL_NAMES) ?: return null
+            val jsonProbs = json.getJSONArray(JSON_FIELD_LABEL_PROBABILITIES) ?: return null
+            val jsonLoc = json.getJSONArray(JSON_FIELD_LOCATION_COORDINATES) ?: return null
 
             // Sanity check the JSON.
-            if (json_labels.length() != json_probs.length()) return null
-            if (json_loc.length() != 2) return null
+            if (jsonLabels.length() != jsonProbs.length()) return null
+            if (jsonLoc.length() != 2) return null
 
-            val preds = (0 until json_labels.length()).map {
-                Pair(json_labels.getString(it), json_probs.getDouble(it))
+            val preds = (0 until jsonLabels.length()).map {
+                jsonLabels.getString(it) to jsonProbs.getDouble(it)
             }.toMap()
-            val loc = Pair(json_loc.getDouble(0), json_loc.getDouble(1))
-            return ExtraSensoryInfo(preds, loc)
+            val loc = Pair(jsonLoc.getDouble(0), jsonLoc.getDouble(1))
+            return ExtraSensoryInfo(creationTime, preds, loc)
         }
 }
 
 /**
  * Holds information for an ExtraSensory file.
+ * @property creationTime A [Date] object representing the time the file for this info was created.
  * @property predictions A mapping of labels to confidence level.
  * @property location A latitude/longitude pair.
  */
-data class ExtraSensoryInfo
-internal constructor(
+data class ExtraSensoryInfo constructor(
+        val creationTime: Date,
         val predictions: Map<String, Double>,
-        val location: Pair<Double, Double>)
+        val location: Pair<Double, Double>) {
+    val topPrediction: String?
+        get() = predictions.maxBy { it.value }?.key
+}
