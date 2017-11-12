@@ -14,5 +14,6 @@ class MainActivity : AppCompatActivity() {
         val latest = ExtraSensory(applicationContext).users?.first()?.files?.first()?.info
         val hw = findViewById<TextView>(R.id.es_debug)
         hw.text = latest.toString()
+
     }
 }
