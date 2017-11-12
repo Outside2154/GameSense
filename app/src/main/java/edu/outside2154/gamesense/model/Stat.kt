@@ -1,4 +1,4 @@
-package edu.outside2154.gamesense
+package edu.outside2154.gamesense.model
 
 class Stat (initGoals: Map<String, Double>) {
 
@@ -10,8 +10,10 @@ class Stat (initGoals: Map<String, Double>) {
         }
     }
 
-    private var goals = StatItems(initGoals.mapValues { (_, v) -> v * 60.0 })
-    private var current = StatItems(initGoals.mapValues { (_, v) -> v * 0.0 })
+    var goals = StatItems(initGoals.mapValues { (_, v) -> v * 60.0 })
+        private set
+    var current = StatItems(initGoals.mapValues { (_, v) -> v * 0.0 })
+        private set
 
     fun updateCurrent(data: Map<String, Double>) {
         current += StatItems(data.mapValues { (_, v) -> v * 60.0 })

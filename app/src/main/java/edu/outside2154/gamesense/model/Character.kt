@@ -1,4 +1,4 @@
-package edu.outside2154.gamesense
+package edu.outside2154.gamesense.model
 
 import java.util.*
 
@@ -20,9 +20,10 @@ class Character (_intStat: Stat, _atkStat: Stat, _regenStat: Stat) {
         private set
     val dead
         get() = health == 0.0
+    private val rand = Random()
 
     private fun isCritical(): Boolean{
-        return Random().nextDouble() < intStat.calcStat() ?: 0.0
+        return rand.nextDouble() < intStat.calcStat() ?: 0.0
     }
 
     private fun takeDamage(damage: Double){

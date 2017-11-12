@@ -1,4 +1,4 @@
-package edu.outside2154.gamesense
+package edu.outside2154.gamesense.model
 
 const val BOSS_BASE_HEALTH = 100.0
 const val BOSS_HEALTH_INC = 50.0
