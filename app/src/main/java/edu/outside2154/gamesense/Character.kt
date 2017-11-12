@@ -2,21 +2,24 @@ package edu.outside2154.gamesense
 
 import java.util.*
 
-/**
- * Created by Nurbergen on 11/4/17.
- */
+const val USER_BASE_HEALTH = 100.0
+const val USER_BASE_ATTACK = 100.0
+const val USER_CRIT_MULT = 2.0
 
-class Character (intelligence: Stat, attack: Stat, regeneration: Stat) {
-    private val baseHealth = 100.0
-    private val baseAttack = 100.0
-    private val criticalMultiplier = 2.0
 
-    private var health = baseHealth
-    private var intStat = intelligence
-    private var atkStat = attack
-    private var regenStat = regeneration
-    private var currency = 0.0
-    private var avatar = ""
+class Character (_intStat: Stat, _atkStat: Stat, _regenStat: Stat) {
+    var health = USER_BASE_HEALTH
+        private set
+    var intStat = _intStat
+        private set
+    var atkStat = _atkStat
+        private set
+    var regenStat = _regenStat
+        private set
+    var currency = 0.0
+        private set
+    val dead
+        get() = health == 0.0
 
     private fun isCritical(): Boolean{
         return Random().nextDouble() < intStat.calcStat() ?: 0.0
@@ -27,20 +30,16 @@ class Character (intelligence: Stat, attack: Stat, regeneration: Stat) {
     }
 
     fun fightWith(boss: Boss){
-        if (boss.isDead()) return
+        if (boss.dead) return
 
         // User attacks
         val attack = atkStat.calcStat() ?: 0.0
-        var damage = attack * baseAttack
-        if (isCritical()) damage *= criticalMultiplier
+        var damage = attack * USER_BASE_ATTACK
+        if (isCritical()) damage *= USER_CRIT_MULT
         boss.takeDamage(damage)
 
         // Boss attacks
-        if (boss.isDead()) return
-        takeDamage(boss.getAttack())
-    }
-
-    fun isDead() : Boolean{
-        return health == 0.0
+        if (boss.dead) return
+        takeDamage(boss.attack)
     }
 }

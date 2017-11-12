@@ -1,9 +1,5 @@
 package edu.outside2154.gamesense
 
-/**
- * Created by Nurbergen on 11/4/17.
- */
-
 class Stat (initGoals: Map<String, Double>) {
 
     data class StatItems(val items: Map<String, Double>) {

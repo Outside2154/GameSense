@@ -1,35 +1,27 @@
 package edu.outside2154.gamesense
 
-/**
- * Created by Nurbergen on 11/4/17.
- */
+const val BOSS_BASE_HEALTH = 100.0
+const val BOSS_HEALTH_INC = 50.0
+const val BOSS_BASE_ATTACK = 20.0
+const val BOSS_ATTACK_INC = 5.0
 
 class Boss {
-    private val baseHealth = 100.0
-    private val healthInc = 50.0
-    private val baseAttack = 20.0
-    private val attackInc = 5.0
-
-    private var health = baseHealth
-    private var attack = baseAttack
-    private var lvl = 1
-    private var avatar = ""
+    var health = BOSS_BASE_HEALTH
+        private set
+    var attack = BOSS_BASE_ATTACK
+        private set
+    var lvl = 1
+        private set
+    val dead
+        get() = health == 0.0
 
     fun takeDamage(damage: Double){
         health = maxOf(health - damage, 0.0)
     }
 
-    fun isDead() : Boolean{
-        return health == 0.0
-    }
-
-    fun reset(userWon:Boolean) {
+    fun reset(userWon: Boolean) {
         if (userWon) lvl++
-        health = baseHealth + healthInc * (lvl - 1)
-        attack = baseAttack + attackInc * (lvl - 1)
-    }
-
-    fun getAttack():Double {
-        return attack
+        health = BOSS_BASE_HEALTH + BOSS_HEALTH_INC * (lvl - 1)
+        attack = BOSS_BASE_ATTACK + BOSS_ATTACK_INC * (lvl - 1)
     }
 }
