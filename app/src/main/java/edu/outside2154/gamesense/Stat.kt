@@ -1,11 +1,5 @@
 package edu.outside2154.gamesense;
 
-import java.lang.Double.sum
-
-/**
- * Created by iammichelleau on 11/4/17.
- */
-
 data class StatItems(val items: Map<String, Double>) {
     operator fun plus(other: StatItems): StatItems {
         // "Merge" the two maps

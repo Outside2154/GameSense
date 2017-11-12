@@ -3,10 +3,6 @@ package edu.outside2154.gamesense
 import java.util.*
 import edu.outside2154.gamesense.StatType.*
 
-/**
- * Created by iammichelleau on 11/4/17.
- */
-
 class Character () {
     private val BASE_HEALTH: Double = 100.0
     private val BASE_ATK: Double = 100.0

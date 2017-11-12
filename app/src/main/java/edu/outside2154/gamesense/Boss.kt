@@ -1,11 +1,5 @@
 package edu.outside2154.gamesense;
 
-import com.sun.org.apache.xpath.internal.operations.Bool
-
-/**
- * Created by iammichelleau on 11/4/17.
- */
-
 public class Boss {
     private val BASE_HEALTH: Double = 100.0
     private val BASE_HEALTH_INC: Double = 50.0
