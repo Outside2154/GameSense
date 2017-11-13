@@ -1,0 +1,6 @@
+<resources>
+    <declare-styleable name="LabeledBarView">
+        <attr name="label" format="string" />
+        <attr name="label_width" format="dimension" />
+    </declare-styleable>
+</resources>
