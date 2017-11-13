@@ -1,14 +1,16 @@
 package edu.outside2154.gamesense.fragment
 
-import android.content.Context
 import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.TextView
+import edu.outside2154.gamesense.Character
+import edu.outside2154.gamesense.Boss
 
 import edu.outside2154.gamesense.R
 
@@ -36,34 +38,39 @@ class HomeFragment : Fragment() {
     private lateinit var intelAmt: TextView
     private lateinit var hthAmt: TextView
 
+    private var character: Character? = null
+    private var boss: Boss? = null
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.run {
             mParam1 = getString(ARG_PARAM1)
             mParam2 = getString(ARG_PARAM2)
+            character = getSerializable("char") as Character
+            boss = getSerializable("boss") as Boss
         }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val v = inflater.inflate(R.layout.fragment_home, container, false)
-
         // TODO: Don't hardcode.
         val atkLevel = 20
         atkPb = v.findViewById(R.id.atk_pb)
         atkPb.progress = atkLevel
         atkAmt = v.findViewById(R.id.atk_amt)
-        atkAmt.text = atkLevel.toString() + "%"
+        atkAmt.text = character?.getAttack().toString() + "%"
         val intelLevel = 30
         intelPb = v.findViewById(R.id.intel_pb)
         intelPb.progress = intelLevel
         intelAmt = v.findViewById(R.id.intel_amt)
-        intelAmt.text = intelLevel.toString() + "%"
+        intelAmt.text = character?.getIntelligence().toString() + "%"
         val hthLevel = 40
         hthPb = v.findViewById(R.id.hth_pb)
         hthPb.progress = hthLevel
         hthAmt = v.findViewById(R.id.hth_amt)
-        hthAmt.text = hthLevel.toString() + "%"
+        hthAmt.text = character?.getHealth().toString() + "%"
 
         // Inflate the layout for this fragment
         return v

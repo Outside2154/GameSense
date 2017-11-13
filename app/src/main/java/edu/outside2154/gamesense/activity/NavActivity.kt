@@ -2,6 +2,7 @@ package edu.outside2154.gamesense.activity
 
 import android.content.res.Configuration
 import android.os.Bundle
+import android.provider.Settings
 import android.support.v4.app.Fragment
 import android.view.View
 import android.support.design.widget.NavigationView
@@ -11,10 +12,14 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 
+import edu.outside2154.gamesense.Character
+import edu.outside2154.gamesense.Boss
+
 import edu.outside2154.gamesense.R
 import edu.outside2154.gamesense.fragment.ChecklistFragment
 import edu.outside2154.gamesense.fragment.HomeFragment
 import edu.outside2154.gamesense.fragment.SettingsFragment
+import edu.outside2154.gamesense.isEmulator
 
 // TODO: Review this.
 class NavActivity : AppCompatActivity() {
@@ -25,6 +30,9 @@ class NavActivity : AppCompatActivity() {
     // Make sure to be using android.support.v7.app.ActionBarDrawerToggle version.
     // The android.support.v4.app.ActionBarDrawerToggle has been deprecated.
     private var drawerToggle: ActionBarDrawerToggle? = null
+
+    private var character: Character? = null
+    private var boss: Boss? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,6 +61,16 @@ class NavActivity : AppCompatActivity() {
 
         // Tie DrawerLayout events to the ActionBarToggle
         mDrawer!!.addDrawerListener(drawerToggle!!)
+
+        // Grab current androidID
+        var androidId = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID); //Device ID
+        if (isEmulator()) {
+            androidId = "1cf08e3503018df0";
+        }
+
+        // Create character and boss objects for use in all fragments
+        character = Character(androidId)
+        boss = Boss(androidId)
     }
 
     private fun setupDrawerToggle(): ActionBarDrawerToggle {
@@ -92,7 +110,12 @@ class NavActivity : AppCompatActivity() {
         }
 
         try {
+            // Pass character and boss objects as Serializable objects to fragments
+            var bundle = Bundle()
+            bundle.putSerializable("char", character)
+            bundle.putSerializable("boss", boss)
             fragment = fragmentClass.newInstance() as Fragment
+            fragment.setArguments(bundle)
         } catch (e: Exception) {
             e.printStackTrace()
         }

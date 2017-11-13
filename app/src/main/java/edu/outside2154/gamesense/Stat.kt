@@ -2,9 +2,10 @@ package edu.outside2154.gamesense
 
 /**
  * Created by Nurbergen on 11/4/17.
+ * Modified by Tynan Dewes on 11/13/17
  */
 
-class Stat (initGoals: Map<String, Double>) {
+class Stat (initGoals : Map<String, Double>, currGoals : Map<String, Double>) {
 
     data class StatItems(val items: Map<String, Double>) {
         operator fun plus(other: StatItems): StatItems {
@@ -14,8 +15,8 @@ class Stat (initGoals: Map<String, Double>) {
         }
     }
 
-    private var goals = StatItems(initGoals.mapValues { (_, v) -> v * 60.0 })
-    private var current = StatItems(initGoals.mapValues { (_, v) -> v * 0.0 })
+    private var goals = StatItems(initGoals)
+    private var current = StatItems(currGoals)
 
     fun updateCurrent(data: Map<String, Double>) {
         current += StatItems(data.mapValues { (_, v) -> v * 60.0 })

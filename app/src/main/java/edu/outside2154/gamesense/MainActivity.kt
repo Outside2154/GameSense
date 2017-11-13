@@ -12,16 +12,12 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        var androidId = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID); //Device ID
-        if (isEmulator()) {
-            androidId = "1cf08e3503018df0";
-        }
+        print("I came here")
 
         // Show the first info of the first user if available.
         val latest = ExtraSensory(applicationContext).users?.first()?.files?.first()?.info
         val hw = findViewById<TextView>(R.id.es_debug)
         hw.text = latest.toString()
-
     }
 }
 
