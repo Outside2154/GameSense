@@ -7,10 +7,10 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ProgressBar
-import android.widget.TextView
+import android.widget.*
 
 import edu.outside2154.gamesense.R
+import java.net.URI
 
 /**
  * A simple [Fragment] subclass.
@@ -36,12 +36,15 @@ class HomeFragment : Fragment() {
     private lateinit var intelAmt: TextView
     private lateinit var hthAmt: TextView
 
+//    private lateinit var atkSpinner: Spinner
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.run {
             mParam1 = getString(ARG_PARAM1)
             mParam2 = getString(ARG_PARAM2)
         }
+
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -49,21 +52,30 @@ class HomeFragment : Fragment() {
         val v = inflater.inflate(R.layout.fragment_home, container, false)
 
         // TODO: Don't hardcode.
-        val atkLevel = 20
-        atkPb = v.findViewById(R.id.atk_pb)
-        atkPb.progress = atkLevel
-        atkAmt = v.findViewById(R.id.atk_amt)
-        atkAmt.text = atkLevel.toString() + "%"
-        val intelLevel = 30
-        intelPb = v.findViewById(R.id.intel_pb)
-        intelPb.progress = intelLevel
-        intelAmt = v.findViewById(R.id.intel_amt)
-        intelAmt.text = intelLevel.toString() + "%"
-        val hthLevel = 40
-        hthPb = v.findViewById(R.id.hth_pb)
-        hthPb.progress = hthLevel
-        hthAmt = v.findViewById(R.id.hth_amt)
-        hthAmt.text = hthLevel.toString() + "%"
+//        val atkLevel = 20
+//        atkPb = v.findViewById(R.id.atk_pb)
+//        atkPb.progress = atkLevel
+//        atkAmt = v.findViewById(R.id.atk_amt)
+//        atkAmt.text = atkLevel.toString() + "%"
+//        val intelLevel = 30
+//        intelPb = v.findViewById(R.id.intel_pb)
+//        intelPb.progress = intelLevel
+//        intelAmt = v.findViewById(R.id.intel_amt)
+//        intelAmt.text = intelLevel.toString() + "%"
+//        val hthLevel = 40
+//        hthPb = v.findViewById(R.id.hth_pb)
+//        hthPb.progress = hthLevel
+//        hthAmt = v.findViewById(R.id.hth_amt)
+//        hthAmt.text = hthLevel.toString() + "%"
+
+        val atkSpinner = v.findViewById<Spinner>(R.id.atk_spinner) as Spinner
+        val strings = arrayOf<String>("a", "b", "c")
+        val adapater = ArrayAdapter<String>(context, android.R.layout.simple_spinner_dropdown_item, strings)
+
+        atkSpinner.setAdapter(adapater)
+
+
+
 
         // Inflate the layout for this fragment
         return v
