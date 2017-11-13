@@ -22,7 +22,11 @@ class Stat (initGoals: Map<String, Double>) {
     fun calcStat(): Double? {
         val divisor = goals.items.values.sum()
         if (divisor == 0.0) return null
-        return current.items.values.sum() / divisor
+
+        val elements = current.items.mapValues { (k, v) ->
+            minOf(v, goals.items[k] ?: 0.0)
+        }
+        return elements.values.sum() / divisor
     }
 
     fun reset() {
