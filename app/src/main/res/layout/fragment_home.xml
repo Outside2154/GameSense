@@ -45,27 +45,29 @@
         gamesense:layout_constraintTop_toBottomOf="@+id/atk_lb" />
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/avatar"
         android:layout_width="0dp"
         android:layout_height="100dp"
         android:layout_marginStart="16dp"
+        android:contentDescription="Avatar"
         android:src="@drawable/avatar"
         gamesense:layout_constraintBottom_toTopOf="@+id/boss_hp_lb"
-        gamesense:layout_constraintEnd_toStartOf="@+id/imageView2"
+        gamesense:layout_constraintEnd_toStartOf="@+id/boss"
         gamesense:layout_constraintHorizontal_bias="0.5"
         gamesense:layout_constraintStart_toStartOf="parent"
         gamesense:layout_constraintTop_toBottomOf="@+id/int_lb" />
 
     <ImageView
-        android:id="@+id/imageView2"
+        android:id="@+id/boss"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="16dp"
+        android:contentDescription="Boss"
         android:src="@drawable/androidboss"
         gamesense:layout_constraintBottom_toTopOf="@+id/boss_hp_lb"
         gamesense:layout_constraintEnd_toEndOf="parent"
         gamesense:layout_constraintHorizontal_bias="0.5"
-        gamesense:layout_constraintStart_toEndOf="@+id/imageView"
+        gamesense:layout_constraintStart_toEndOf="@+id/avatar"
         gamesense:layout_constraintTop_toBottomOf="@+id/int_lb" />
 
     <edu.outside2154.gamesense.view.LabeledBarView
