@@ -11,9 +11,9 @@
         android:id="@+id/hp_lb"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="20dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
         gamesense:label="HP"
         gamesense:label_width="50dp"
         gamesense:layout_constraintEnd_toEndOf="parent"
@@ -24,8 +24,8 @@
         android:id="@+id/atk_lb"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="20dp"
-        android:layout_marginStart="20dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
         gamesense:label="ATK"
         gamesense:label_width="50dp"
         gamesense:layout_constraintEnd_toEndOf="parent"
@@ -36,13 +36,51 @@
         android:id="@+id/int_lb"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="20dp"
-        android:layout_marginStart="20dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
         gamesense:label="INT"
         gamesense:label_width="50dp"
         gamesense:layout_constraintEnd_toEndOf="parent"
         gamesense:layout_constraintStart_toStartOf="parent"
         gamesense:layout_constraintTop_toBottomOf="@+id/atk_lb" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="0dp"
+        android:layout_height="100dp"
+        android:layout_marginStart="16dp"
+        android:src="@drawable/avatar"
+        gamesense:layout_constraintBottom_toTopOf="@+id/boss_hp_lb"
+        gamesense:layout_constraintEnd_toStartOf="@+id/imageView2"
+        gamesense:layout_constraintHorizontal_bias="0.5"
+        gamesense:layout_constraintStart_toStartOf="parent"
+        gamesense:layout_constraintTop_toBottomOf="@+id/int_lb" />
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="16dp"
+        android:src="@drawable/androidboss"
+        gamesense:layout_constraintBottom_toTopOf="@+id/boss_hp_lb"
+        gamesense:layout_constraintEnd_toEndOf="parent"
+        gamesense:layout_constraintHorizontal_bias="0.5"
+        gamesense:layout_constraintStart_toEndOf="@+id/imageView"
+        gamesense:layout_constraintTop_toBottomOf="@+id/int_lb" />
+
+    <edu.outside2154.gamesense.view.LabeledBarView
+        android:id="@+id/boss_hp_lb"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        gamesense:label="BOSS"
+        gamesense:label_width="50dp"
+        gamesense:label_onRight="true"
+        gamesense:layout_constraintBottom_toBottomOf="parent"
+        gamesense:layout_constraintEnd_toEndOf="parent"
+        gamesense:layout_constraintStart_toStartOf="parent" />
 
 
 </android.support.constraint.ConstraintLayout>

@@ -2,6 +2,7 @@ package edu.outside2154.gamesense.view
 
 import android.content.Context
 import android.util.AttributeSet
+import android.view.Gravity
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.Space
@@ -38,19 +39,24 @@ class LabeledBarView @JvmOverloads constructor(
             layoutParams = LayoutParams(
                     dpToPx(context, LABELED_BAR_VIEW_PADDING), LayoutParams.MATCH_PARENT)
         }
-        vBar.layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
+        vBar.layoutParams = LayoutParams(0, LayoutParams.MATCH_PARENT, 1.0f)
 
         // Apply XML attributes.
+        var labelOnRight = false
         context.theme.obtainStyledAttributes(
                 attrs, R.styleable.LabeledBarView, defStyle, 0).runAndRecycle {
             label = getString(R.styleable.LabeledBarView_label)
+
             vText.layoutParams.width = getDimensionPixelSize(
                     R.styleable.LabeledBarView_label_width, LayoutParams.WRAP_CONTENT)
+
+            labelOnRight = getBoolean(R.styleable.LabeledBarView_label_onRight, false)
+            if (labelOnRight) vText.gravity = Gravity.END
         }
 
         // Add bar elements.
-        addView(vText)
+        addView(if (labelOnRight) vBar else vText)
         addView(space)
-        addView(vBar)
+        addView(if (labelOnRight) vText else vBar)
     }
 }
