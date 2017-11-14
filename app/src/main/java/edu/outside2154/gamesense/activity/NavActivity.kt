@@ -11,6 +11,7 @@ import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
+import com.google.firebase.database.FirebaseDatabase
 
 import edu.outside2154.gamesense.Character
 import edu.outside2154.gamesense.Boss
@@ -139,5 +140,19 @@ class NavActivity : AppCompatActivity() {
             true
         } else super.onOptionsItemSelected(item)
 
+    }
+
+    override fun onPause() {
+        // Grab current androidID
+        var androidId = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID); //Device ID
+        if (isEmulator()) {
+            androidId = "1cf08e3503018df0";
+        }
+
+        val dbRef = FirebaseDatabase.getInstance().getReference()
+        dbRef.child(androidId).child("character").child("health").setValue(character?.getHealth())
+        dbRef.child(androidId).child("character").child("currency").setValue(character?.getHealth())
+
+        super.onPause()
     }
 }
