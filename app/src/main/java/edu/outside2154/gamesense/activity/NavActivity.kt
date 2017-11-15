@@ -150,8 +150,8 @@ class NavActivity : AppCompatActivity() {
         }
 
         val dbRef = FirebaseDatabase.getInstance().getReference()
-        dbRef.child(androidId).child("character").child("health").setValue(character?.getHealth())
-        dbRef.child(androidId).child("character").child("currency").setValue(character?.getHealth())
+        //dbRef.child(androidId).child("character").child("health").setValue(character?.getHealth())
+        //dbRef.child(androidId).child("character").child("currency").setValue(character?.getHealth())
 
         super.onPause()
     }
