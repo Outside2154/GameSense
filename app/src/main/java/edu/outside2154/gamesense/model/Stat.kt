@@ -1,6 +1,6 @@
 package edu.outside2154.gamesense.model
 
-class Stat (initGoals: Map<String, Double>) {
+class Stat (initGoals : Map<String, Double>, currGoals : Map<String, Double>) {
 
     data class StatItems(val items: Map<String, Double>) {
         operator fun plus(other: StatItems): StatItems {
@@ -10,10 +10,8 @@ class Stat (initGoals: Map<String, Double>) {
         }
     }
 
-    var goals = StatItems(initGoals.mapValues { (_, v) -> v * 60.0 })
-        private set
-    var current = StatItems(initGoals.mapValues { (_, v) -> v * 0.0 })
-        private set
+    var goals = StatItems(initGoals)
+    var current = StatItems(currGoals)
 
     fun updateCurrent(data: Map<String, Double>) {
         current += StatItems(data.mapValues { (_, v) -> v * 60.0 })
