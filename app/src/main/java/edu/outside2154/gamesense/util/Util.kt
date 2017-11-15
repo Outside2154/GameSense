@@ -1,4 +1,4 @@
-package edu.outside2154.gamesense
+package edu.outside2154.gamesense.util
 
 import android.content.Context
 import android.content.res.TypedArray

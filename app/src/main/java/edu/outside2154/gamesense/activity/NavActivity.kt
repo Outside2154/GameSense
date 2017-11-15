@@ -14,7 +14,7 @@ import edu.outside2154.gamesense.R
 import edu.outside2154.gamesense.fragment.ChecklistFragment
 import edu.outside2154.gamesense.fragment.HomeFragment
 import edu.outside2154.gamesense.fragment.SettingsFragment
-import edu.outside2154.gamesense.transact
+import edu.outside2154.gamesense.util.transact
 
 class NavActivity : AppCompatActivity() {
     private lateinit var mDrawer: DrawerLayout
