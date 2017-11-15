@@ -69,13 +69,20 @@ class HomeFragment : Fragment() {
 //        hthAmt.text = hthLevel.toString() + "%"
 
         val atkSpinner = v.findViewById<Spinner>(R.id.atk_spinner) as Spinner
-        val strings = arrayOf<String>("a", "b", "c")
-        val adapater = ArrayAdapter<String>(context, android.R.layout.simple_spinner_dropdown_item, strings)
+        val atkOptions = arrayOf<String>("Sleeping", "Relaxing", "Eating", "Cleaning", "Social: With Friends/Family")
+        val atkAdapter = ArrayAdapter<String>(context, android.R.layout.simple_spinner_dropdown_item, atkOptions)
 
-        atkSpinner.setAdapter(adapater)
+        val intSpinner = v.findViewById<Spinner>(R.id.int_spinner) as Spinner
+        val intOptions = arrayOf<String>("Occupation: Studying/Working", "Reading", "Playing Musical Instrument", "Drawning", "Singing")
+        val intAdapter = ArrayAdapter<String>(context, android.R.layout.simple_spinner_dropdown_item, intOptions)
 
+        val hthSpinner = v.findViewById<Spinner>(R.id.hth_spinner) as Spinner
+        val hthOptions = arrayOf<String>("Exercising", "Walking", "Running", "Hiking", "Lifting Weights", "Yoga")
+        val hthAdapter = ArrayAdapter<String>(context, android.R.layout.simple_spinner_dropdown_item, hthOptions)
 
-
+        atkSpinner.setAdapter(atkAdapter)
+        intSpinner.setAdapter(intAdapter)
+        hthSpinner.setAdapter(hthAdapter)
 
         // Inflate the layout for this fragment
         return v
