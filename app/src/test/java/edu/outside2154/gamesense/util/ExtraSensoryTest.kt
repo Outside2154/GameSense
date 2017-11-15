@@ -1,4 +1,4 @@
-package edu.outside2154.gamesense
+package edu.outside2154.gamesense.util
 
 import org.junit.Assert.*
 import org.junit.Before

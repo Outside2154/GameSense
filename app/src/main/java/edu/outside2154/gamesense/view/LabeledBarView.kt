@@ -9,8 +9,8 @@ import android.widget.Space
 import android.widget.TextView
 
 import edu.outside2154.gamesense.R
-import edu.outside2154.gamesense.dpToPx
-import edu.outside2154.gamesense.runAndRecycle
+import edu.outside2154.gamesense.util.dpToPx
+import edu.outside2154.gamesense.util.runAndRecycle
 
 const val LABELED_BAR_VIEW_PADDING = 10.0
 
