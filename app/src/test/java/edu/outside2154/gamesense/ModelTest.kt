@@ -12,7 +12,7 @@ class ModelBossTest {
 
     @Before
     fun setUp() {
-        boss = Boss()
+        boss = Boss(BOSS_BASE_HEALTH, BOSS_BASE_ATTACK, 1)
     }
 
     @Test
@@ -62,18 +62,15 @@ class ModelPlayerTest {
 
     @Before
     fun setUp() {
-        val intStat = Stat(mapOf("Lab work" to 4.0, "In class" to 8.0))
-        val atkStat = Stat(mapOf("Running" to 3.0, "Exercise" to 7.0))
-        val regenStat = Stat(mapOf("Sleeping" to 56.0))
-        player = Player(intStat, atkStat, regenStat)
-        boss = Boss()
+        val intStat = Stat(mapOf("Lab work" to 4.0, "In class" to 8.0), mapOf("Lab work" to 2.0, "In class" to 4.0))
+        val atkStat = Stat(mapOf("Running" to 3.0, "Exercise" to 7.0), mapOf("Running" to 1.5, "Exercise" to 1.0))
+        val regenStat = Stat(mapOf("Sleeping" to 56.0), mapOf("Sleeping" to 14.0))
+        player = Player(regenStat, atkStat, intStat, PLAYER_BASE_HEALTH, 0.0)
+        boss = Boss(BOSS_BASE_HEALTH, BOSS_BASE_ATTACK, 1)
     }
 
     @Test
     fun testFight() {
-        player.intStat.updateCurrent(mapOf("Lab work" to 2.0, "In class" to 4.0))
-        player.atkStat.updateCurrent(mapOf("Running" to 1.5, "Exercise" to 1.0))
-        player.regenStat.updateCurrent(mapOf("Sleeping" to 14.0))
         assertEquals(0.5, player.intStat.calcStat() ?: 0.0, EPS)
         assertEquals(0.25, player.atkStat.calcStat() ?: 0.0, EPS)
         assertEquals(0.25, player.regenStat.calcStat() ?: 0.0, EPS)
@@ -97,12 +94,12 @@ class ModelStatTest {
 
     @Before
     fun setUp() {
-        stat = Stat(mapOf("Lab work" to 4.0, "In class" to 8.0))
+        stat = Stat(mapOf("Lab work" to 4.0, "In class" to 8.0), mapOf("Lab work" to 0.0, "In class" to 0.0))
     }
 
     @Test
     fun testUpdateCurrent() {
-        val goals1 = Stat.StatItems(mapOf("Lab work" to 240.0, "In class" to 480.0))
+        val goals1 = Stat.StatItems(mapOf("Lab work" to 4.0, "In class" to 8.0))
         assertEquals(goals1, stat.goals)
 
         val cur1 = Stat.StatItems(mapOf("Lab work" to 0.0, "In class" to 0.0))
@@ -110,11 +107,11 @@ class ModelStatTest {
         stat.updateCurrent(mapOf("Running" to 3.0, "Exercise" to 6.0))
         assertEquals(cur1, stat.current)
 
-        val cur2 = Stat.StatItems(mapOf("Lab work" to 60.0, "In class" to 420.0))
+        val cur2 = Stat.StatItems(mapOf("Lab work" to 1.0, "In class" to 7.0))
         stat.updateCurrent(mapOf("Lab work" to 1.0, "In class" to 7.0))
         assertEquals(cur2, stat.current)
 
-        val cur3 = Stat.StatItems(mapOf("Lab work" to 300.0, "In class" to 420.0))
+        val cur3 = Stat.StatItems(mapOf("Lab work" to 5.0, "In class" to 7.0))
         stat.updateCurrent(mapOf("Lab work" to 4.0))
         assertEquals(cur3, stat.current)
     }

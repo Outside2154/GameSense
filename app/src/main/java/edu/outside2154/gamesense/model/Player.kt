@@ -1,22 +1,23 @@
 package edu.outside2154.gamesense.model
 
+import android.util.Log
+import java.io.Serializable
 import java.util.*
 
 const val PLAYER_BASE_HEALTH = 100.0
 const val PLAYER_BASE_ATTACK = 100.0
 const val PLAYER_CRIT_MULT = 2.0
 
-
-class Player(_intStat: Stat, _atkStat: Stat, _regenStat: Stat) {
-    var health = PLAYER_BASE_HEALTH
+class Player(regen : Stat, attack : Stat, intelligence : Stat, health : Double, currency: Double) : Serializable {
+    var regenStat = regen
         private set
-    var intStat = _intStat
+    var atkStat = attack
         private set
-    var atkStat = _atkStat
+    var intStat = intelligence
         private set
-    var regenStat = _regenStat
+    var health = health
         private set
-    var currency = 0.0
+    var currency = currency
         private set
     val pureDamage
         get() = PLAYER_BASE_ATTACK * (atkStat.calcStat() ?: 0.0)

@@ -3,11 +3,20 @@ package edu.outside2154.gamesense.fragment
 import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
+import edu.outside2154.gamesense.model.Player
+import edu.outside2154.gamesense.model.Boss
 
 import edu.outside2154.gamesense.R
+import edu.outside2154.gamesense.activity.NavActivity
+import edu.outside2154.gamesense.model.Stat
 import kotlinx.android.synthetic.main.fragment_home.*
 
 /**
@@ -26,11 +35,22 @@ class HomeFragment : Fragment() {
 
     private var mListener: OnFragmentInteractionListener? = null
 
+    private var player: Player? = null
+    private var boss: Boss? = null
+    private lateinit var androidId: String
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.run {
             mParam1 = getString(ARG_PARAM1)
             mParam2 = getString(ARG_PARAM2)
+            player = getSerializable("player") as Player?
+            boss = getSerializable("boss") as Boss?
+            androidId = getString("androidId")
+        }
+
+        if (player == null && boss == null) {
+            createCharacters()
         }
     }
 
@@ -39,13 +59,87 @@ class HomeFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_home, container, false)
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    private fun updatePlayerBars() {
+        hp_lb.progress = player!!.health.toInt()
+        atk_lb.progress = (player!!.atkStat.calcStat() !!* 100).toInt()
+        int_lb.progress = (player!!.intStat.calcStat() !!* 100).toInt()
+    }
 
-        hp_lb.progress = 80
-        atk_lb.progress = 50
-        int_lb.progress = 20
-        boss_hp_lb.progress = 100
+    private fun updateBossBar() {
+        boss_hp_lb.progress = boss!!.health.toInt()
+    }
+
+    private fun createCharacters() {
+        // Create listener for data reading from Firebase
+        val fbListener = object : ValueEventListener {
+            @Suppress("UNCHECKED_CAST")
+            override fun onDataChange(snapshot: DataSnapshot) {
+                // Get Maps of health goals and current values
+                val healthGoals = snapshot.child("regen").child("goals").value as Map<String, Long>
+                val healthCurr = snapshot.child("regen").child("current").value as Map<String, Long>
+
+                // Get Maps of attack goals and current values
+                val atkGoals = snapshot.child("attack").child("goals").value as Map<String, Long>
+                val atkCurr = snapshot.child("attack").child("current").value as Map<String, Long>
+
+                // Get Maps of intelligence goals and current values
+                val intGoals = snapshot.child("intelligence").child("goals").value as Map<String, Long>
+                val intCurr = snapshot.child("intelligence").child("current").value as Map<String, Long>
+
+                // Set stats as maps of goals and current values
+                val regenStat = Stat(convertMap(healthGoals), convertMap(healthCurr))
+                val atkStat = Stat(convertMap(atkGoals), convertMap(atkCurr))
+                val intStat = Stat(convertMap(intGoals), convertMap(intCurr))
+
+                // Get snapshot of current health and cast appropriately
+                val longHealth = snapshot.child("character").child("health").value as Long
+                val health = longHealth.toDouble()
+
+                // Get snapshot of current currency and cast appropriately
+                val longCurrency = snapshot.child("character").child("currency").value as Long
+                val currency = longCurrency.toDouble()
+
+                // Get previous values for player
+                player = Player(regenStat, atkStat, intStat, health, currency)
+                updatePlayerBars()
+
+                // Pull boss info as Longs from Firebase
+                val bossLongHealth = snapshot.child("boss").child("health").value as Long
+                val longAttack = snapshot.child("boss").child("attack").value as Long
+                val longLevel = snapshot.child("boss").child("level").value as Long
+
+                // Set boss attributes
+                val bossHealth = bossLongHealth.toDouble()
+                val bossAttack = longAttack.toDouble()
+                val lvl = longLevel.toInt()
+
+                // Get previous values for boss
+                boss = Boss(bossHealth, bossAttack, lvl)
+                updateBossBar()
+
+                // Call ExtraSensory function
+                // Fighting functions
+
+                // Update player and boss with new data
+                // updatePlayerBars()
+                // updateBossBar()
+
+                (activity as NavActivity).updateCharacters(player, boss)
+            }
+
+            // Print if error occurs
+            override fun onCancelled(databaseError: DatabaseError) {
+                println("loadPost:onCancelled ${databaseError.toException()}")
+            }
+        }
+
+        // Grab values with single value event listener
+        val dbRef = FirebaseDatabase.getInstance().reference
+        dbRef.child(androidId).addListenerForSingleValueEvent(fbListener)
+    }
+
+    private fun convertMap(origMap : Map<String, Long>): Map<String, Double> {
+        return origMap.mapValues {it.value.toDouble()}
     }
 
     // TODO: Rename method, update argument and hook method into UI event

@@ -1,6 +1,6 @@
 package edu.outside2154.gamesense.model
 
-class Stat (initGoals: Map<String, Double>) {
+class Stat (initGoals : Map<String, Double>, currGoals : Map<String, Double>) {
 
     data class StatItems(val items: Map<String, Double>) {
         operator fun plus(other: StatItems): StatItems {
@@ -10,13 +10,11 @@ class Stat (initGoals: Map<String, Double>) {
         }
     }
 
-    var goals = StatItems(initGoals.mapValues { (_, v) -> v * 60.0 })
-        private set
-    var current = StatItems(initGoals.mapValues { (_, v) -> v * 0.0 })
-        private set
+    var goals = StatItems(initGoals)
+    var current = StatItems(currGoals)
 
     fun updateCurrent(data: Map<String, Double>) {
-        current += StatItems(data.mapValues { (_, v) -> v * 60.0 })
+        current += StatItems(data)
     }
 
     fun calcStat(): Double? {
@@ -24,8 +22,11 @@ class Stat (initGoals: Map<String, Double>) {
         if (divisor == 0.0) return null
 
         val elements = current.items.mapValues { (k, v) ->
-            minOf(v, goals.items[k] ?: 0.0)
+            minOf(v, goals.items[k] ?: Double.MAX_VALUE)
         }
+
+        print(elements)
+
         return elements.values.sum() / divisor
     }
 

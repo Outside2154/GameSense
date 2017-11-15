@@ -1,16 +1,18 @@
 package edu.outside2154.gamesense.model
 
+import java.io.Serializable
+
 const val BOSS_BASE_HEALTH = 100.0
 const val BOSS_HEALTH_INC = 50.0
 const val BOSS_BASE_ATTACK = 20.0
 const val BOSS_ATTACK_INC = 5.0
 
-class Boss {
-    var health = BOSS_BASE_HEALTH
+class Boss(health : Double, attack : Double, level : Int) : Serializable {
+    var health = health
         private set
-    var attack = BOSS_BASE_ATTACK
+    var attack = attack
         private set
-    var lvl = 1
+    var lvl = level
         private set
     val dead
         get() = health == 0.0
