@@ -37,7 +37,7 @@ class HomeFragment : Fragment() {
 
     private var player: Player? = null
     private var boss: Boss? = null
-    private var androidId: String? = null
+    private lateinit var androidId: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
