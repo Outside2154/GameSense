@@ -14,7 +14,7 @@ class Stat (initGoals : Map<String, Double>, currGoals : Map<String, Double>) {
     var current = StatItems(currGoals)
 
     fun updateCurrent(data: Map<String, Double>) {
-        current += StatItems(data.mapValues { (_, v) -> v * 60.0 })
+        current += StatItems(data)
     }
 
     fun calcStat(): Double? {
@@ -22,8 +22,11 @@ class Stat (initGoals : Map<String, Double>, currGoals : Map<String, Double>) {
         if (divisor == 0.0) return null
 
         val elements = current.items.mapValues { (k, v) ->
-            minOf(v, goals.items[k] ?: 0.0)
+            minOf(v, goals.items[k] ?: Double.MAX_VALUE)
         }
+
+        print(elements)
+
         return elements.values.sum() / divisor
     }
 

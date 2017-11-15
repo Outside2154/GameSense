@@ -52,16 +52,6 @@ class NavActivity : AppCompatActivity() {
                 R.string.drawer_open, R.string.drawer_close)
         mDrawer.addDrawerListener(drawerToggle)
 
-        // Grab current androidID
-        var androidId = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID); //Device ID
-        if (isEmulator()) {
-            androidId = "1cf08e3503018df0";
-        }
-
-        // Create character and boss objects for use in all fragments
-        player = Player(androidId)
-        boss = Boss(androidId)
-
         // Initially select the first menu item.
         selectDrawerItem(nvDrawer.menu.getItem(0))
     }
@@ -75,10 +65,18 @@ class NavActivity : AppCompatActivity() {
             else -> Fragment()  // TODO: replace with a 404 fragment
         }
 
-        var bundle = Bundle()
+        // Grab androidId
+        var androidId = Settings.Secure.getString(this.contentResolver, Settings.Secure.ANDROID_ID)
+        if (isEmulator()) {
+            androidId = "1cf08e3503018df0";
+        }
+
+        // Add player/boss objects to bundle along with androidId
+        val bundle = Bundle()
         bundle.putSerializable("player", player)
         bundle.putSerializable("boss", boss)
-        fragment.setArguments(bundle)
+        bundle.putString("androidId", androidId)
+        fragment.arguments = bundle
 
         // Insert the fragment by replacing any existing fragment
         supportFragmentManager.transact { replace(R.id.flContent, fragment) }
@@ -107,21 +105,45 @@ class NavActivity : AppCompatActivity() {
 
     }
 
-    override fun onPause() {
-        // Grab current androidID
-        var androidId = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID); //Device ID
+    override fun onStop() {
+        updateFirebase()
+        super.onStop()
+    }
+
+    fun updateCharacters(inputPlayer : Player?, inputBoss : Boss?) {
+        player = inputPlayer
+        boss = inputBoss
+    }
+
+    private fun updateFirebase() {
+        var androidId = Settings.Secure.getString(this.contentResolver, Settings.Secure.ANDROID_ID)
         if (isEmulator()) {
             androidId = "1cf08e3503018df0";
         }
 
-        val dbRef = FirebaseDatabase.getInstance().getReference()
-        //dbRef.child(androidId).child("character").child("health").setValue(character?.getHealth())
-        //dbRef.child(androidId).child("character").child("currency").setValue(character?.getHealth())
+        val dbRef = FirebaseDatabase.getInstance().reference
 
-        super.onPause()
+        // Update stats (goals and current)
+        dbRef.child("attack").child("goals").setValue(player!!.atkStat.goals)
+        dbRef.child("attack").child("current").setValue(player!!.atkStat.current)
+
+        dbRef.child("intelligence").child("goals").setValue(player!!.atkStat.goals)
+        dbRef.child("intelligence").child("current").setValue(player!!.atkStat.current)
+
+        dbRef.child("regen").child("goals").setValue(player!!.regenStat.goals)
+        dbRef.child("regen").child("current").setValue(player!!.regenStat.current)
+
+        // Update character health and currency
+        dbRef.child(androidId).child("character").child("health").setValue(player!!.health)
+        dbRef.child(androidId).child("character").child("currency").setValue(player!!.currency)
+
+        // Update boss health, attack, and level
+        dbRef.child(androidId).child("boss").child("health").setValue(boss!!.health)
+        dbRef.child(androidId).child("boss").child("attack").setValue(boss!!.attack)
+        dbRef.child(androidId).child("boss").child("level").setValue(boss!!.lvl)
     }
 
-    fun isEmulator(): Boolean {
+    private fun isEmulator(): Boolean {
         return (Build.FINGERPRINT.startsWith("generic")
             || Build.FINGERPRINT.startsWith("unknown")
             || Build.MODEL.contains("google_sdk")
