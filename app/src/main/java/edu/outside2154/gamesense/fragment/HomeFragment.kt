@@ -54,6 +54,11 @@ class HomeFragment : Fragment() {
         atk_lb.progress = 50
         int_lb.progress = 20
         boss_hp_lb.progress = 100
+
+        //hp_lb.progress = player!!.health.toInt()
+        //atk_lb.progress = (player!!.atkStat!!.calcStat() !!* 100).toInt()
+        //int_lb.progress = (player!!.intStat!!.calcStat() !!* 100).toInt()
+        //boss_hp_lb.progress = boss!!.health.toInt()
     }
 
     // TODO: Rename method, update argument and hook method into UI event

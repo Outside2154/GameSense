@@ -18,6 +18,7 @@ const val PLAYER_CRIT_MULT = 2.0
 class Player(androidId : String) : Serializable {
     var health = PLAYER_BASE_HEALTH
         private set
+
     var intStat : Stat? = null
     var atkStat : Stat? = null
     var regenStat : Stat? = null
@@ -46,13 +47,14 @@ class Player(androidId : String) : Serializable {
                 val goalsIntSnapShot = snapshot.child("intelligence").child("goals")
                 val currIntSnapShot = snapshot.child("intelligence").child("current")
 
+
                 // Set stats as maps of goals and current values
-                regenStat = Stat(goalsHealthSnapShot.getValue() as Map<String, Double>,
-                        currHealthSnapShot.getValue() as Map<String, Double>)
-                atkStat = Stat(goalsAtkSnapShot.getValue() as Map<String, Double>,
-                        currAtkSnapShot.getValue() as Map<String, Double>)
-                intStat = Stat(goalsIntSnapShot.getValue() as Map<String, Double>,
-                        currIntSnapShot.getValue() as Map<String, Double>)
+                regenStat = Stat(convertMap(goalsHealthSnapShot.getValue() as Map<String, Long>),
+                        convertMap(currHealthSnapShot.getValue() as Map<String, Long>))
+                atkStat = Stat(convertMap(goalsAtkSnapShot.getValue() as Map<String, Long>),
+                        convertMap(currAtkSnapShot.getValue() as Map<String, Long>))
+                intStat = Stat(convertMap(goalsIntSnapShot.getValue() as Map<String, Long>),
+                        convertMap(currIntSnapShot.getValue() as Map<String, Long>))
 
                 // Get snapshot of current health and cast appropriately
                 val currHealthSnapshot = snapshot.child("character").child("health")
@@ -74,6 +76,10 @@ class Player(androidId : String) : Serializable {
         // Grab values with single value event listener
         val dbRef = FirebaseDatabase.getInstance().getReference()
         dbRef.child(androidId).addListenerForSingleValueEvent(fbListener)
+    }
+
+    private fun convertMap(origMap : Map<String, Long>): Map<String, Double> {
+        return origMap.mapValues {it.value.toDouble()}
     }
 
     private fun isCritical(): Boolean{
