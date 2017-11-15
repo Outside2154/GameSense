@@ -1,35 +1,36 @@
-package edu.outside2154.gamesense
+package edu.outside2154.gamesense.model
 
 import android.util.Log
-import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import edu.outside2154.gamesense.model.Stat
+import edu.outside2154.gamesense.model.Boss
 import java.io.Serializable
 import java.util.*
 
+const val PLAYER_BASE_HEALTH = 100.0
+const val PLAYER_BASE_ATTACK = 100.0
+const val PLAYER_CRIT_MULT = 2.0
 
-/**
- * Created by Nurbergen on 11/4/17.
- * Modified by Tynan Dewes on 11/13/17
- */
 
-class Character (androidId : String): Serializable {
-    private val baseHealth = 100.0
-    private val baseAttack = 100.0
-    private val criticalMultiplier = 2.0
+class Player(androidId : String) : Serializable {
+    var health = PLAYER_BASE_HEALTH
+        private set
+    var intStat : Stat? = null
+    var atkStat : Stat? = null
+    var regenStat : Stat? = null
 
-    private var health = baseHealth
-    private var regenStat: Stat? = null
-    private var atkStat: Stat? = null
-    private var intStat: Stat? = null
-
-    private var currency = 0.0
-    private var avatar = ""
+    var currency = 0.0
+        private set
+    val pureDamage
+        get() = PLAYER_BASE_ATTACK * (atkStat?.calcStat() ?: 0.0)
+    val dead
+        get() = health == 0.0
+    private val rand = Random()
 
     init {
-        val dbRef = FirebaseDatabase.getInstance().getReference()
-
         // Create listener for data reading from Firebase
         val fbListener = object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -71,44 +72,28 @@ class Character (androidId : String): Serializable {
         }
 
         // Grab values with single value event listener
+        val dbRef = FirebaseDatabase.getInstance().getReference()
         dbRef.child(androidId).addListenerForSingleValueEvent(fbListener)
     }
 
     private fun isCritical(): Boolean{
-        return Random().nextDouble() < intStat?.calcStat() ?: 0.0
+        return rand.nextDouble() < intStat?.calcStat() ?: 0.0
     }
 
     private fun takeDamage(damage: Double){
         health = maxOf(health - damage, 0.0)
     }
 
-    fun fightWith(boss: Boss){
-        if (boss.isDead()) return
+    fun fight(boss: Boss){
+        if (boss.dead) return
 
         // User attacks
-        val attack = atkStat?.calcStat() ?: 0.0
-        var damage = attack * baseAttack
-        if (isCritical()) damage *= criticalMultiplier
-        boss.takeDamage(damage)
+        var finalDamage = pureDamage
+        if (isCritical()) finalDamage *= PLAYER_CRIT_MULT
+        boss.takeDamage(finalDamage)
 
         // Boss attacks
-        if (boss.isDead()) return
-        takeDamage(boss.getAttack())
-    }
-
-    fun isDead() : Boolean{
-        return health == 0.0
-    }
-
-    fun getHealth() : Double {
-        return health
-    }
-
-    fun getAttack() : Double? {
-        return atkStat?.calcStat()
-    }
-
-    fun getIntelligence() : Double? {
-        return intStat?.calcStat()
+        if (boss.dead) return
+        takeDamage(boss.attack)
     }
 }

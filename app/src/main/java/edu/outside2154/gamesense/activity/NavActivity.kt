@@ -1,10 +1,10 @@
 package edu.outside2154.gamesense.activity
 
 import android.content.res.Configuration
+import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.support.v4.app.Fragment
-import android.view.View
 import android.support.design.widget.NavigationView
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
@@ -13,26 +13,20 @@ import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import com.google.firebase.database.FirebaseDatabase
 
-import edu.outside2154.gamesense.Character
-import edu.outside2154.gamesense.Boss
+import edu.outside2154.gamesense.model.Player
+import edu.outside2154.gamesense.model.Boss
 
 import edu.outside2154.gamesense.R
 import edu.outside2154.gamesense.fragment.ChecklistFragment
 import edu.outside2154.gamesense.fragment.HomeFragment
 import edu.outside2154.gamesense.fragment.SettingsFragment
-import edu.outside2154.gamesense.isEmulator
+import edu.outside2154.gamesense.util.transact
 
-// TODO: Review this.
 class NavActivity : AppCompatActivity() {
-    private var mDrawer: DrawerLayout? = null
-    private var toolbar: Toolbar? = null
-    private var nvDrawer: NavigationView? = null
+    private lateinit var mDrawer: DrawerLayout
+    private lateinit var drawerToggle: ActionBarDrawerToggle
 
-    // Make sure to be using android.support.v7.app.ActionBarDrawerToggle version.
-    // The android.support.v4.app.ActionBarDrawerToggle has been deprecated.
-    private var drawerToggle: ActionBarDrawerToggle? = null
-
-    private var character: Character? = null
+    private var player: Player? = null
     private var boss: Boss? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,28 +34,22 @@ class NavActivity : AppCompatActivity() {
         setContentView(R.layout.activity_nav)
 
         // Set a Toolbar to replace the ActionBar.
-        toolbar = findViewById<View>(R.id.toolbar) as Toolbar
+        val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
 
-        val tx = supportFragmentManager.beginTransaction()
-        tx.replace(R.id.flContent, HomeFragment())
-        tx.commit()
+        // Find and setup the drawer view.
+        mDrawer = findViewById(R.id.drawer_layout)
+        val nvDrawer = findViewById<NavigationView>(R.id.nvView)
+        nvDrawer.setNavigationItemSelectedListener {
+            selectDrawerItem(it)
+            true  // Display the item as selected.
+        }
 
-        // Find our drawer view
-        mDrawer = findViewById<View>(R.id.drawer_layout) as DrawerLayout
-        nvDrawer = findViewById<View>(R.id.nvView) as NavigationView
-        // Setup drawer view
-        setupDrawerContent(nvDrawer)
-
-        toolbar = findViewById<View>(R.id.toolbar) as Toolbar
-        setSupportActionBar(toolbar)
-
-        // Find our drawer view
-        mDrawer = findViewById<View>(R.id.drawer_layout) as DrawerLayout
-        drawerToggle = setupDrawerToggle()
-
-        // Tie DrawerLayout events to the ActionBarToggle
-        mDrawer!!.addDrawerListener(drawerToggle!!)
+        // Tie DrawerLayout events to a toggle.
+        drawerToggle = ActionBarDrawerToggle(
+                this, mDrawer, toolbar,
+                R.string.drawer_open, R.string.drawer_close)
+        mDrawer.addDrawerListener(drawerToggle)
 
         // Grab current androidID
         var androidId = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID); //Device ID
@@ -70,75 +58,51 @@ class NavActivity : AppCompatActivity() {
         }
 
         // Create character and boss objects for use in all fragments
-        character = Character(androidId)
+        player = Player(androidId)
         boss = Boss(androidId)
+
+        // Initially select the first menu item.
+        selectDrawerItem(nvDrawer.menu.getItem(0))
     }
 
-    private fun setupDrawerToggle(): ActionBarDrawerToggle {
-        // NOTE: Make sure you pass in a valid toolbar reference.  ActionBarDrawToggle() does not require it
-        // and will not render the hamburger icon without it.
-        return ActionBarDrawerToggle(this, mDrawer, toolbar, R.string.drawer_open, R.string.drawer_close)
+    private fun selectDrawerItem(menuItem: MenuItem) {
+        // Create a new fragment based on menu item selected.
+        val fragment = when (menuItem.itemId) {
+            R.id.nav_home_fragment -> HomeFragment()
+            R.id.nav_settings_fragment -> SettingsFragment()
+            R.id.nav_checklist_fragment -> ChecklistFragment()
+            else -> Fragment()  // TODO: replace with a 404 fragment
+        }
+
+        var bundle = Bundle()
+        bundle.putSerializable("player", player)
+        bundle.putSerializable("boss", boss)
+        fragment.setArguments(bundle)
+
+        // Insert the fragment by replacing any existing fragment
+        supportFragmentManager.transact { replace(R.id.flContent, fragment) }
+
+        // Update UI state
+        menuItem.isChecked = true
+        title = menuItem.title
+        mDrawer.closeDrawers()
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
         // Sync the toggle state after onRestoreInstanceState has occurred.
-        drawerToggle!!.syncState()
+        drawerToggle.syncState()
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
-        // Pass any configuration change to the drawer toggles
-        drawerToggle!!.onConfigurationChanged(newConfig)
+        // Pass any configuration change to the drawer toggles.
+        drawerToggle.onConfigurationChanged(newConfig)
     }
-
-    private fun setupDrawerContent(navigationView: NavigationView?) {
-        navigationView!!.setNavigationItemSelectedListener { menuItem ->
-            selectDrawerItem(menuItem)
-            true
-        }
-    }
-
-    fun selectDrawerItem(menuItem: MenuItem) {
-        // Create a new fragment and specify the fragment to show based on nav item clicked
-        var fragment: Fragment? = null
-        val fragmentClass: Class<*>
-        when (menuItem.itemId) {
-            R.id.nav_first_fragment -> fragmentClass = HomeFragment::class.java
-            R.id.nav_second_fragment -> fragmentClass = SettingsFragment::class.java
-            R.id.nav_third_fragment -> fragmentClass = ChecklistFragment::class.java
-            else -> fragmentClass = HomeFragment::class.java
-        }
-
-        try {
-            // Pass character and boss objects as Serializable objects to fragments
-            var bundle = Bundle()
-            bundle.putSerializable("char", character)
-            bundle.putSerializable("boss", boss)
-            fragment = fragmentClass.newInstance() as Fragment
-            fragment.setArguments(bundle)
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-
-        // Insert the fragment by replacing any existing fragment
-        val fragmentManager = supportFragmentManager
-        fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit()
-
-        // Highlight the selected item has been done by NavigationView
-        menuItem.isChecked = true
-        // Set action bar title
-        title = menuItem.title
-        // Close the navigation drawer
-        mDrawer!!.closeDrawers()
-    }
-
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         // The action bar home/up action should open or close the drawer.
-        return if (drawerToggle!!.onOptionsItemSelected(item)) {
-            true
-        } else super.onOptionsItemSelected(item)
+        return drawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item)
 
     }
 
@@ -154,5 +118,16 @@ class NavActivity : AppCompatActivity() {
         //dbRef.child(androidId).child("character").child("currency").setValue(character?.getHealth())
 
         super.onPause()
+    }
+
+    fun isEmulator(): Boolean {
+        return (Build.FINGERPRINT.startsWith("generic")
+            || Build.FINGERPRINT.startsWith("unknown")
+            || Build.MODEL.contains("google_sdk")
+            || Build.MODEL.contains("Emulator")
+            || Build.MODEL.contains("Android SDK built for x86")
+            || Build.MANUFACTURER.contains("Genymotion")
+            || Build.BRAND.startsWith("generic") && Build.DEVICE.startsWith("generic")
+            || "google_sdk" == Build.PRODUCT)
     }
 }
