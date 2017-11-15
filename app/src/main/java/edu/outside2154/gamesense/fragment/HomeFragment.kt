@@ -118,6 +118,7 @@ class HomeFragment : Fragment() {
                 updateBossBar()
 
                 // Call ExtraSensory function
+                // Fighting functions
 
                 // Update player and boss with new data
                 // updatePlayerBars()

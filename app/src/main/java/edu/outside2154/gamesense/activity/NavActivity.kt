@@ -29,6 +29,7 @@ class NavActivity : AppCompatActivity() {
 
     private var player: Player? = null
     private var boss: Boss? = null
+    private lateinit var androidId : String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,6 +53,12 @@ class NavActivity : AppCompatActivity() {
                 R.string.drawer_open, R.string.drawer_close)
         mDrawer.addDrawerListener(drawerToggle)
 
+        // Grab androidId
+        androidId = Settings.Secure.getString(this.contentResolver, Settings.Secure.ANDROID_ID)
+        if (isEmulator()) {
+            androidId = "1cf08e3503018df0";
+        }
+
         // Initially select the first menu item.
         selectDrawerItem(nvDrawer.menu.getItem(0))
     }
@@ -63,12 +70,6 @@ class NavActivity : AppCompatActivity() {
             R.id.nav_settings_fragment -> SettingsFragment()
             R.id.nav_checklist_fragment -> ChecklistFragment()
             else -> Fragment()  // TODO: replace with a 404 fragment
-        }
-
-        // Grab androidId
-        var androidId = Settings.Secure.getString(this.contentResolver, Settings.Secure.ANDROID_ID)
-        if (isEmulator()) {
-            androidId = "1cf08e3503018df0";
         }
 
         // Add player/boss objects to bundle along with androidId
@@ -116,22 +117,17 @@ class NavActivity : AppCompatActivity() {
     }
 
     private fun updateFirebase() {
-        var androidId = Settings.Secure.getString(this.contentResolver, Settings.Secure.ANDROID_ID)
-        if (isEmulator()) {
-            androidId = "1cf08e3503018df0";
-        }
-
         val dbRef = FirebaseDatabase.getInstance().reference
 
         // Update stats (goals and current)
-        dbRef.child("attack").child("goals").setValue(player!!.atkStat.goals)
-        dbRef.child("attack").child("current").setValue(player!!.atkStat.current)
+        dbRef.child("attack").child("goals").updateChildren(player!!.atkStat.goals.items)
+        dbRef.child("attack").child("current").updateChildren(player!!.atkStat.current.items)
 
-        dbRef.child("intelligence").child("goals").setValue(player!!.atkStat.goals)
-        dbRef.child("intelligence").child("current").setValue(player!!.atkStat.current)
+        dbRef.child("intelligence").child("goals").setValue(player!!.intStat.goals.items)
+        dbRef.child("intelligence").child("current").setValue(player!!.intStat.current.items)
 
-        dbRef.child("regen").child("goals").setValue(player!!.regenStat.goals)
-        dbRef.child("regen").child("current").setValue(player!!.regenStat.current)
+        dbRef.child("regen").child("goals").setValue(player!!.regenStat.goals.items)
+        dbRef.child("regen").child("current").setValue(player!!.regenStat.current.items)
 
         // Update character health and currency
         dbRef.child(androidId).child("character").child("health").setValue(player!!.health)
