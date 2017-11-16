@@ -35,9 +35,9 @@ abstract class BossBaseImpl : Boss {
     }
 }
 
-class BossLocalImpl(override var health : Double,
-                    override var attack : Double,
-                    override var lvl : Int) : BossBaseImpl()
+class BossLocalImpl(override var health: Double,
+                    override var attack: Double,
+                    override var lvl: Int) : BossBaseImpl()
 
 class BossFirebaseImpl(root: FirebaseRefSnap) : BossBaseImpl() {
     override var health: Double by BoundFirebaseProperty(root, BOSS_BASE_HEALTH)
