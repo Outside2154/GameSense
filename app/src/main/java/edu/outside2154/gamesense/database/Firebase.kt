@@ -40,9 +40,10 @@ open class FirebaseIdentity<T> : FirebaseTransform<T> {
 }
 
 // Delegates a property to Firebase represented by `root`.
-class FirebaseProperty<in R, T>(private val root: FirebaseRefSnap,
-                                private val default: T,
-                                private val transform: FirebaseTransform<T> = FirebaseIdentity())
+class FirebaseProperty<in R, T>(
+        private val root: FirebaseRefSnap,
+        private val default: T,
+        private val transform: FirebaseTransform<T> = FirebaseIdentity())
     : ReadWriteProperty<R, T> {
     var field: T? = transform.fromFirebase(root.snap)
 
