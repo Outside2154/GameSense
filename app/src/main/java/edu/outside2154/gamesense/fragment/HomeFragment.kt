@@ -60,8 +60,6 @@ class HomeFragment : Fragment() {
                 boss = BossFirebaseImpl(it)
                 updateBossBar()
             }
-        } else {
-            updateBossBar()
         }
 
         if (player == null) createCharacters()
@@ -72,10 +70,18 @@ class HomeFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_home, container, false)
     }
 
+    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        updatePlayerBars()
+        updateBossBar()
+    }
+
     private fun updatePlayerBars() {
-        hp_lb.progress = player!!.health.toInt()
-        atk_lb.progress = (player!!.atkStat.calcStat() !!* 100).toInt()
-        int_lb.progress = (player!!.intStat.calcStat() !!* 100).toInt()
+        player?.let {
+            hp_lb.progress = it.health.toInt()
+            atk_lb.progress = ((it.atkStat.calcStat() ?: 0.0) * 100).toInt()
+            int_lb.progress = ((it.intStat.calcStat() ?: 0.0) * 100).toInt()
+        }
     }
 
     private fun updateBossBar() {
