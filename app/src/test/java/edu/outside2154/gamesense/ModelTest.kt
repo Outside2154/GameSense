@@ -12,7 +12,7 @@ class ModelBossTest {
 
     @Before
     fun setUp() {
-        boss = Boss(BOSS_BASE_HEALTH, BOSS_BASE_ATTACK, 1)
+        boss = BossLocalImpl(BOSS_BASE_HEALTH, BOSS_BASE_ATTACK, 1)
     }
 
     @Test
@@ -66,7 +66,7 @@ class ModelPlayerTest {
         val atkStat = Stat(mapOf("Running" to 3.0, "Exercise" to 7.0), mapOf("Running" to 1.5, "Exercise" to 1.0))
         val regenStat = Stat(mapOf("Sleeping" to 56.0), mapOf("Sleeping" to 14.0))
         player = Player(regenStat, atkStat, intStat, PLAYER_BASE_HEALTH, 0.0)
-        boss = Boss(BOSS_BASE_HEALTH, BOSS_BASE_ATTACK, 1)
+        boss = BossLocalImpl(BOSS_BASE_HEALTH, BOSS_BASE_ATTACK, 1)
     }
 
     @Test

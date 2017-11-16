@@ -3,7 +3,6 @@ package edu.outside2154.gamesense.fragment
 import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,6 +15,8 @@ import edu.outside2154.gamesense.model.Boss
 
 import edu.outside2154.gamesense.R
 import edu.outside2154.gamesense.activity.NavActivity
+import edu.outside2154.gamesense.database.FirebaseRefSnap
+import edu.outside2154.gamesense.model.BossFirebaseImpl
 import edu.outside2154.gamesense.model.Stat
 import kotlinx.android.synthetic.main.fragment_home.*
 
@@ -36,20 +37,20 @@ class HomeFragment : Fragment() {
     private var mListener: OnFragmentInteractionListener? = null
 
     private var player: Player? = null
-    private var boss: Boss? = null
+    private lateinit var boss: Boss
     private lateinit var androidId: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.run {
-            mParam1 = getString(ARG_PARAM1)
-            mParam2 = getString(ARG_PARAM2)
-            player = getSerializable("player") as Player?
-            boss = getSerializable("boss") as Boss?
-            androidId = getString("androidId")
-        }
-
-        if (player == null && boss == null) {
+        if (arguments != null) {
+            arguments.run {
+                mParam1 = getString(ARG_PARAM1)
+                mParam2 = getString(ARG_PARAM2)
+                player = getSerializable("player") as Player?
+                boss = getSerializable("boss") as Boss
+                androidId = getString("androidId")
+            }
+        } else {
             createCharacters()
         }
     }
@@ -66,14 +67,18 @@ class HomeFragment : Fragment() {
     }
 
     private fun updateBossBar() {
-        boss_hp_lb.progress = boss!!.health.toInt()
+        boss_hp_lb.progress = boss.health.toInt()
     }
 
     private fun createCharacters() {
+        val dbRef = FirebaseDatabase.getInstance().reference.child(androidId)
+
         // Create listener for data reading from Firebase
         val fbListener = object : ValueEventListener {
             @Suppress("UNCHECKED_CAST")
             override fun onDataChange(snapshot: DataSnapshot) {
+                val root = FirebaseRefSnap(dbRef, snapshot)
+
                 // Get Maps of health goals and current values
                 val healthGoals = snapshot.child("regen").child("goals").value as Map<String, Long>
                 val healthCurr = snapshot.child("regen").child("current").value as Map<String, Long>
@@ -103,18 +108,7 @@ class HomeFragment : Fragment() {
                 player = Player(regenStat, atkStat, intStat, health, currency)
                 updatePlayerBars()
 
-                // Pull boss info as Longs from Firebase
-                val bossLongHealth = snapshot.child("boss").child("health").value as Long
-                val longAttack = snapshot.child("boss").child("attack").value as Long
-                val longLevel = snapshot.child("boss").child("level").value as Long
-
-                // Set boss attributes
-                val bossHealth = bossLongHealth.toDouble()
-                val bossAttack = longAttack.toDouble()
-                val lvl = longLevel.toInt()
-
-                // Get previous values for boss
-                boss = Boss(bossHealth, bossAttack, lvl)
+                boss = BossFirebaseImpl(root.child("boss"))
                 updateBossBar()
 
                 // Call ExtraSensory function
@@ -134,8 +128,8 @@ class HomeFragment : Fragment() {
         }
 
         // Grab values with single value event listener
-        val dbRef = FirebaseDatabase.getInstance().reference
-        dbRef.child(androidId).addListenerForSingleValueEvent(fbListener)
+        dbRef.addListenerForSingleValueEvent(fbListener)
+
     }
 
     private fun convertMap(origMap : Map<String, Long>): Map<String, Double> {

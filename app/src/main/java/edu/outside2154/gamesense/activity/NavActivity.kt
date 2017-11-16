@@ -56,7 +56,7 @@ class NavActivity : AppCompatActivity() {
         // Grab androidId
         androidId = Settings.Secure.getString(this.contentResolver, Settings.Secure.ANDROID_ID)
         if (isEmulator()) {
-            androidId = "1cf08e3503018df0";
+            androidId = "1cf08e3503018df0"
         }
 
         // Initially select the first menu item.
@@ -132,11 +132,6 @@ class NavActivity : AppCompatActivity() {
         // Update character health and currency
         dbRef.child(androidId).child("character").child("health").setValue(player!!.health)
         dbRef.child(androidId).child("character").child("currency").setValue(player!!.currency)
-
-        // Update boss health, attack, and level
-        dbRef.child(androidId).child("boss").child("health").setValue(boss!!.health)
-        dbRef.child(androidId).child("boss").child("attack").setValue(boss!!.attack)
-        dbRef.child(androidId).child("boss").child("level").setValue(boss!!.lvl)
     }
 
     private fun isEmulator(): Boolean {

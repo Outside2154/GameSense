@@ -1,5 +1,7 @@
 package edu.outside2154.gamesense.model
 
+import edu.outside2154.gamesense.database.FirebaseProperty
+import edu.outside2154.gamesense.database.FirebaseRefSnap
 import java.io.Serializable
 
 const val BOSS_BASE_HEALTH = 100.0
@@ -7,23 +9,38 @@ const val BOSS_HEALTH_INC = 50.0
 const val BOSS_BASE_ATTACK = 20.0
 const val BOSS_ATTACK_INC = 5.0
 
-class Boss(health : Double, attack : Double, level : Int) : Serializable {
-    var health = health
-        private set
-    var attack = attack
-        private set
-    var lvl = level
-        private set
+interface Boss : Serializable {
+    val health: Double
+    val attack: Double
+    val lvl: Int
     val dead
         get() = health == 0.0
+    fun takeDamage(damage: Double)
+    fun reset(userWon: Boolean)
+}
 
-    fun takeDamage(damage: Double){
+abstract class BossBaseImpl : Boss {
+    abstract override var health: Double
+    abstract override var attack: Double
+    abstract override var lvl: Int
+
+    override fun takeDamage(damage: Double) {
         health = maxOf(health - damage, 0.0)
     }
 
-    fun reset(userWon: Boolean) {
+    override fun reset(userWon: Boolean) {
         if (userWon) lvl++
         health = BOSS_BASE_HEALTH + BOSS_HEALTH_INC * (lvl - 1)
         attack = BOSS_BASE_ATTACK + BOSS_ATTACK_INC * (lvl - 1)
     }
+}
+
+class BossLocalImpl(override var health : Double,
+                    override var attack : Double,
+                    override var lvl : Int) : BossBaseImpl()
+
+class BossFirebaseImpl(root: FirebaseRefSnap) : BossBaseImpl() {
+    override var health: Double by FirebaseProperty(root, BOSS_BASE_HEALTH)
+    override var attack: Double by FirebaseProperty(root, BOSS_BASE_ATTACK)
+    override var lvl: Int by FirebaseProperty(root, 0)
 }
