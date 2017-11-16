@@ -16,6 +16,7 @@ import edu.outside2154.gamesense.model.Boss
 import edu.outside2154.gamesense.R
 import edu.outside2154.gamesense.activity.NavActivity
 import edu.outside2154.gamesense.database.FirebaseRefSnap
+import edu.outside2154.gamesense.database.firebaseListen
 import edu.outside2154.gamesense.model.BossFirebaseImpl
 import edu.outside2154.gamesense.model.Stat
 import kotlinx.android.synthetic.main.fragment_home.*
@@ -37,22 +38,29 @@ class HomeFragment : Fragment() {
     private var mListener: OnFragmentInteractionListener? = null
 
     private var player: Player? = null
-    private lateinit var boss: Boss
+    private var boss: Boss? = null
     private lateinit var androidId: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (arguments != null) {
-            arguments.run {
-                mParam1 = getString(ARG_PARAM1)
-                mParam2 = getString(ARG_PARAM2)
-                player = getSerializable("player") as Player?
-                boss = getSerializable("boss") as Boss
-                androidId = getString("androidId")
+        arguments.run {
+            androidId = getString("androidId")
+            mParam1 = getString(ARG_PARAM1)
+            mParam2 = getString(ARG_PARAM2)
+            player = getSerializable("player") as Player?
+            boss = getSerializable("boss") as Boss?
+        }
+
+        if (boss == null) {
+            firebaseListen("$androidId/boss") {
+                boss = BossFirebaseImpl(it)
+                updateBossBar()
             }
         } else {
-            createCharacters()
+            updateBossBar()
         }
+
+        if (player == null) createCharacters()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -67,7 +75,9 @@ class HomeFragment : Fragment() {
     }
 
     private fun updateBossBar() {
-        boss_hp_lb.progress = boss.health.toInt()
+        boss?.let {
+            boss_hp_lb.progress = it.health.toInt()
+        }
     }
 
     private fun createCharacters() {
@@ -108,15 +118,11 @@ class HomeFragment : Fragment() {
                 player = Player(regenStat, atkStat, intStat, health, currency)
                 updatePlayerBars()
 
-                boss = BossFirebaseImpl(root.child("boss"))
-                updateBossBar()
-
                 // Call ExtraSensory function
                 // Fighting functions
 
-                // Update player and boss with new data
+                // Update player with new data
                 // updatePlayerBars()
-                // updateBossBar()
 
                 (activity as NavActivity).updateCharacters(player, boss)
             }

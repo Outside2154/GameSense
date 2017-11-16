@@ -1,6 +1,6 @@
 package edu.outside2154.gamesense.model
 
-import edu.outside2154.gamesense.database.FirebaseProperty
+import edu.outside2154.gamesense.database.BoundFirebaseProperty
 import edu.outside2154.gamesense.database.FirebaseRefSnap
 import java.io.Serializable
 
@@ -40,7 +40,7 @@ class BossLocalImpl(override var health : Double,
                     override var lvl : Int) : BossBaseImpl()
 
 class BossFirebaseImpl(root: FirebaseRefSnap) : BossBaseImpl() {
-    override var health: Double by FirebaseProperty(root, BOSS_BASE_HEALTH)
-    override var attack: Double by FirebaseProperty(root, BOSS_BASE_ATTACK)
-    override var lvl: Int by FirebaseProperty(root, 0)
+    override var health: Double by BoundFirebaseProperty(root, BOSS_BASE_HEALTH)
+    override var attack: Double by BoundFirebaseProperty(root, BOSS_BASE_ATTACK)
+    override var lvl: Int by BoundFirebaseProperty(root, 0)
 }
