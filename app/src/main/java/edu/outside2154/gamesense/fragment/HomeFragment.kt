@@ -1,16 +1,14 @@
 package edu.outside2154.gamesense.fragment
 
-import android.content.Context
 import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
 
 import edu.outside2154.gamesense.R
-import java.net.URI
+import kotlinx.android.synthetic.main.fragment_home.*
 
 /**
  * A simple [Fragment] subclass.
@@ -28,64 +26,26 @@ class HomeFragment : Fragment() {
 
     private var mListener: OnFragmentInteractionListener? = null
 
-    private lateinit var atkPb: ProgressBar
-    private lateinit var intelPb: ProgressBar
-    private lateinit var hthPb: ProgressBar
-
-    private lateinit var atkAmt: TextView
-    private lateinit var intelAmt: TextView
-    private lateinit var hthAmt: TextView
-
-//    private lateinit var atkSpinner: Spinner
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.run {
             mParam1 = getString(ARG_PARAM1)
             mParam2 = getString(ARG_PARAM2)
         }
-
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        val v = inflater.inflate(R.layout.fragment_home, container, false)
+        return inflater.inflate(R.layout.fragment_home, container, false)
+    }
 
-        // TODO: Don't hardcode.
-//        val atkLevel = 20
-//        atkPb = v.findViewById(R.id.atk_pb)
-//        atkPb.progress = atkLevel
-//        atkAmt = v.findViewById(R.id.atk_amt)
-//        atkAmt.text = atkLevel.toString() + "%"
-//        val intelLevel = 30
-//        intelPb = v.findViewById(R.id.intel_pb)
-//        intelPb.progress = intelLevel
-//        intelAmt = v.findViewById(R.id.intel_amt)
-//        intelAmt.text = intelLevel.toString() + "%"
-//        val hthLevel = 40
-//        hthPb = v.findViewById(R.id.hth_pb)
-//        hthPb.progress = hthLevel
-//        hthAmt = v.findViewById(R.id.hth_amt)
-//        hthAmt.text = hthLevel.toString() + "%"
+    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-        val atkSpinner = v.findViewById<Spinner>(R.id.atk_spinner) as Spinner
-        val atkOptions = arrayOf<String>("Sleeping", "Relaxing", "Eating", "Cleaning", "Social: With Friends/Family")
-        val atkAdapter = ArrayAdapter<String>(context, android.R.layout.simple_spinner_dropdown_item, atkOptions)
-
-        val intSpinner = v.findViewById<Spinner>(R.id.int_spinner) as Spinner
-        val intOptions = arrayOf<String>("Occupation: Studying/Working", "Reading", "Playing Musical Instrument", "Drawning", "Singing")
-        val intAdapter = ArrayAdapter<String>(context, android.R.layout.simple_spinner_dropdown_item, intOptions)
-
-        val hthSpinner = v.findViewById<Spinner>(R.id.hth_spinner) as Spinner
-        val hthOptions = arrayOf<String>("Exercising", "Walking", "Running", "Hiking", "Lifting Weights", "Yoga")
-        val hthAdapter = ArrayAdapter<String>(context, android.R.layout.simple_spinner_dropdown_item, hthOptions)
-
-        atkSpinner.setAdapter(atkAdapter)
-        intSpinner.setAdapter(intAdapter)
-        hthSpinner.setAdapter(hthAdapter)
-
-        // Inflate the layout for this fragment
-        return v
+        hp_lb.progress = 80
+        atk_lb.progress = 50
+        int_lb.progress = 20
+        boss_hp_lb.progress = 100
     }
 
     // TODO: Rename method, update argument and hook method into UI event

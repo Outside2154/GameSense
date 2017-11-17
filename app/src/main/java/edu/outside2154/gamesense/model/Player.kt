@@ -2,13 +2,13 @@ package edu.outside2154.gamesense.model
 
 import java.util.*
 
-const val USER_BASE_HEALTH = 100.0
-const val USER_BASE_ATTACK = 100.0
-const val USER_CRIT_MULT = 2.0
+const val PLAYER_BASE_HEALTH = 100.0
+const val PLAYER_BASE_ATTACK = 100.0
+const val PLAYER_CRIT_MULT = 2.0
 
 
-class Character (_intStat: Stat, _atkStat: Stat, _regenStat: Stat) {
-    var health = USER_BASE_HEALTH
+class Player(_intStat: Stat, _atkStat: Stat, _regenStat: Stat) {
+    var health = PLAYER_BASE_HEALTH
         private set
     var intStat = _intStat
         private set
@@ -18,6 +18,8 @@ class Character (_intStat: Stat, _atkStat: Stat, _regenStat: Stat) {
         private set
     var currency = 0.0
         private set
+    val pureDamage
+        get() = PLAYER_BASE_ATTACK * (atkStat.calcStat() ?: 0.0)
     val dead
         get() = health == 0.0
     private val rand = Random()
@@ -30,14 +32,13 @@ class Character (_intStat: Stat, _atkStat: Stat, _regenStat: Stat) {
         health = maxOf(health - damage, 0.0)
     }
 
-    fun fightWith(boss: Boss){
+    fun fight(boss: Boss){
         if (boss.dead) return
 
         // User attacks
-        val attack = atkStat.calcStat() ?: 0.0
-        var damage = attack * USER_BASE_ATTACK
-        if (isCritical()) damage *= USER_CRIT_MULT
-        boss.takeDamage(damage)
+        var finalDamage = pureDamage
+        if (isCritical()) finalDamage *= PLAYER_CRIT_MULT
+        boss.takeDamage(finalDamage)
 
         // Boss attacks
         if (boss.dead) return

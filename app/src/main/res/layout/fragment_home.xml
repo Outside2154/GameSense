@@ -1,73 +1,88 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:gamesense="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/frameLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="edu.outside2154.gamesense.fragment.HomeFragment">
 
-    <!-- TODO: Update blank fragment layout -->
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginHorizontal="20dp"
-        android:layout_marginVertical="50dp"
-        android:orientation="vertical">
+    <edu.outside2154.gamesense.view.LabeledBarView
+        android:id="@+id/hp_lb"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        gamesense:label="HP"
+        gamesense:label_width="50dp"
+        gamesense:layout_constraintEnd_toEndOf="parent"
+        gamesense:layout_constraintStart_toStartOf="parent"
+        gamesense:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/atk_header"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Attack"
-            android:textSize="30sp" />
+    <edu.outside2154.gamesense.view.LabeledBarView
+        android:id="@+id/atk_lb"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        gamesense:label="ATK"
+        gamesense:label_width="50dp"
+        gamesense:layout_constraintEnd_toEndOf="parent"
+        gamesense:layout_constraintStart_toStartOf="parent"
+        gamesense:layout_constraintTop_toBottomOf="@+id/hp_lb" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+    <edu.outside2154.gamesense.view.LabeledBarView
+        android:id="@+id/int_lb"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        gamesense:label="INT"
+        gamesense:label_width="50dp"
+        gamesense:layout_constraintEnd_toEndOf="parent"
+        gamesense:layout_constraintStart_toStartOf="parent"
+        gamesense:layout_constraintTop_toBottomOf="@+id/atk_lb" />
 
-        </LinearLayout>
+    <ImageView
+        android:id="@+id/avatar"
+        android:layout_width="0dp"
+        android:layout_height="100dp"
+        android:layout_marginStart="16dp"
+        android:contentDescription="Avatar"
+        android:src="@drawable/avatar"
+        gamesense:layout_constraintBottom_toTopOf="@+id/boss_hp_lb"
+        gamesense:layout_constraintEnd_toStartOf="@+id/boss"
+        gamesense:layout_constraintHorizontal_bias="0.5"
+        gamesense:layout_constraintStart_toStartOf="parent"
+        gamesense:layout_constraintTop_toBottomOf="@+id/int_lb" />
 
-        <Spinner
-            android:id="@+id/atk_spinner"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+    <ImageView
+        android:id="@+id/boss"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="16dp"
+        android:contentDescription="Boss"
+        android:src="@drawable/androidboss"
+        gamesense:layout_constraintBottom_toTopOf="@+id/boss_hp_lb"
+        gamesense:layout_constraintEnd_toEndOf="parent"
+        gamesense:layout_constraintHorizontal_bias="0.5"
+        gamesense:layout_constraintStart_toEndOf="@+id/avatar"
+        gamesense:layout_constraintTop_toBottomOf="@+id/int_lb" />
 
-        <TextView
-            android:id="@+id/intel_header"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Intelligence"
-            android:textSize="30sp" />
+    <edu.outside2154.gamesense.view.LabeledBarView
+        android:id="@+id/boss_hp_lb"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        gamesense:label="BOSS"
+        gamesense:label_width="50dp"
+        gamesense:label_onRight="true"
+        gamesense:layout_constraintBottom_toBottomOf="parent"
+        gamesense:layout_constraintEnd_toEndOf="parent"
+        gamesense:layout_constraintStart_toStartOf="parent" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
 
-        </LinearLayout>
-
-        <Spinner
-            android:id="@+id/int_spinner"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-        <TextView
-            android:id="@+id/hth_header"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Health"
-            android:textSize="30sp" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-        </LinearLayout>
-
-        <Spinner
-            android:id="@+id/hth_spinner"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </LinearLayout>
-</FrameLayout>
+</android.support.constraint.ConstraintLayout>
