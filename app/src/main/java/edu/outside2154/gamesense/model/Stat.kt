@@ -26,11 +26,12 @@ class Stat (initGoals : Map<String, Double>, currGoals : Map<String, Double>)
         val divisor = goals.items.values.sum()
         if (divisor == 0.0) return null
 
-        val elements = current.items.mapValues { (k, v) ->
+        // Avoid 'overflow' with activities by taking <= goals only
+        val cappedCurrent = current.items.mapValues { (k, v) ->
             minOf(v, goals.items[k] ?: 0.0)
         }
 
-        return elements.values.sum() / divisor
+        return cappedCurrent.values.sum() / divisor
     }
 
     fun reset() {
