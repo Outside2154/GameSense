@@ -27,10 +27,8 @@ class Stat (initGoals : Map<String, Double>, currGoals : Map<String, Double>)
         if (divisor == 0.0) return null
 
         val elements = current.items.mapValues { (k, v) ->
-            minOf(v, goals.items[k] ?: Double.MAX_VALUE)
+            minOf(v, goals.items[k] ?: 0.0)
         }
-
-        print(elements)
 
         return elements.values.sum() / divisor
     }

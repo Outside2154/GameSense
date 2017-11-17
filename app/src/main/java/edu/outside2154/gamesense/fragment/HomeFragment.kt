@@ -6,14 +6,9 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
 
 import edu.outside2154.gamesense.R
 import edu.outside2154.gamesense.activity.NavActivity
-import edu.outside2154.gamesense.database.FirebaseRefSnap
 import edu.outside2154.gamesense.database.firebaseListen
 import edu.outside2154.gamesense.model.*
 import kotlinx.android.synthetic.main.fragment_home.*
@@ -54,7 +49,7 @@ class HomeFragment : Fragment() {
             firebaseListen(androidId) {
                 player = PlayerFirebaseImpl(it)
                 updatePlayerBars()
-                (activity as NavActivity).updatePlayer(player)
+                (activity as NavActivity).player = player
             }
         }
 
@@ -64,7 +59,7 @@ class HomeFragment : Fragment() {
             firebaseListen("$androidId/boss") {
                 boss = BossFirebaseImpl(it)
                 updateBossBar()
-                (activity as NavActivity).updateBoss(boss)
+                (activity as NavActivity).boss = boss
             }
         }
     }

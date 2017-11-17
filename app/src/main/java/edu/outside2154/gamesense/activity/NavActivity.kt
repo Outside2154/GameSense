@@ -1,9 +1,7 @@
 package edu.outside2154.gamesense.activity
 
 import android.content.res.Configuration
-import android.os.Build
 import android.os.Bundle
-import android.provider.Settings
 import android.support.v4.app.Fragment
 import android.support.design.widget.NavigationView
 import android.support.v4.widget.DrawerLayout
@@ -12,7 +10,6 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.view.MenuItem
-import com.google.firebase.database.FirebaseDatabase
 
 import edu.outside2154.gamesense.model.Player
 import edu.outside2154.gamesense.model.Boss
@@ -21,14 +18,15 @@ import edu.outside2154.gamesense.R
 import edu.outside2154.gamesense.fragment.ChecklistFragment
 import edu.outside2154.gamesense.fragment.HomeFragment
 import edu.outside2154.gamesense.fragment.SettingsFragment
+import edu.outside2154.gamesense.util.getAndroidId
 import edu.outside2154.gamesense.util.transact
 
 class NavActivity : AppCompatActivity() {
     private lateinit var mDrawer: DrawerLayout
     private lateinit var drawerToggle: ActionBarDrawerToggle
 
-    private var player: Player? = null
-    private var boss: Boss? = null
+    var player: Player? = null
+    var boss: Boss? = null
     private lateinit var androidId : String
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,10 +52,7 @@ class NavActivity : AppCompatActivity() {
         mDrawer.addDrawerListener(drawerToggle)
 
         // Grab androidId
-        androidId = Settings.Secure.getString(this.contentResolver, Settings.Secure.ANDROID_ID)
-        if (isEmulator()) {
-            androidId = "1cf08e3503018df0"
-        }
+        androidId = getAndroidId(this)
 
         // Initially select the first menu item.
         selectDrawerItem(nvDrawer.menu.getItem(0))
@@ -73,11 +68,11 @@ class NavActivity : AppCompatActivity() {
         }
 
         // Add player/boss objects to bundle along with androidId
-        val bundle = Bundle()
-        bundle.putSerializable("player", player)
-        bundle.putSerializable("boss", boss)
-        bundle.putString("androidId", androidId)
-        fragment.arguments = bundle
+        fragment.arguments = Bundle().apply {
+            putSerializable("player", player)
+            putSerializable("boss", boss)
+            putString("androidId", androidId)
+        }
 
         // Insert the fragment by replacing any existing fragment
         supportFragmentManager.transact { replace(R.id.flContent, fragment) }
@@ -104,28 +99,5 @@ class NavActivity : AppCompatActivity() {
         // The action bar home/up action should open or close the drawer.
         return drawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item)
 
-    }
-
-    override fun onStop() {
-        super.onStop()
-    }
-
-    fun updatePlayer(inputPlayer : Player?) {
-        player = inputPlayer
-    }
-
-    fun updateBoss(inputBoss : Boss?) {
-        boss = inputBoss
-    }
-
-    private fun isEmulator(): Boolean {
-        return (Build.FINGERPRINT.startsWith("generic")
-            || Build.FINGERPRINT.startsWith("unknown")
-            || Build.MODEL.contains("google_sdk")
-            || Build.MODEL.contains("Emulator")
-            || Build.MODEL.contains("Android SDK built for x86")
-            || Build.MANUFACTURER.contains("Genymotion")
-            || Build.BRAND.startsWith("generic") && Build.DEVICE.startsWith("generic")
-            || "google_sdk" == Build.PRODUCT)
     }
 }

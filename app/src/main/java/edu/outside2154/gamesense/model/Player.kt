@@ -22,8 +22,21 @@ interface Player : Serializable {
     val dead
         get() = health == 0.0
 
+    /**
+     * Handles player criticals via intStat value.
+     *
+     * @return Boolean if attack was critical based on intStat.
+     */
     fun isCritical(): Boolean
+
+    /**
+     * Handles health reduction during fight with boss.
+     */
     fun takeDamage(damage: Double)
+
+    /**
+     * Handles player and boss interaction during fight.
+     */
     fun fight(boss: Boss)
 }
 

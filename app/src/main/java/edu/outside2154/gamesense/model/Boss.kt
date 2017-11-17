@@ -15,7 +15,15 @@ interface Boss : Serializable {
     val lvl: Int
     val dead
         get() = health == 0.0
+
+    /**
+     * Handles health reduction during fight with player.
+     */
     fun takeDamage(damage: Double)
+
+    /**
+     * Resets boss at the end of the week based on remaining health.
+     */
     fun reset(userWon: Boolean)
 }
 
