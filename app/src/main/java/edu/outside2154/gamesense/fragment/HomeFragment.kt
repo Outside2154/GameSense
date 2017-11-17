@@ -67,8 +67,6 @@ class HomeFragment : Fragment() {
                 (activity as NavActivity).updateBoss(boss)
             }
         }
-
-        //if (player == null) createCharacters()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,

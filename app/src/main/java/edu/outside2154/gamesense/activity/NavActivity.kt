@@ -107,7 +107,6 @@ class NavActivity : AppCompatActivity() {
     }
 
     override fun onStop() {
-        updateFirebase()
         super.onStop()
     }
 
@@ -117,24 +116,6 @@ class NavActivity : AppCompatActivity() {
 
     fun updateBoss(inputBoss : Boss?) {
         boss = inputBoss
-    }
-
-    private fun updateFirebase() {
-        val dbRef = FirebaseDatabase.getInstance().reference
-
-        // Update stats (goals and current)
-        dbRef.child("attack").child("goals").updateChildren(player!!.atkStat.goals.items)
-        dbRef.child("attack").child("current").updateChildren(player!!.atkStat.current.items)
-
-        dbRef.child("intelligence").child("goals").setValue(player!!.intStat.goals.items)
-        dbRef.child("intelligence").child("current").setValue(player!!.intStat.current.items)
-
-        dbRef.child("regen").child("goals").setValue(player!!.regenStat.goals.items)
-        dbRef.child("regen").child("current").setValue(player!!.regenStat.current.items)
-
-        // Update character health and currency
-        dbRef.child(androidId).child("character").child("health").setValue(player!!.health)
-        dbRef.child(androidId).child("character").child("currency").setValue(player!!.currency)
     }
 
     private fun isEmulator(): Boolean {
