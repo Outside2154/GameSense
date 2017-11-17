@@ -111,8 +111,11 @@ class NavActivity : AppCompatActivity() {
         super.onStop()
     }
 
-    fun updateCharacters(inputPlayer : Player?, inputBoss : Boss?) {
+    fun updatePlayer(inputPlayer : Player?) {
         player = inputPlayer
+    }
+
+    fun updateBoss(inputBoss : Boss?) {
         boss = inputBoss
     }
 

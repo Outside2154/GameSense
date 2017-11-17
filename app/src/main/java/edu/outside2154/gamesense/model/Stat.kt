@@ -1,13 +1,32 @@
 package edu.outside2154.gamesense.model
 
-class Stat (initGoals : Map<String, Double>, currGoals : Map<String, Double>) {
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseReference
+import edu.outside2154.gamesense.database.FirebaseTransform
 
+class Stat (initGoals : Map<String, Double>, currGoals : Map<String, Double>) {
     data class StatItems(val items: Map<String, Double>) {
         operator fun plus(other: StatItems): StatItems {
             return StatItems(items.mapValues { (k, v) ->
                 v + (other.items[k] ?: 0.0)
             })
         }
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    class FirebaseStatTransform : FirebaseTransform<Stat> {
+        override fun fromFirebase(s: DataSnapshot): Stat? {
+            val goals = s.child("goals").value as Map<String, Long>? ?: return null
+            val current = s.child("current").value as Map<String, Long>? ?: return null
+            return Stat(convertMap(goals), convertMap(current))
+        }
+        override fun toFirebase(value: Stat, ref: DatabaseReference) {
+            ref.child("goals").updateChildren(value.goals.items)
+            ref.child("current").updateChildren(value.current.items)
+        }
+
+        private fun convertMap(origMap : Map<String, Long>): Map<String, Double> =
+                origMap.mapValues {it.value.toDouble()}
     }
 
     var goals = StatItems(initGoals)

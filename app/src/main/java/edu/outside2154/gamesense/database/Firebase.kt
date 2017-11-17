@@ -1,6 +1,7 @@
 package edu.outside2154.gamesense.database
 
 import com.google.firebase.database.*
+import edu.outside2154.gamesense.model.Stat
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
 
@@ -29,14 +30,15 @@ data class FirebaseRefSnap(val ref: DatabaseReference, val snap: DataSnapshot) {
 // Used for FirebaseProperty. Useful when the destination is not 1:1 with the snapshot.
 interface FirebaseTransform<T> {
     fun fromFirebase(s: DataSnapshot): T?
-    fun toFirebase(value: T): Any
+    fun toFirebase(value: T, ref: DatabaseReference)
 }
 
-// The default FirebaseTransform.
 @Suppress("UNCHECKED_CAST")
 open class FirebaseIdentity<T> : FirebaseTransform<T> {
     override fun fromFirebase(s: DataSnapshot): T? = s.value as T?
-    override fun toFirebase(value: T): Any = value as Any
+    override fun toFirebase(value: T, ref: DatabaseReference) {
+        ref.setValue(value)
+    }
 }
 
 // Delegates a property to Firebase represented by `root`.
@@ -50,7 +52,7 @@ class FirebaseProperty<in R, T>(
     override operator fun getValue(thisRef: R, property: KProperty<*>): T = field ?: default
     override operator fun setValue(thisRef: R, property: KProperty<*>, value: T) {
         field = value
-        root.ref.setValue(transform.toFirebase(value))
+        transform.toFirebase(value, root.ref)
     }
 }
 
