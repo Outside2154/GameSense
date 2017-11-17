@@ -65,7 +65,7 @@ class ModelPlayerTest {
         val intStat = Stat(mapOf("Lab work" to 4.0, "In class" to 8.0), mapOf("Lab work" to 2.0, "In class" to 4.0))
         val atkStat = Stat(mapOf("Running" to 3.0, "Exercise" to 7.0), mapOf("Running" to 1.5, "Exercise" to 1.0))
         val regenStat = Stat(mapOf("Sleeping" to 56.0), mapOf("Sleeping" to 14.0))
-        player = Player(regenStat, atkStat, intStat, PLAYER_BASE_HEALTH, 0.0)
+        player = PlayerLocalImpl(regenStat, atkStat, intStat, PLAYER_BASE_HEALTH, 0)
         boss = BossLocalImpl(BOSS_BASE_HEALTH, BOSS_BASE_ATTACK, 1)
     }
 

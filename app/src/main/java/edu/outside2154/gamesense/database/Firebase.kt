@@ -1,7 +1,6 @@
 package edu.outside2154.gamesense.database
 
 import com.google.firebase.database.*
-import edu.outside2154.gamesense.model.Stat
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
 
@@ -33,8 +32,8 @@ interface FirebaseTransform<T> {
     fun toFirebase(value: T, ref: DatabaseReference)
 }
 
-@Suppress("UNCHECKED_CAST")
 open class FirebaseIdentity<T> : FirebaseTransform<T> {
+    @Suppress("UNCHECKED_CAST")
     override fun fromFirebase(s: DataSnapshot): T? = s.value as T?
     override fun toFirebase(value: T, ref: DatabaseReference) {
         ref.setValue(value)
@@ -47,7 +46,7 @@ class FirebaseProperty<in R, T>(
         private val default: T,
         private val transform: FirebaseTransform<T> = FirebaseIdentity())
     : ReadWriteProperty<R, T> {
-    var field: T? = transform.fromFirebase(root.snap)
+    private var field: T? = transform.fromFirebase(root.snap)
 
     override operator fun getValue(thisRef: R, property: KProperty<*>): T = field ?: default
     override operator fun setValue(thisRef: R, property: KProperty<*>, value: T) {
@@ -65,4 +64,30 @@ class BoundFirebaseProperty<in R, T>(
             thisRef: R,
             prop: KProperty<*>
     ): ReadWriteProperty<R, T> = FirebaseProperty(root.child(prop.name), default, transform)
+}
+
+// Same as FirebaseProperty, but the type provides a transform.
+// It's kind of cheating and uses the default class.
+class SelfFirebaseProperty<in R, T : FirebaseTransform<T>>(
+        private val root: FirebaseRefSnap,
+        private val default: T)
+    : ReadWriteProperty<R, T> {
+    private var field: T? = default.fromFirebase(root.snap)
+
+    override operator fun getValue(thisRef: R, property: KProperty<*>): T = field ?: default
+    override operator fun setValue(thisRef: R, property: KProperty<*>, value: T) {
+        field = value
+        default.toFirebase(value, root.ref)
+    }
+}
+
+// Same as BoundFirebaseProperty, but the type provides a transform.
+// It's kind of cheating and uses the default class.
+class SelfBoundFirebaseProperty<in R, T : FirebaseTransform<T>>(
+        private val root: FirebaseRefSnap,
+        private val default: T) {
+    operator fun provideDelegate(
+            thisRef: R,
+            prop: KProperty<*>
+    ): ReadWriteProperty<R, T> = SelfFirebaseProperty(root.child(prop.name), default)
 }
