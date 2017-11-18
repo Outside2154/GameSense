@@ -8,17 +8,26 @@ import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
+import android.util.Log
 import android.view.MenuItem
+
+import edu.outside2154.gamesense.model.Player
+import edu.outside2154.gamesense.model.Boss
 
 import edu.outside2154.gamesense.R
 import edu.outside2154.gamesense.fragment.ChecklistFragment
 import edu.outside2154.gamesense.fragment.HomeFragment
 import edu.outside2154.gamesense.fragment.SettingsFragment
+import edu.outside2154.gamesense.util.getAndroidId
 import edu.outside2154.gamesense.util.transact
 
 class NavActivity : AppCompatActivity() {
     private lateinit var mDrawer: DrawerLayout
     private lateinit var drawerToggle: ActionBarDrawerToggle
+
+    var player: Player? = null
+    var boss: Boss? = null
+    private lateinit var androidId : String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,6 +51,9 @@ class NavActivity : AppCompatActivity() {
                 R.string.drawer_open, R.string.drawer_close)
         mDrawer.addDrawerListener(drawerToggle)
 
+        // Grab androidId
+        androidId = getAndroidId(this)
+
         // Initially select the first menu item.
         selectDrawerItem(nvDrawer.menu.getItem(0))
     }
@@ -53,6 +65,13 @@ class NavActivity : AppCompatActivity() {
             R.id.nav_settings_fragment -> SettingsFragment()
             R.id.nav_checklist_fragment -> ChecklistFragment()
             else -> Fragment()  // TODO: replace with a 404 fragment
+        }
+
+        // Add player/boss objects to bundle along with androidId
+        fragment.arguments = Bundle().apply {
+            putSerializable("player", player)
+            putSerializable("boss", boss)
+            putString("androidId", androidId)
         }
 
         // Insert the fragment by replacing any existing fragment
