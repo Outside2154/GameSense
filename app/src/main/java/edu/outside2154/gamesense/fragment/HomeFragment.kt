@@ -46,6 +46,7 @@ class HomeFragment : Fragment() {
         atk_lb.progress = 50
         int_lb.progress = 20
         boss_hp_lb.progress = 100
+        boss_atk_lb.progress = 50
     }
 
     // TODO: Rename method, update argument and hook method into UI event

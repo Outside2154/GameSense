@@ -9,6 +9,8 @@ import android.view.View
 import android.view.ViewGroup
 
 import edu.outside2154.gamesense.R
+import kotlinx.android.synthetic.main.fragment_checklist.*
+import kotlinx.android.synthetic.main.fragment_home.*
 
 /**
  * A simple [Fragment] subclass.
@@ -36,8 +38,15 @@ class ChecklistFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_checklist, container, false)
+    }
+
+    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        health_progress.progress = 100
+        attack_progress.progress = 100
+        intel_progress.progress = 100
     }
 
     // TODO: Rename method, update argument and hook method into UI event

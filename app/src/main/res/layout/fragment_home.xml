@@ -7,82 +7,277 @@
     tools:context="edu.outside2154.gamesense.fragment.HomeFragment">
 
 
-    <edu.outside2154.gamesense.view.LabeledBarView
-        android:id="@+id/hp_lb"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+    <TextView
+        android:id="@+id/daily_status_header"
+        android:layout_width="wrap_content"
+        android:layout_height="27dp"
         android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        gamesense:label="HP"
-        gamesense:label_width="50dp"
+        android:layout_marginTop="30dp"
+        android:text="Daily Status"
+        android:textSize="20dp"
         gamesense:layout_constraintEnd_toEndOf="parent"
+        gamesense:layout_constraintHorizontal_bias="0.0"
         gamesense:layout_constraintStart_toStartOf="parent"
         gamesense:layout_constraintTop_toTopOf="parent" />
 
-    <edu.outside2154.gamesense.view.LabeledBarView
-        android:id="@+id/atk_lb"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+    <TextView
+        android:id="@+id/daily_status_value"
+        android:layout_width="wrap_content"
+        android:layout_height="18dp"
         android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
-        gamesense:label="ATK"
-        gamesense:label_width="50dp"
+        android:layout_marginTop="8dp"
+        android:text="You have not attacked today."
+        android:textSize="15dp"
         gamesense:layout_constraintEnd_toEndOf="parent"
+        gamesense:layout_constraintHorizontal_bias="0.0"
+        gamesense:layout_constraintStart_toStartOf="parent"
+        gamesense:layout_constraintTop_toBottomOf="@+id/daily_status_header" />
+
+    <TextView
+        android:id="@+id/health_header"
+        android:layout_width="wrap_content"
+        android:layout_height="27dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="20dp"
+        android:text="User Statistics"
+        android:textSize="20dp"
+        gamesense:layout_constraintStart_toStartOf="parent"
+        gamesense:layout_constraintTop_toBottomOf="@+id/daily_status_value" />
+
+    <TextView
+        android:id="@+id/health_activity_header"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="Points: "
+        android:textSize="15dp"
+        gamesense:layout_constraintEnd_toEndOf="parent"
+        gamesense:layout_constraintHorizontal_bias="0.0"
+        gamesense:layout_constraintStart_toStartOf="parent"
+        gamesense:layout_constraintTop_toBottomOf="@+id/health_header" />
+
+    <TextView
+        android:id="@+id/points_value"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="1"
+        android:textSize="15dp"
+        gamesense:layout_constraintEnd_toEndOf="parent"
+        gamesense:layout_constraintHorizontal_bias="0.025"
+        gamesense:layout_constraintStart_toEndOf="@+id/health_activity_header"
+        gamesense:layout_constraintTop_toBottomOf="@+id/health_header" />
+
+    <TextView
+        android:id="@+id/hp_header"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="HP"
+        android:textSize="15dp"
+        gamesense:layout_constraintEnd_toEndOf="parent"
+        gamesense:layout_constraintHorizontal_bias="0.0"
+        gamesense:layout_constraintStart_toStartOf="parent"
+        gamesense:layout_constraintTop_toBottomOf="@+id/health_activity_header" />
+
+    <ProgressBar
+        android:id="@+id/hp_lb"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="0dp"
+        android:layout_height="20dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:progressTint="@color/colorPrimary"
+        android:scaleY="2"
+        gamesense:layout_constraintEnd_toEndOf="parent"
+        gamesense:layout_constraintHorizontal_bias="0.0"
+        gamesense:layout_constraintStart_toStartOf="parent"
+        gamesense:layout_constraintTop_toBottomOf="@+id/hp_header" />
+
+    <TextView
+        android:id="@+id/atk_header"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="Attack"
+        android:textSize="15dp"
+        gamesense:layout_constraintEnd_toEndOf="parent"
+        gamesense:layout_constraintHorizontal_bias="0.0"
         gamesense:layout_constraintStart_toStartOf="parent"
         gamesense:layout_constraintTop_toBottomOf="@+id/hp_lb" />
 
-    <edu.outside2154.gamesense.view.LabeledBarView
-        android:id="@+id/int_lb"
+    <ProgressBar
+        android:id="@+id/atk_lb"
+        style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
-        gamesense:label="INT"
-        gamesense:label_width="50dp"
+        android:progressTint="@color/colorPrimary"
+        android:scaleY="2"
         gamesense:layout_constraintEnd_toEndOf="parent"
+        gamesense:layout_constraintHorizontal_bias="0.0"
+        gamesense:layout_constraintStart_toStartOf="parent"
+        gamesense:layout_constraintTop_toBottomOf="@+id/atk_header" />
+
+    <TextView
+        android:id="@+id/int_header"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="Intelligence"
+        android:textSize="15dp"
+        gamesense:layout_constraintEnd_toEndOf="parent"
+        gamesense:layout_constraintHorizontal_bias="0.0"
         gamesense:layout_constraintStart_toStartOf="parent"
         gamesense:layout_constraintTop_toBottomOf="@+id/atk_lb" />
 
-    <ImageView
-        android:id="@+id/avatar"
+    <ProgressBar
+        android:id="@+id/int_lb"
+        style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="0dp"
-        android:layout_height="100dp"
+        android:layout_height="19dp"
+        android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
-        android:contentDescription="Avatar"
-        android:src="@drawable/avatar"
-        gamesense:layout_constraintBottom_toTopOf="@+id/boss_hp_lb"
-        gamesense:layout_constraintEnd_toStartOf="@+id/boss"
-        gamesense:layout_constraintHorizontal_bias="0.5"
+        android:progressTint="@color/colorPrimary"
+        android:scaleY="2"
+        gamesense:layout_constraintEnd_toEndOf="parent"
+        gamesense:layout_constraintHorizontal_bias="0.0"
+        gamesense:layout_constraintStart_toStartOf="parent"
+        gamesense:layout_constraintTop_toBottomOf="@+id/int_header" />
+
+    <TextView
+        android:id="@+id/boss_stats_header"
+        android:layout_width="wrap_content"
+        android:layout_height="27dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="Boss Statistics"
+        android:textSize="20dp"
+        gamesense:layout_constraintEnd_toEndOf="parent"
+        gamesense:layout_constraintHorizontal_bias="0.0"
         gamesense:layout_constraintStart_toStartOf="parent"
         gamesense:layout_constraintTop_toBottomOf="@+id/int_lb" />
 
-    <ImageView
-        android:id="@+id/boss"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="16dp"
-        android:contentDescription="Boss"
-        android:src="@drawable/androidboss"
-        gamesense:layout_constraintBottom_toTopOf="@+id/boss_hp_lb"
-        gamesense:layout_constraintEnd_toEndOf="parent"
-        gamesense:layout_constraintHorizontal_bias="0.5"
-        gamesense:layout_constraintStart_toEndOf="@+id/avatar"
-        gamesense:layout_constraintTop_toBottomOf="@+id/int_lb" />
-
-    <edu.outside2154.gamesense.view.LabeledBarView
-        android:id="@+id/boss_hp_lb"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
+    <TextView
+        android:id="@+id/boss_hp_header"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
         android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
-        gamesense:label="BOSS"
-        gamesense:label_width="50dp"
-        gamesense:label_onRight="true"
-        gamesense:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="8dp"
+        android:text="HP"
+        android:textSize="15dp"
         gamesense:layout_constraintEnd_toEndOf="parent"
-        gamesense:layout_constraintStart_toStartOf="parent" />
+        gamesense:layout_constraintHorizontal_bias="0.0"
+        gamesense:layout_constraintStart_toStartOf="parent"
+        gamesense:layout_constraintTop_toBottomOf="@+id/boss_level_header" />
 
+    <ProgressBar
+        android:id="@+id/boss_hp_lb"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="0dp"
+        android:layout_height="19dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:progressTint="@color/colorPrimary"
+        android:scaleY="2"
+        gamesense:layout_constraintEnd_toEndOf="parent"
+        gamesense:layout_constraintHorizontal_bias="0.0"
+        gamesense:layout_constraintStart_toStartOf="parent"
+        gamesense:layout_constraintTop_toBottomOf="@+id/boss_hp_header" />
+
+    <TextView
+        android:id="@+id/boss_atk_header"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="Attack"
+        android:textSize="15dp"
+        gamesense:layout_constraintEnd_toEndOf="parent"
+        gamesense:layout_constraintHorizontal_bias="0.0"
+        gamesense:layout_constraintStart_toStartOf="parent"
+        gamesense:layout_constraintTop_toBottomOf="@+id/boss_hp_lb" />
+
+    <ProgressBar
+        android:id="@+id/boss_atk_lb"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="0dp"
+        android:layout_height="19dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:progressTint="@color/colorPrimary"
+        android:scaleY="2"
+        gamesense:layout_constraintEnd_toEndOf="parent"
+        gamesense:layout_constraintHorizontal_bias="0.0"
+        gamesense:layout_constraintStart_toStartOf="parent"
+        gamesense:layout_constraintTop_toBottomOf="@+id/boss_atk_header" />
+
+    <TextView
+        android:id="@+id/boss_level_header"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="Level: "
+        android:textSize="15dp"
+        gamesense:layout_constraintEnd_toEndOf="parent"
+        gamesense:layout_constraintHorizontal_bias="0.0"
+        gamesense:layout_constraintStart_toStartOf="parent"
+        gamesense:layout_constraintTop_toBottomOf="@+id/boss_stats_header" />
+
+    <TextView
+        android:id="@+id/boss_level_value"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="1"
+        android:textSize="15dp"
+        gamesense:layout_constraintEnd_toEndOf="parent"
+        gamesense:layout_constraintHorizontal_bias="0.024"
+        gamesense:layout_constraintStart_toEndOf="@+id/boss_level_header"
+        gamesense:layout_constraintTop_toBottomOf="@+id/boss_stats_header" />
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="136dp"
+        android:layout_marginTop="20dp"
+        android:src="@drawable/avatar"
+        gamesense:layout_constraintEnd_toEndOf="parent"
+        gamesense:layout_constraintStart_toEndOf="@+id/health_header"
+        gamesense:layout_constraintTop_toBottomOf="@+id/daily_status_value" />
+
+    <ImageView
+        android:id="@+id/imageView4"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="136dp"
+        android:layout_marginTop="8dp"
+        android:src="@drawable/androidboss"
+        gamesense:layout_constraintEnd_toEndOf="parent"
+        gamesense:layout_constraintStart_toEndOf="@+id/boss_stats_header"
+        gamesense:layout_constraintTop_toBottomOf="@+id/int_lb" />
 
 </android.support.constraint.ConstraintLayout>

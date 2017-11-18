@@ -2,6 +2,7 @@ package edu.outside2154.gamesense.view
 
 import android.content.Context
 import android.util.AttributeSet
+import android.util.TypedValue
 import android.view.Gravity
 import android.widget.LinearLayout
 import android.widget.ProgressBar
@@ -27,7 +28,9 @@ class LabeledBarView @JvmOverloads constructor(
     // Public attributes.
     var label
         get() = vText.text
-        set(value) { vText.text = value }
+        set(value) {
+            vText.text = value
+        }
     var progress
         get() = vBar.progress
         set(value) { vBar.progress = value }
