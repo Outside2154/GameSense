@@ -6,9 +6,9 @@ import edu.outside2154.gamesense.database.SelfBoundFirebaseProperty
 import java.io.Serializable
 import java.util.*
 
-const val PLAYER_BASE_HEALTH = 100.0
-const val PLAYER_BASE_ATTACK = 100.0
-const val PLAYER_CRIT_MULT = 2.0
+private const val PLAYER_BASE_HEALTH = 100.0
+private const val PLAYER_BASE_ATTACK = 100.0
+private const val PLAYER_CRIT_MULT = 2.0
 
 interface Player : Serializable {
     val regenStat: Stat
@@ -83,4 +83,3 @@ class PlayerFirebaseImpl(root: FirebaseRefSnap) : PlayerBaseImpl() {
     override var health: Double by BoundFirebaseProperty(root, PLAYER_BASE_HEALTH)
     override var currency: Int by BoundFirebaseProperty(root, 0)
 }
-

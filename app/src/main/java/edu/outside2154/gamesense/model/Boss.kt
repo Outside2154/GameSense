@@ -4,10 +4,10 @@ import edu.outside2154.gamesense.database.BoundFirebaseProperty
 import edu.outside2154.gamesense.database.FirebaseRefSnap
 import java.io.Serializable
 
-const val BOSS_BASE_HEALTH = 100.0
-const val BOSS_HEALTH_INC = 50.0
-const val BOSS_BASE_ATTACK = 20.0
-const val BOSS_ATTACK_INC = 5.0
+private const val BOSS_BASE_HEALTH = 100.0
+private const val BOSS_HEALTH_INC = 50.0
+private const val BOSS_BASE_ATTACK = 20.0
+private const val BOSS_ATTACK_INC = 5.0
 
 interface Boss : Serializable {
     val health: Double
