@@ -3,14 +3,15 @@ package edu.outside2154.gamesense.fragment
 import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import edu.outside2154.gamesense.model.Player
-import edu.outside2154.gamesense.model.Boss
 
 import edu.outside2154.gamesense.R
+import edu.outside2154.gamesense.model.*
+import edu.outside2154.gamesense.util.BundleUpdatable
+import edu.outside2154.gamesense.util.Updatable
+import edu.outside2154.gamesense.util.toIntPercent
 import kotlinx.android.synthetic.main.fragment_home.*
 
 /**
@@ -21,91 +22,41 @@ import kotlinx.android.synthetic.main.fragment_home.*
  * Use the [HomeFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class HomeFragment : Fragment() {
-
-    // TODO: Rename and change types of parameters
-    private var mParam1: String? = null
-    private var mParam2: String? = null
-
-    private var mListener: OnFragmentInteractionListener? = null
-
+class HomeFragment : Fragment(), Updatable, BundleUpdatable {
     private var player: Player? = null
     private var boss: Boss? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.run {
-            mParam1 = getString(ARG_PARAM1)
-            mParam2 = getString(ARG_PARAM2)
-            player = getSerializable("player") as Player
-            boss = getSerializable("boss") as Boss
-        }
+        updateBundle(arguments)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_home, container, false)
-    }
+                              savedInstanceState: Bundle?): View? =
+            inflater.inflate(R.layout.fragment_home, container, false)
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        hp_lb.progress = 80
-        atk_lb.progress = 50
-        int_lb.progress = 20
-        boss_hp_lb.progress = 100
-
-        //hp_lb.progress = player!!.health.toInt()
-        //atk_lb.progress = (player!!.atkStat!!.calcStat() !!* 100).toInt()
-        //int_lb.progress = (player!!.intStat!!.calcStat() !!* 100).toInt()
-        //boss_hp_lb.progress = boss!!.health.toInt()
+        update()
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    fun onButtonPressed(uri: Uri) = mListener?.onFragmentInteraction(uri)
-
-
-    override fun onDetach() {
-        super.onDetach()
-        mListener = null
-    }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     *
-     *
-     * See the Android Training lesson [Communicating with Other Fragments](http://developer.android.com/training/basics/fragments/communicating.html) for more information.
-     */
-    interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        fun onFragmentInteraction(uri: Uri)
-    }
-
-    companion object {
-        // TODO: Rename parameter arguments, choose names that match
-        // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-        private val ARG_PARAM1 = "param1"
-        private val ARG_PARAM2 = "param2"
-
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment HomeFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        fun newInstance(param1: String, param2: String): HomeFragment {
-            val fragment = HomeFragment()
-            fragment.arguments = Bundle().apply {
-                putString(ARG_PARAM1, param1)
-                putString(ARG_PARAM2, param2)
-            }
-            return fragment
+    override fun updateBundle(bundle: Bundle) {
+        bundle.run {
+            player = getSerializable("player") as Player?
+            boss = getSerializable("boss") as Boss?
         }
     }
-}// Required empty public constructor
+
+    override fun update() {
+        // Update all progress bars
+        player?.let {
+            hp_lb.progress = it.health.toInt()
+            atk_lb.progress = it.atkStat.calcStat()?.toIntPercent() ?: 0
+            int_lb.progress = it.intStat.calcStat()?.toIntPercent() ?: 0
+        }
+
+        boss?.let {
+            boss_hp_lb.progress = it.health.toInt()
+        }
+    }
+}

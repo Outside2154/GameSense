@@ -1,12 +1,8 @@
 package edu.outside2154.gamesense.model
 
-import android.util.Log
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
-import edu.outside2154.gamesense.model.Stat
-import edu.outside2154.gamesense.model.Boss
+import edu.outside2154.gamesense.database.BoundFirebaseProperty
+import edu.outside2154.gamesense.database.FirebaseRefSnap
+import edu.outside2154.gamesense.database.SelfBoundFirebaseProperty
 import java.io.Serializable
 import java.util.*
 
@@ -14,83 +10,53 @@ const val PLAYER_BASE_HEALTH = 100.0
 const val PLAYER_BASE_ATTACK = 100.0
 const val PLAYER_CRIT_MULT = 2.0
 
+interface Player : Serializable {
+    val regenStat: Stat
+    val atkStat: Stat
+    val intStat: Stat
+    val health: Double
+    val currency: Int
 
-class Player(androidId : String) : Serializable {
-    var health = PLAYER_BASE_HEALTH
-        private set
-
-    var intStat : Stat? = null
-    var atkStat : Stat? = null
-    var regenStat : Stat? = null
-
-    var currency = 0.0
-        private set
-    val pureDamage
-        get() = PLAYER_BASE_ATTACK * (atkStat?.calcStat() ?: 0.0)
+    val pureDamage: Double
+        get() = PLAYER_BASE_ATTACK * (atkStat.calcStat() ?: 0.0)
     val dead
         get() = health == 0.0
-    private val rand = Random()
 
-    init {
-        // Create listener for data reading from Firebase
-        val fbListener = object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                // Get snapshot of health goals and current values
-                val goalsHealthSnapShot = snapshot.child("health").child("goals")
-                val currHealthSnapShot = snapshot.child("health").child("current")
+    /**
+     * Handles player criticals via intStat value.
+     *
+     * @return Boolean if attack was critical based on intStat.
+     */
+    fun isCritical(): Boolean
 
-                // Get snapshot of attack goals and current values
-                val goalsAtkSnapShot = snapshot.child("attack").child("goals")
-                val currAtkSnapShot = snapshot.child("attack").child("current")
+    /**
+     * Handles health reduction during fight with boss.
+     */
+    fun takeDamage(damage: Double)
 
-                // Get snapshot of intelligence goals and current values
-                val goalsIntSnapShot = snapshot.child("intelligence").child("goals")
-                val currIntSnapShot = snapshot.child("intelligence").child("current")
+    /**
+     * Handles player and boss interaction during fight.
+     */
+    fun fight(boss: Boss)
+}
 
+abstract class PlayerBaseImpl : Player {
+    abstract override var regenStat: Stat
+    abstract override var atkStat: Stat
+    abstract override var intStat: Stat
+    abstract override var health: Double
+    abstract override var currency: Int
 
-                // Set stats as maps of goals and current values
-                regenStat = Stat(convertMap(goalsHealthSnapShot.getValue() as Map<String, Long>),
-                        convertMap(currHealthSnapShot.getValue() as Map<String, Long>))
-                atkStat = Stat(convertMap(goalsAtkSnapShot.getValue() as Map<String, Long>),
-                        convertMap(currAtkSnapShot.getValue() as Map<String, Long>))
-                intStat = Stat(convertMap(goalsIntSnapShot.getValue() as Map<String, Long>),
-                        convertMap(currIntSnapShot.getValue() as Map<String, Long>))
-
-                // Get snapshot of current health and cast appropriately
-                val currHealthSnapshot = snapshot.child("character").child("health")
-                val longHealth = currHealthSnapshot.getValue() as Long
-                health = longHealth.toDouble()
-
-                // Get snapshot of current currency and cast appropriately
-                val currCurrencySnapshot = snapshot.child("character").child("currency")
-                val longCurrency = currCurrencySnapshot.getValue() as Long
-                currency = longCurrency.toDouble()
-            }
-
-            // Print if error occurs
-            override fun onCancelled(databaseError: DatabaseError) {
-                println("loadPost:onCancelled ${databaseError.toException()}")
-            }
-        }
-
-        // Grab values with single value event listener
-        val dbRef = FirebaseDatabase.getInstance().getReference()
-        dbRef.child(androidId).addListenerForSingleValueEvent(fbListener)
+    override fun isCritical(): Boolean {
+        val rand = Random()
+        return rand.nextDouble() < intStat.calcStat() ?: 0.0
     }
 
-    private fun convertMap(origMap : Map<String, Long>): Map<String, Double> {
-        return origMap.mapValues {it.value.toDouble()}
-    }
-
-    private fun isCritical(): Boolean{
-        return rand.nextDouble() < intStat?.calcStat() ?: 0.0
-    }
-
-    private fun takeDamage(damage: Double){
+    override fun takeDamage(damage: Double) {
         health = maxOf(health - damage, 0.0)
     }
 
-    fun fight(boss: Boss){
+    override fun fight(boss: Boss) {
         if (boss.dead) return
 
         // User attacks
@@ -103,3 +69,18 @@ class Player(androidId : String) : Serializable {
         takeDamage(boss.attack)
     }
 }
+
+class PlayerLocalImpl(override var regenStat: Stat,
+                      override var atkStat: Stat,
+                      override var intStat: Stat,
+                      override var health: Double,
+                      override var currency: Int) : PlayerBaseImpl()
+
+class PlayerFirebaseImpl(root: FirebaseRefSnap) : PlayerBaseImpl() {
+    override var regenStat: Stat by SelfBoundFirebaseProperty(root, Stat(mapOf(), mapOf()))
+    override var atkStat: Stat by SelfBoundFirebaseProperty(root, Stat(mapOf(), mapOf()))
+    override var intStat: Stat by SelfBoundFirebaseProperty(root, Stat(mapOf(), mapOf()))
+    override var health: Double by BoundFirebaseProperty(root, PLAYER_BASE_HEALTH)
+    override var currency: Int by BoundFirebaseProperty(root, 0)
+}
+
