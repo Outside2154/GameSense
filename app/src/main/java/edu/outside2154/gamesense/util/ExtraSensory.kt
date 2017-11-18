@@ -16,9 +16,19 @@ const val JSON_FIELD_LOCATION_COORDINATES = "location_lat_long"
 
 /**
  * Manages ExtraSensory resources.
+ */
+interface ExtraSensory {
+    /**
+     * All the available [ExtraSensoryUser]s.
+     */
+    val users : List<ExtraSensoryUser>?
+}
+
+/**
+ * Manages ExtraSensory resources.
  * @param ctx The return value of [Context.getApplicationContext].
  */
-class ExtraSensory(private val ctx: Context) {
+class ExtraSensoryImpl(private val ctx: Context) : ExtraSensory {
     private val esCtx = ctx.createPackageContext(ES_PACKAGE_NAME, 0)
 
     /**
@@ -32,12 +42,24 @@ class ExtraSensory(private val ctx: Context) {
     /**
      * All the available [ExtraSensoryUser]s.
      */
-    val users : List<ExtraSensoryUser>?
+    override val users : List<ExtraSensoryUser>?
         get() = directory?.list { _, s ->
             s.startsWith(FILE_PREFIX_UUID_DIR)
         }?.map {
-            ExtraSensoryUser(File(directory, it), it.removePrefix(FILE_PREFIX_UUID_DIR))
+            ExtraSensoryUserImpl(File(directory, it), it.removePrefix(FILE_PREFIX_UUID_DIR))
         }
+}
+
+/**
+ * Corresponds to a user of ExtraSensory.
+ */
+interface ExtraSensoryUser {
+    val uuid: String
+    /**
+     * [ExtraSensoryFile]s for all recorded data for an [ExtraSensoryUser].
+     * Includes both server predictions and user-reported labels.
+     */
+    val files: List<ExtraSensoryFile>
 }
 
 /**
@@ -45,18 +67,18 @@ class ExtraSensory(private val ctx: Context) {
  * @param directory The directory of the corresponding user.
  * @param uuid The UUID of the corresponding user.
  */
-class ExtraSensoryUser constructor(private val directory: File, val uuid: String) {
+class ExtraSensoryUserImpl constructor(private val directory: File, override val uuid: String) : ExtraSensoryUser {
 
     /**
      * [ExtraSensoryFile]s for all recorded data for an [ExtraSensoryUser].
      * Includes both server predictions and user-reported labels.
      */
-    val files: List<ExtraSensoryFile>
+    override val files: List<ExtraSensoryFile>
         get() = directory.list { _, s ->
             s.endsWith(FILE_SUFFIX_SERVER_PREDICTIONS) ||
                     s.endsWith(FILE_SUFFIX_USER_REPORTED_LABELS)
         }.map {
-            ExtraSensoryFile(
+            ExtraSensoryFileImpl(
                     File(directory, it),
                     Date(it.slice(0..9).toLong() * 1000),
                     it.endsWith(FILE_SUFFIX_SERVER_PREDICTIONS))
@@ -65,18 +87,30 @@ class ExtraSensoryUser constructor(private val directory: File, val uuid: String
 
 /**
  * Holds ExtraSensory reading file information.
- * @property file The associated [File].
- * @property creationTime A [Date] object representing the time the file was created.
- * @property isServer If true, is a server info. Otherwise, is a user reported label.
  */
-class ExtraSensoryFile constructor(private val file: File,
-                                   val creationTime: Date,
-                                   val isServer: Boolean) {
-
+interface ExtraSensoryFile {
+    val creationTime: Date
+    val isServer: Boolean
     /**
      * The associated [ExtraSensoryInfo].
      */
     val info: ExtraSensoryInfo?
+}
+
+/**
+ * Holds ExtraSensory reading file information.
+ * @property file The associated [File].
+ * @property creationTime A [Date] object representing the time the file was created.
+ * @property isServer If true, is a server info. Otherwise, is a user reported label.
+ */
+class ExtraSensoryFileImpl constructor(private val file: File,
+                                       override val creationTime: Date,
+                                       override val isServer: Boolean) : ExtraSensoryFile {
+
+    /**
+     * The associated [ExtraSensoryInfo].
+     */
+    override val info: ExtraSensoryInfo?
         get() {
             val json = JSONObject(file.readText())
             val jsonLabels = json.getJSONArray(JSON_FIELD_LABEL_NAMES) ?: return null
