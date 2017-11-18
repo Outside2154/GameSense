@@ -8,6 +8,9 @@ import android.view.View
 import android.view.ViewGroup
 
 import edu.outside2154.gamesense.R
+import edu.outside2154.gamesense.activity.NavActivity
+import edu.outside2154.gamesense.database.firebaseListen
+import edu.outside2154.gamesense.model.*
 import kotlinx.android.synthetic.main.fragment_home.*
 
 /**
@@ -26,11 +29,38 @@ class HomeFragment : Fragment() {
 
     private var mListener: OnFragmentInteractionListener? = null
 
+    private var player: Player? = null
+    private var boss: Boss? = null
+    private lateinit var androidId: String
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.run {
+
+        // Retrieve items from bundle.
+        arguments.run {
+            androidId = getString("androidId")
             mParam1 = getString(ARG_PARAM1)
             mParam2 = getString(ARG_PARAM2)
+            player = getSerializable("player") as Player?
+            boss = getSerializable("boss") as Boss?
+        }
+
+        if (player == null) {
+            firebaseListen(androidId) {
+                player = PlayerFirebaseImpl(it)
+                updatePlayerBars()
+                (activity as NavActivity).player = player
+            }
+        }
+
+        // If we didn't have a boss, get it from Firebase.
+        // Once we have the boss, update.
+        if (boss == null) {
+            firebaseListen("$androidId/boss") {
+                boss = BossFirebaseImpl(it)
+                updateBossBar()
+                (activity as NavActivity).boss = boss
+            }
         }
     }
 
@@ -41,7 +71,22 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        updatePlayerBars()
+        updateBossBar()
+    }
 
+    private fun updatePlayerBars() {
+        player?.let {
+            hp_lb.progress = it.health.toInt()
+            atk_lb.progress = ((it.atkStat.calcStat() ?: 0.0) * 100).toInt()
+            int_lb.progress = ((it.intStat.calcStat() ?: 0.0) * 100).toInt()
+        }
+    }
+
+    private fun updateBossBar() {
+        boss?.let {
+            boss_hp_lb.progress = it.health.toInt()
+        }
         hp_lb.progress = 80
         atk_lb.progress = 50
         int_lb.progress = 20
