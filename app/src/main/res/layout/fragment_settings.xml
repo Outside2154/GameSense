@@ -1,18 +1,20 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<!--<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"-->
+    <!--android:layout_width="fill_parent"-->
+    <!--android:layout_height="fill_parent">-->
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="edu.outside2154.gamesense.fragment.SettingsFragment">
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:fillViewport="false">
+    <!--tools:context="edu.outside2154.gamesense.fragment.SettingsFragment">-->
 
     <!-- TODO: Update blank fragment layout -->
 
-    <ScrollView
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
-
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
             android:layout_marginVertical="50dp"
             android:orientation="vertical">
@@ -24,12 +26,12 @@
                 android:text="Attack"
                 android:textSize="30sp" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
+            <!--<LinearLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:orientation="vertical">-->
 
-            </LinearLayout>
+            <!--</LinearLayout>-->
 
             <Spinner
                 android:id="@+id/atk_spinner"
@@ -57,12 +59,12 @@
                 android:text="Intelligence"
                 android:textSize="30sp" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
+            <!--<LinearLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:orientation="vertical">-->
 
-            </LinearLayout>
+            <!--</LinearLayout>-->
 
             <Spinner
                 android:id="@+id/int_spinner"
@@ -90,12 +92,12 @@
                 android:text="Health"
                 android:textSize="30sp" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
+            <!--<LinearLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:orientation="vertical">-->
 
-            </LinearLayout>
+            <!--</LinearLayout>-->
 
             <Spinner
                 android:id="@+id/hth_spinner"
@@ -119,5 +121,6 @@
 
         </LinearLayout>
 
-    </ScrollView>
-</FrameLayout>
+</ScrollView>
+
+<!--</ScrollView>-->
