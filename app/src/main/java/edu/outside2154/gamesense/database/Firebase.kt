@@ -1,6 +1,8 @@
 package edu.outside2154.gamesense.database
 
 import com.google.firebase.database.*
+import edu.outside2154.gamesense.util.Updatable
+import kotlin.properties.ReadOnlyProperty
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
 
@@ -90,4 +92,44 @@ class SelfBoundFirebaseProperty<in R, T : FirebaseTransform<T>>(
             thisRef: R,
             prop: KProperty<*>
     ): ReadWriteProperty<R, T> = SelfFirebaseProperty(root.child(prop.name), default)
+}
+
+/**
+ * Retrieves a [FirebaseRefSnap] via [firebaseListen].
+ *
+ * @param path The Firebase path to retrieve.
+ * @param transform Turns a [FirebaseRefSnap] into [T].
+ * @param callback The function to call after [transform].
+ */
+class FromFirebase<in R, T>(
+        path: String,
+        transform: (FirebaseRefSnap) -> T,
+        callback: () -> Unit = {})
+    : ReadOnlyProperty<R, T?> {
+    private var field: T? = null
+
+    init {
+        firebaseListen(path) {
+            field = transform(it)
+            callback()
+        }
+    }
+
+    override fun getValue(thisRef: R, property: KProperty<*>): T? = field
+}
+
+/**
+ * Retrieves a [FirebaseRefSnap] and calls [thisRef.update] on the property-containing
+ * instance once it is retrieved via [firebaseListen].
+ *
+ * @param path The Firebase path to retrieve.
+ * @param transform Turns a [FirebaseRefSnap] into [T].
+ */
+class FromFirebaseAndUpdate<in R : Updatable, T>(
+        private val path: String,
+        private val transform: (FirebaseRefSnap) -> T) {
+    operator fun provideDelegate(
+            thisRef: R,
+            prop: KProperty<*>
+    ): ReadOnlyProperty<R, T?> = FromFirebase(path, transform) { thisRef.update() }
 }
