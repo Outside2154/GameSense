@@ -1,6 +1,6 @@
 package edu.outside2154.gamesense.util
 
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import java.io.File

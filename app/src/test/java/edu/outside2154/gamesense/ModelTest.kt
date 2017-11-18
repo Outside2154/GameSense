@@ -1,7 +1,7 @@
 package edu.outside2154.gamesense
 
 import edu.outside2154.gamesense.model.*
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 
