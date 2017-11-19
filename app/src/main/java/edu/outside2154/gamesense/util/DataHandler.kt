@@ -11,7 +11,10 @@ interface DataHandler {
     fun pullData(): Map<String, Double>
 }
 
-abstract class DataHandlerBaseImpl(val user: ExtraSensoryUser) : DataHandler {
+abstract class DataHandlerBaseImpl(
+        private val user: ExtraSensoryUser,
+        private val timeProvider: () -> Date
+) : DataHandler {
     abstract var lastUpdateTime: Date
     private val freshData: Map<String, Double>
         get() = user.files
@@ -23,18 +26,20 @@ abstract class DataHandlerBaseImpl(val user: ExtraSensoryUser) : DataHandler {
 
     override fun pullData(): Map<String, Double> {
         val toReturn = freshData
-        lastUpdateTime = Calendar.getInstance().time
+        lastUpdateTime = timeProvider()
         return toReturn
     }
 }
 
 class DataHandlerLocalImpl(user: ExtraSensoryUser,
-                           override var lastUpdateTime: Date) : DataHandlerBaseImpl(user)
+                           timeProvider: () -> Date,
+                           override var lastUpdateTime: Date) : DataHandlerBaseImpl(user, timeProvider)
 
 class DataHandlerFirebaseImpl(user: ExtraSensoryUser,
-                              root: FirebaseRefSnap) : DataHandlerBaseImpl(user) {
+                              timeProvider: () -> Date,
+                              root: FirebaseRefSnap) : DataHandlerBaseImpl(user, timeProvider) {
     override var lastUpdateTime: Date by BoundFirebaseProperty(
-            root, Calendar.getInstance().time, FirebaseDateTransform())
+            root, timeProvider(), FirebaseDateTransform())
 }
 
 class FirebaseDateTransform : FirebaseTransform<Date> {
