@@ -1,6 +1,6 @@
 package edu.outside2154.gamesense.fragment
 
-import org.jetbrains.anko.*
+//import org.jetbrains.anko.*
 import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -21,33 +21,6 @@ import kotlinx.android.synthetic.main.fragment_notifications.*
  * Use the [NotificationsFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-
-class NotificationsAdapter (var messages: MutableList<String>): RecyclerView.Adapter<NotificationsAdapter.ViewHolder>() {
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.title.text = messages[position]
-    }
-
-    //this method is giving the size of the list
-    override fun getItemCount(): Int {
-        return messages.size
-    }
-
-    //this method is returning the view for each item in the list
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        var view = LayoutInflater.from(parent.context).inflate(R.layout.fragment_settings, parent, false)
-        return ViewHolder(view)
-    }
-
-    //the class is hodling the list view
-    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val title: TextView = view.find<TextView>(R.id.title)
-        init {
-
-        }
-    }
-}
-
-
 class NotificationsFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var mParam1: String? = null
@@ -66,15 +39,14 @@ class NotificationsFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
-        val v = inflater.inflate(R.layout.fragment_settings, container, false)
+        val v = inflater.inflate(R.layout.fragment_notifications, container, false)
 
-        recycler_view.apply {
-            setHasFixedSize(true)
-            layoutManager = LinearLayoutManager(activity)
-            adapter = NotificationsAdapter(mutableListOf("Msg 1", "Msg 2"))
-        }
+        val notifications = v.findViewById<RecyclerView>(R.id.recycler_view) as RecyclerView
+        val messages = mutableListOf("Welcome to GameSense!", "Let's begin your battle!",
+                "Boss is attacking you!")
 
-
+        notifications.layoutManager = LinearLayoutManager(context)
+        notifications.adapter = NotificationsAdapter(messages)
         return v
     }
 

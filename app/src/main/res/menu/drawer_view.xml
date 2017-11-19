@@ -16,5 +16,10 @@
             android:id="@+id/nav_checklist_fragment"
             android:icon="@drawable/ic_menu_send"
             android:title="Checklist" />
+
+        <item
+            android:id="@+id/nav_notification_fragment"
+            android:icon="@drawable/ic_menu_send"
+            android:title="Notifications" />
     </group>
 </menu>
