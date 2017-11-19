@@ -50,13 +50,16 @@ class HomeFragment : Fragment(), Updatable, BundleUpdatable {
     override fun update() {
         // Update all progress bars
         player?.let {
+            points_value.text = it.currency.toString()
             hp_lb.progress = it.health.toInt()
             atk_lb.progress = it.atkStat.calcStat()?.toIntPercent() ?: 0
             int_lb.progress = it.intStat.calcStat()?.toIntPercent() ?: 0
         }
 
         boss?.let {
+            boss_level_value.text = it.level.toString()
             boss_hp_lb.progress = it.health.toInt()
+            boss_atk_lb.progress = it.attack.toInt()
         }
     }
 }
