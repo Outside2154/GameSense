@@ -18,7 +18,7 @@ abstract class DataHandlerBaseImpl(
     abstract var lastUpdateTime: Date
     private val freshData: Map<String, Double>
         get() = user.files
-                .filter { it.creationTime.after(lastUpdateTime) }
+                .filter { it.creationTime > lastUpdateTime }
                 .mapNotNull { it.info?.topPrediction }
                 .groupingBy { it }
                 .eachCount()
@@ -31,13 +31,17 @@ abstract class DataHandlerBaseImpl(
     }
 }
 
-class DataHandlerLocalImpl(user: ExtraSensoryUser,
-                           timeProvider: () -> Date,
-                           override var lastUpdateTime: Date) : DataHandlerBaseImpl(user, timeProvider)
+class DataHandlerLocalImpl(
+        user: ExtraSensoryUser,
+        override var lastUpdateTime: Date,
+        timeProvider: () -> Date
+) : DataHandlerBaseImpl(user, timeProvider)
 
-class DataHandlerFirebaseImpl(user: ExtraSensoryUser,
-                              timeProvider: () -> Date,
-                              root: FirebaseRefSnap) : DataHandlerBaseImpl(user, timeProvider) {
+class DataHandlerFirebaseImpl(
+        user: ExtraSensoryUser,
+        root: FirebaseRefSnap,
+        timeProvider: () -> Date
+) : DataHandlerBaseImpl(user, timeProvider) {
     override var lastUpdateTime: Date by BoundFirebaseProperty(
             root, timeProvider(), FirebaseDateTransform())
 }
