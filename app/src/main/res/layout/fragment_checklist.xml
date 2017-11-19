@@ -1,22 +1,485 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="10dp"
+    android:fillViewport="false">
+
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:gamesense="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/frameLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="edu.outside2154.gamesense.fragment.ChecklistFragment">
+    tools:context="edu.outside2154.gamesense.fragment.HomeFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginHorizontal="20dp"
-        android:layout_marginVertical="50dp"
-        android:orientation="vertical">
-        <TextView
-            android:id="@+id/checklist_header"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Checklist"
-            android:textSize="30sp" />
-    </LinearLayout>
 
-</FrameLayout>
+    <TextView
+        android:id="@+id/health_header"
+        android:layout_width="wrap_content"
+        android:layout_height="27dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="28dp"
+        android:text="Health"
+        android:textSize="20dp"
+        gamesense:layout_constraintEnd_toEndOf="parent"
+        gamesense:layout_constraintHorizontal_bias="0.0"
+        gamesense:layout_constraintStart_toStartOf="parent"
+        gamesense:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/health_activity_header"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="Activity: "
+        android:textSize="15dp"
+        gamesense:layout_constraintEnd_toEndOf="parent"
+        gamesense:layout_constraintHorizontal_bias="0.0"
+        gamesense:layout_constraintStart_toStartOf="parent"
+        gamesense:layout_constraintTop_toBottomOf="@+id/health_header" />
+
+    <TextView
+        android:id="@+id/health_activity_value"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="Activity"
+        android:textSize="15dp"
+        gamesense:layout_constraintEnd_toEndOf="parent"
+        gamesense:layout_constraintHorizontal_bias="0.025"
+        gamesense:layout_constraintStart_toEndOf="@+id/health_activity_header"
+        gamesense:layout_constraintTop_toBottomOf="@+id/health_header" />
+
+    <TextView
+        android:id="@+id/health_time_header"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="Time scale: "
+        android:textSize="15dp"
+        gamesense:layout_constraintEnd_toEndOf="parent"
+        gamesense:layout_constraintHorizontal_bias="0.0"
+        gamesense:layout_constraintStart_toStartOf="parent"
+        gamesense:layout_constraintTop_toBottomOf="@+id/health_activity_header" />
+
+    <TextView
+        android:id="@+id/health_time_value"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="Daily"
+        android:textSize="15dp"
+        gamesense:layout_constraintEnd_toEndOf="parent"
+        gamesense:layout_constraintHorizontal_bias="0.016"
+        gamesense:layout_constraintStart_toEndOf="@+id/health_time_header"
+        gamesense:layout_constraintTop_toBottomOf="@+id/health_activity_header" />
+
+    <TextView
+        android:id="@+id/health_user_amt_header"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="Your hours: "
+        android:textSize="15dp"
+        gamesense:layout_constraintEnd_toEndOf="parent"
+        gamesense:layout_constraintHorizontal_bias="0.0"
+        gamesense:layout_constraintStart_toStartOf="parent"
+        gamesense:layout_constraintTop_toBottomOf="@+id/health_time_header" />
+
+    <TextView
+        android:id="@+id/health_user_amt_value"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="0"
+        android:textSize="15dp"
+        gamesense:layout_constraintEnd_toEndOf="parent"
+        gamesense:layout_constraintHorizontal_bias="0.017"
+        gamesense:layout_constraintStart_toEndOf="@+id/health_user_amt_header"
+        gamesense:layout_constraintTop_toBottomOf="@+id/health_time_header" />
+
+    <TextView
+        android:id="@+id/health_goal_amt_header"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="Goal hours: "
+        android:textSize="15dp"
+        gamesense:layout_constraintEnd_toEndOf="parent"
+        gamesense:layout_constraintHorizontal_bias="0.0"
+        gamesense:layout_constraintStart_toStartOf="parent"
+        gamesense:layout_constraintTop_toBottomOf="@+id/health_user_amt_header" />
+
+    <TextView
+        android:id="@+id/health_goal_amt_value"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="0"
+        android:textSize="15dp"
+        gamesense:layout_constraintEnd_toEndOf="parent"
+        gamesense:layout_constraintHorizontal_bias="0.016"
+        gamesense:layout_constraintStart_toEndOf="@+id/health_goal_amt_header"
+        gamesense:layout_constraintTop_toBottomOf="@+id/health_user_amt_header" />
+
+    <TextView
+        android:id="@+id/health_progress_header"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="Progress"
+        android:textSize="15dp"
+        gamesense:layout_constraintEnd_toEndOf="parent"
+        gamesense:layout_constraintHorizontal_bias="0.0"
+        gamesense:layout_constraintStart_toStartOf="parent"
+        gamesense:layout_constraintTop_toBottomOf="@+id/health_goal_amt_header" />
+
+    <ProgressBar
+        android:id="@+id/health_progress"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="0dp"
+        android:layout_height="20dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:progressTint="@color/colorPrimary"
+        android:scaleY="2"
+        gamesense:layout_constraintEnd_toEndOf="parent"
+        gamesense:layout_constraintHorizontal_bias="0.0"
+        gamesense:layout_constraintStart_toStartOf="parent"
+        gamesense:layout_constraintTop_toBottomOf="@+id/health_progress_header" />
+
+
+    <TextView
+        android:id="@+id/attack_header"
+        android:layout_width="wrap_content"
+        android:layout_height="27dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="28dp"
+        android:text="Attack"
+        android:textSize="20dp"
+        gamesense:layout_constraintEnd_toEndOf="parent"
+        gamesense:layout_constraintHorizontal_bias="0.0"
+        gamesense:layout_constraintStart_toStartOf="parent"
+        gamesense:layout_constraintTop_toBottomOf="@id/health_progress" />
+
+    <TextView
+        android:id="@+id/attack_activity_header"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="Activity: "
+        android:textSize="15dp"
+        gamesense:layout_constraintEnd_toEndOf="parent"
+        gamesense:layout_constraintHorizontal_bias="0.0"
+        gamesense:layout_constraintStart_toStartOf="parent"
+        gamesense:layout_constraintTop_toBottomOf="@+id/attack_header" />
+
+    <TextView
+        android:id="@+id/attack_activity_value"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="Activity"
+        android:textSize="15dp"
+        gamesense:layout_constraintEnd_toEndOf="parent"
+        gamesense:layout_constraintHorizontal_bias="0.025"
+        gamesense:layout_constraintStart_toEndOf="@+id/attack_activity_header"
+        gamesense:layout_constraintTop_toBottomOf="@+id/attack_header" />
+
+    <TextView
+        android:id="@+id/attack_time_header"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="Time scale: "
+        android:textSize="15dp"
+        gamesense:layout_constraintEnd_toEndOf="parent"
+        gamesense:layout_constraintHorizontal_bias="0.0"
+        gamesense:layout_constraintStart_toStartOf="parent"
+        gamesense:layout_constraintTop_toBottomOf="@+id/attack_activity_header" />
+
+    <TextView
+        android:id="@+id/attack_time_value"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="Weekly"
+        android:textSize="15dp"
+        gamesense:layout_constraintEnd_toEndOf="parent"
+        gamesense:layout_constraintHorizontal_bias="0.016"
+        gamesense:layout_constraintStart_toEndOf="@+id/attack_time_header"
+        gamesense:layout_constraintTop_toBottomOf="@+id/attack_activity_header" />
+
+    <TextView
+        android:id="@+id/attack_user_amt_header"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="Your hours: "
+        android:textSize="15dp"
+        gamesense:layout_constraintEnd_toEndOf="parent"
+        gamesense:layout_constraintHorizontal_bias="0.0"
+        gamesense:layout_constraintStart_toStartOf="parent"
+        gamesense:layout_constraintTop_toBottomOf="@+id/attack_time_header" />
+
+    <TextView
+        android:id="@+id/attack_user_amt_value"
+        android:layout_width="10dp"
+        android:layout_height="20dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="0"
+        android:textSize="15dp"
+        gamesense:layout_constraintEnd_toEndOf="parent"
+        gamesense:layout_constraintHorizontal_bias="0.016"
+        gamesense:layout_constraintStart_toEndOf="@+id/attack_user_amt_header"
+        gamesense:layout_constraintTop_toBottomOf="@+id/attack_time_header" />
+
+    <TextView
+        android:id="@+id/attack_goal_amt_header"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="Goal hours: "
+        android:textSize="15dp"
+        gamesense:layout_constraintEnd_toEndOf="parent"
+        gamesense:layout_constraintHorizontal_bias="0.0"
+        gamesense:layout_constraintStart_toStartOf="parent"
+        gamesense:layout_constraintTop_toBottomOf="@+id/attack_user_amt_header" />
+
+    <TextView
+        android:id="@+id/attack_goal_amt_value"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="0"
+        android:textSize="15dp"
+        gamesense:layout_constraintEnd_toEndOf="parent"
+        gamesense:layout_constraintHorizontal_bias="0.016"
+        gamesense:layout_constraintStart_toEndOf="@+id/attack_goal_amt_header"
+        gamesense:layout_constraintTop_toBottomOf="@+id/attack_user_amt_header" />
+
+    <TextView
+        android:id="@+id/attack_progress_header"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="Progress"
+        android:textSize="15dp"
+        gamesense:layout_constraintEnd_toEndOf="parent"
+        gamesense:layout_constraintHorizontal_bias="0.0"
+        gamesense:layout_constraintStart_toStartOf="parent"
+        gamesense:layout_constraintTop_toBottomOf="@+id/attack_goal_amt_header" />
+
+    <ProgressBar
+        android:id="@+id/attack_progress"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="0dp"
+        android:layout_height="20dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:progressTint="@color/colorPrimary"
+        android:scaleY="2"
+        gamesense:layout_constraintEnd_toEndOf="parent"
+        gamesense:layout_constraintHorizontal_bias="0.0"
+        gamesense:layout_constraintStart_toStartOf="parent"
+        gamesense:layout_constraintTop_toBottomOf="@+id/attack_progress_header" />
+
+
+    <TextView
+        android:id="@+id/intel_header"
+        android:layout_width="wrap_content"
+        android:layout_height="27dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="28dp"
+        android:text="Intelligence"
+        android:textSize="20dp"
+        gamesense:layout_constraintEnd_toEndOf="parent"
+        gamesense:layout_constraintHorizontal_bias="0.0"
+        gamesense:layout_constraintStart_toStartOf="parent"
+        gamesense:layout_constraintTop_toBottomOf="@id/attack_progress" />
+
+    <TextView
+        android:id="@+id/intel_activity_header"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="Activity: "
+        android:textSize="15dp"
+        gamesense:layout_constraintEnd_toEndOf="parent"
+        gamesense:layout_constraintHorizontal_bias="0.0"
+        gamesense:layout_constraintStart_toStartOf="parent"
+        gamesense:layout_constraintTop_toBottomOf="@+id/intel_header" />
+
+    <TextView
+        android:id="@+id/intel_activity_value"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="Activity"
+        android:textSize="15dp"
+        gamesense:layout_constraintEnd_toEndOf="parent"
+        gamesense:layout_constraintHorizontal_bias="0.025"
+        gamesense:layout_constraintStart_toEndOf="@+id/intel_activity_header"
+        gamesense:layout_constraintTop_toBottomOf="@+id/intel_header" />
+
+    <TextView
+        android:id="@+id/intel_time_header"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="Time scale: "
+        android:textSize="15dp"
+        gamesense:layout_constraintEnd_toEndOf="parent"
+        gamesense:layout_constraintHorizontal_bias="0.0"
+        gamesense:layout_constraintStart_toStartOf="parent"
+        gamesense:layout_constraintTop_toBottomOf="@+id/intel_activity_header" />
+
+    <TextView
+        android:id="@+id/intel_time_value"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="Weekly"
+        android:textSize="15dp"
+        gamesense:layout_constraintEnd_toEndOf="parent"
+        gamesense:layout_constraintHorizontal_bias="0.016"
+        gamesense:layout_constraintStart_toEndOf="@+id/intel_time_header"
+        gamesense:layout_constraintTop_toBottomOf="@+id/intel_activity_header" />
+
+    <TextView
+        android:id="@+id/intel_user_amt_header"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="Your hours: "
+        android:textSize="15dp"
+        gamesense:layout_constraintEnd_toEndOf="parent"
+        gamesense:layout_constraintHorizontal_bias="0.0"
+        gamesense:layout_constraintStart_toStartOf="parent"
+        gamesense:layout_constraintTop_toBottomOf="@+id/intel_time_header" />
+
+    <TextView
+        android:id="@+id/intel_user_amt_value"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="0"
+        android:textSize="15dp"
+        gamesense:layout_constraintEnd_toEndOf="parent"
+        gamesense:layout_constraintHorizontal_bias="0.017"
+        gamesense:layout_constraintStart_toEndOf="@+id/intel_user_amt_header"
+        gamesense:layout_constraintTop_toBottomOf="@+id/intel_time_header" />
+
+    <TextView
+        android:id="@+id/intel_goal_amt_header"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="Goal hours: "
+        android:textSize="15dp"
+        gamesense:layout_constraintEnd_toEndOf="parent"
+        gamesense:layout_constraintHorizontal_bias="0.0"
+        gamesense:layout_constraintStart_toStartOf="parent"
+        gamesense:layout_constraintTop_toBottomOf="@+id/intel_user_amt_header" />
+
+    <TextView
+        android:id="@+id/intel_goal_amt_value"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="0"
+        android:textSize="15dp"
+        gamesense:layout_constraintEnd_toEndOf="parent"
+        gamesense:layout_constraintHorizontal_bias="0.016"
+        gamesense:layout_constraintStart_toEndOf="@+id/intel_goal_amt_header"
+        gamesense:layout_constraintTop_toBottomOf="@+id/intel_user_amt_header" />
+
+    <TextView
+        android:id="@+id/intel_progress_header"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="Progress"
+        android:textSize="15dp"
+        gamesense:layout_constraintEnd_toEndOf="parent"
+        gamesense:layout_constraintHorizontal_bias="0.0"
+        gamesense:layout_constraintStart_toStartOf="parent"
+        gamesense:layout_constraintTop_toBottomOf="@+id/intel_goal_amt_header" />
+
+    <ProgressBar
+        android:id="@+id/intel_progress"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="0dp"
+        android:layout_height="20dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:progressTint="@color/colorPrimary"
+        android:scaleY="2"
+        gamesense:layout_constraintEnd_toEndOf="parent"
+        gamesense:layout_constraintHorizontal_bias="0.0"
+        gamesense:layout_constraintStart_toStartOf="parent"
+        gamesense:layout_constraintTop_toBottomOf="@+id/intel_progress_header" />
+
+</android.support.constraint.ConstraintLayout>
+</ScrollView>
+
