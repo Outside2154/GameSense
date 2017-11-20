@@ -62,4 +62,4 @@ class HomeFragment : Fragment(), Updatable, BundleUpdatable {
             boss_atk_lb.progress = it.attack.toInt()
         }
     }
-}
+}// Required empty public constructor

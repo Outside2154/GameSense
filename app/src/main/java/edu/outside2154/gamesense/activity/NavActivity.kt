@@ -5,18 +5,16 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.view.MenuItem
-
-import edu.outside2154.gamesense.model.Player
-import edu.outside2154.gamesense.model.Boss
 
 import edu.outside2154.gamesense.R
 import edu.outside2154.gamesense.database.FromFirebaseAndUpdate
 import edu.outside2154.gamesense.fragment.ChecklistFragment
 import edu.outside2154.gamesense.fragment.HomeFragment
+import edu.outside2154.gamesense.fragment.NotificationsFragment
 import edu.outside2154.gamesense.fragment.SettingsFragment
-import edu.outside2154.gamesense.model.BossFirebaseImpl
-import edu.outside2154.gamesense.model.PlayerFirebaseImpl
+import edu.outside2154.gamesense.model.*
 import edu.outside2154.gamesense.util.*
 import kotlinx.android.synthetic.main.activity_nav.*
 import kotlinx.android.synthetic.main.toolbar.*
@@ -29,9 +27,13 @@ class NavActivity : AppCompatActivity(), Updatable {
     private val player: Player? by FromFirebaseAndUpdate(androidId, ::PlayerFirebaseImpl)
     private val boss: Boss? by FromFirebaseAndUpdate("$androidId/boss", ::BossFirebaseImpl)
 
+    private val notifications = Notifications()
+
     fun makeBundle(): Bundle = Bundle().apply {
         putSerializable("player", player)
         putSerializable("boss", boss)
+        putInt("notificationCount", notifications.notificationCount)
+        putSerializable("notifications", notifications)
     }
 
     override fun update() {
@@ -43,6 +45,8 @@ class NavActivity : AppCompatActivity(), Updatable {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_nav)
+
+        notifications.getNotifications(androidId, notifications)
 
         // Set a Toolbar to replace the ActionBar.
         setSupportActionBar(gs_toolbar)
@@ -69,6 +73,7 @@ class NavActivity : AppCompatActivity(), Updatable {
             R.id.nav_home_fragment -> HomeFragment()
             R.id.nav_settings_fragment -> SettingsFragment()
             R.id.nav_checklist_fragment -> ChecklistFragment()
+            R.id.nav_notification_fragment -> NotificationsFragment()
             else -> Fragment()  // TODO: replace with a 404 fragment
         }
 
