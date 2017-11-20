@@ -2,53 +2,71 @@ package edu.outside2154.gamesense.activity
 
 import android.content.res.Configuration
 import android.os.Bundle
-import android.support.design.widget.NavigationView
 import android.support.v4.app.Fragment
-import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.Toolbar
 import android.view.MenuItem
+
+import edu.outside2154.gamesense.model.Player
+import edu.outside2154.gamesense.model.Boss
+
 import edu.outside2154.gamesense.R
+import edu.outside2154.gamesense.database.FromFirebaseAndUpdate
 import edu.outside2154.gamesense.fragment.ChecklistFragment
 import edu.outside2154.gamesense.fragment.HomeFragment
 import edu.outside2154.gamesense.fragment.NotificationsFragment
 import edu.outside2154.gamesense.fragment.SettingsFragment
-import edu.outside2154.gamesense.util.transact
+import edu.outside2154.gamesense.model.BossFirebaseImpl
+import edu.outside2154.gamesense.model.PlayerFirebaseImpl
+import edu.outside2154.gamesense.util.*
+import kotlinx.android.synthetic.main.activity_nav.*
+import kotlinx.android.synthetic.main.toolbar.*
 
-class NavActivity : AppCompatActivity() {
-    private lateinit var mDrawer: DrawerLayout
+class NavActivity : AppCompatActivity(), Updatable {
     private lateinit var drawerToggle: ActionBarDrawerToggle
+    private var fragment: Fragment? = null
+
+    private val androidId = getAndroidId(this)
+    private val player: Player? by FromFirebaseAndUpdate(androidId, ::PlayerFirebaseImpl)
+    private val boss: Boss? by FromFirebaseAndUpdate("$androidId/boss", ::BossFirebaseImpl)
+
+    fun makeBundle(): Bundle = Bundle().apply {
+        putSerializable("player", player)
+        putSerializable("boss", boss)
+    }
+
+    override fun update() {
+        // Try to update the bundle, then try to update.
+        (fragment as? BundleUpdatable)?.updateBundle(makeBundle())
+        (fragment as? Updatable)?.update()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_nav)
 
         // Set a Toolbar to replace the ActionBar.
-        val toolbar = findViewById<Toolbar>(R.id.toolbar)
-        setSupportActionBar(toolbar)
+        setSupportActionBar(gs_toolbar)
 
         // Find and setup the drawer view.
-        mDrawer = findViewById(R.id.drawer_layout)
-        val nvDrawer = findViewById<NavigationView>(R.id.nvView)
-        nvDrawer.setNavigationItemSelectedListener {
+        nvView.setNavigationItemSelectedListener {
             selectDrawerItem(it)
             true  // Display the item as selected.
         }
 
         // Tie DrawerLayout events to a toggle.
         drawerToggle = ActionBarDrawerToggle(
-                this, mDrawer, toolbar,
+                this, drawer_layout, gs_toolbar,
                 R.string.drawer_open, R.string.drawer_close)
-        mDrawer.addDrawerListener(drawerToggle)
+        drawer_layout.addDrawerListener(drawerToggle)
 
         // Initially select the first menu item.
-        selectDrawerItem(nvDrawer.menu.getItem(0))
+        selectDrawerItem(nvView.menu.getItem(0))
     }
 
     private fun selectDrawerItem(menuItem: MenuItem) {
         // Create a new fragment based on menu item selected.
-        val fragment = when (menuItem.itemId) {
+        fragment = when (menuItem.itemId) {
             R.id.nav_home_fragment -> HomeFragment()
             R.id.nav_settings_fragment -> SettingsFragment()
             R.id.nav_checklist_fragment -> ChecklistFragment()
@@ -56,13 +74,16 @@ class NavActivity : AppCompatActivity() {
             else -> Fragment()  // TODO: replace with a 404 fragment
         }
 
+        // Add player/boss objects to bundle along with androidId
+        fragment?.arguments = makeBundle()
+
         // Insert the fragment by replacing any existing fragment
         supportFragmentManager.transact { replace(R.id.flContent, fragment) }
 
         // Update UI state
         menuItem.isChecked = true
         title = menuItem.title
-        mDrawer.closeDrawers()
+        drawer_layout.closeDrawers()
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {

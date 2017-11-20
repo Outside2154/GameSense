@@ -38,6 +38,7 @@ class SettingsFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
+
         val v = inflater.inflate(R.layout.fragment_settings, container, false)
 
         val atkSpinner = v.findViewById<Spinner>(R.id.atk_spinner) as Spinner
@@ -56,6 +57,7 @@ class SettingsFragment : Fragment() {
         intSpinner.setAdapter(intAdapter)
         hthSpinner.setAdapter(hthAdapter)
         return v
+
     }
 
     // TODO: Rename method, update argument and hook method into UI event
