@@ -14,6 +14,7 @@ import edu.outside2154.gamesense.R
 import edu.outside2154.gamesense.database.FromFirebaseAndUpdate
 import edu.outside2154.gamesense.fragment.ChecklistFragment
 import edu.outside2154.gamesense.fragment.HomeFragment
+import edu.outside2154.gamesense.fragment.NotificationsFragment
 import edu.outside2154.gamesense.fragment.SettingsFragment
 import edu.outside2154.gamesense.model.BossFirebaseImpl
 import edu.outside2154.gamesense.model.PlayerFirebaseImpl
@@ -69,6 +70,7 @@ class NavActivity : AppCompatActivity(), Updatable {
             R.id.nav_home_fragment -> HomeFragment()
             R.id.nav_settings_fragment -> SettingsFragment()
             R.id.nav_checklist_fragment -> ChecklistFragment()
+            R.id.nav_notification_fragment -> NotificationsFragment()
             else -> Fragment()  // TODO: replace with a 404 fragment
         }
 
