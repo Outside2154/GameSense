@@ -3,6 +3,7 @@ package edu.outside2154.gamesense.model
 import edu.outside2154.gamesense.database.BoundFirebaseProperty
 import edu.outside2154.gamesense.database.FirebaseRefSnap
 import edu.outside2154.gamesense.database.SelfBoundFirebaseProperty
+import edu.outside2154.gamesense.util.toDoublePercent
 import java.io.Serializable
 import java.util.*
 
@@ -21,6 +22,11 @@ interface Player : Serializable {
         get() = PLAYER_BASE_ATTACK * (atkStat.calcStat() ?: 0.0)
     val dead
         get() = health == 0.0
+
+    /**
+     * Handles player regen via regenStat value.
+     */
+    fun regenHealth()
 
     /**
      * Handles player criticals via intStat value.
@@ -46,6 +52,10 @@ abstract class PlayerBaseImpl : Player {
     abstract override var intStat: Stat
     abstract override var health: Double
     abstract override var currency: Int
+
+    override fun regenHealth() {
+        health = minOf(health + (regenStat.calcStat()?.toDoublePercent() ?: 0.0), 100.0)
+    }
 
     override fun isCritical(): Boolean {
         val rand = Random()

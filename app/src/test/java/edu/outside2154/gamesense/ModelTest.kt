@@ -70,6 +70,16 @@ class ModelPlayerTest {
     }
 
     @Test
+    fun testRegen() {
+        player.regenHealth()
+        assertEquals(100.0, player.health, EPS)
+
+        player.takeDamage(50.0)
+        player.regenHealth()
+        assertEquals(75.0, player.health, EPS)
+    }
+
+    @Test
     fun testFight() {
         assertEquals(0.5, player.intStat.calcStat() ?: 0.0, EPS)
         assertEquals(0.25, player.atkStat.calcStat() ?: 0.0, EPS)
