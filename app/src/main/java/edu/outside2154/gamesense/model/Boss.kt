@@ -12,7 +12,7 @@ const val BOSS_ATTACK_INC = 5.0
 interface Boss : Serializable {
     val health: Double
     val attack: Double
-    val lvl: Int
+    val level: Int
     val dead
         get() = health == 0.0
 
@@ -30,25 +30,25 @@ interface Boss : Serializable {
 abstract class BossBaseImpl : Boss {
     abstract override var health: Double
     abstract override var attack: Double
-    abstract override var lvl: Int
+    abstract override var level: Int
 
     override fun takeDamage(damage: Double) {
         health = maxOf(health - damage, 0.0)
     }
 
     override fun reset(userWon: Boolean) {
-        if (userWon) lvl++
-        health = BOSS_BASE_HEALTH + BOSS_HEALTH_INC * (lvl - 1)
-        attack = BOSS_BASE_ATTACK + BOSS_ATTACK_INC * (lvl - 1)
+        if (userWon) level++
+        health = BOSS_BASE_HEALTH + BOSS_HEALTH_INC * (level - 1)
+        attack = BOSS_BASE_ATTACK + BOSS_ATTACK_INC * (level - 1)
     }
 }
 
 class BossLocalImpl(override var health: Double,
                     override var attack: Double,
-                    override var lvl: Int) : BossBaseImpl()
+                    override var level: Int) : BossBaseImpl()
 
 class BossFirebaseImpl(root: FirebaseRefSnap) : BossBaseImpl() {
     override var health: Double by BoundFirebaseProperty(root, BOSS_BASE_HEALTH)
     override var attack: Double by BoundFirebaseProperty(root, BOSS_BASE_ATTACK)
-    override var lvl: Int by BoundFirebaseProperty(root, 0)
+    override var level: Int by BoundFirebaseProperty(root, 0)
 }

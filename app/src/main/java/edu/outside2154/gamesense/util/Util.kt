@@ -16,3 +16,13 @@ fun Double.toIntPercent(): Int? = when {
     this > 1.0 -> null
     else -> (this * 100).toInt()
 }
+
+/**
+ * Turns a double in the range [0.0, 1.0] to an integer in the range [0, 100].
+ * @return The converted double if the value is in range, otherwise null.
+ */
+fun Double.toDoublePercent(): Double? = when {
+    this < 0.0 -> null
+    this > 1.0 -> null
+    else -> (this * 100)
+}

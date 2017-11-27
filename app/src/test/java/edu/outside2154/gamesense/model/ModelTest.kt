@@ -41,15 +41,15 @@ class ModelBossTest {
     @Test
     fun testReset() {
         boss.reset(false)
-        assertEquals(1, boss.lvl)
+        assertEquals(1, boss.level)
         assertEquals(BOSS_BASE_HEALTH, boss.health, EPS)
         assertEquals(BOSS_BASE_ATTACK, boss.attack, EPS)
         boss.reset(true)
-        assertEquals(2, boss.lvl)
+        assertEquals(2, boss.level)
         assertEquals(BOSS_BASE_HEALTH + 50.0, boss.health, EPS)
         assertEquals(BOSS_BASE_ATTACK + 5.0, boss.attack, EPS)
         boss.reset(true)
-        assertEquals(3, boss.lvl)
+        assertEquals(3, boss.level)
         assertEquals(BOSS_BASE_HEALTH + 100.0, boss.health, EPS)
         assertEquals(BOSS_BASE_ATTACK + 10.0, boss.attack, EPS)
     }
@@ -66,6 +66,16 @@ class ModelPlayerTest {
         val regenStat = Stat(mapOf("Sleeping" to 56.0), mapOf("Sleeping" to 14.0))
         player = PlayerLocalImpl(regenStat, atkStat, intStat, PLAYER_BASE_HEALTH, 0)
         boss = BossLocalImpl(BOSS_BASE_HEALTH, BOSS_BASE_ATTACK, 1)
+    }
+
+    @Test
+    fun testRegen() {
+        player.regenHealth()
+        assertEquals(100.0, player.health, EPS)
+
+        player.takeDamage(50.0)
+        player.regenHealth()
+        assertEquals(75.0, player.health, EPS)
     }
 
     @Test
