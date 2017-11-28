@@ -93,4 +93,3 @@ class PlayerFirebaseImpl(root: FirebaseRefSnap) : PlayerBaseImpl() {
     override var health: Double by BoundFirebaseProperty(root, PLAYER_BASE_HEALTH)
     override var currency: Int by BoundFirebaseProperty(root, 0)
 }
-

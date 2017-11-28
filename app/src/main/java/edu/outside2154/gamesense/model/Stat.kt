@@ -4,6 +4,12 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseReference
 import edu.outside2154.gamesense.database.FirebaseTransform
 
+enum class StatType(val activities: Set<String>) {
+    HEALTH(setOf("Sleeping", "Eating", "Walking")),
+    INTELLIGENCE(setOf("Lab work", "Computer work", "In class")),
+    ATTACK(setOf("Exercise", "Running", "Bicycling"))
+}
+
 class Stat (initGoals : Map<String, Double>, currGoals : Map<String, Double>)
     : FirebaseTransform<Stat> {
 
@@ -40,8 +46,8 @@ class Stat (initGoals : Map<String, Double>, currGoals : Map<String, Double>)
 
     @Suppress("UNCHECKED_CAST")
     override fun fromFirebase(s: DataSnapshot): Stat? {
-        val goals = s.child("goals").value as Map<String, Long>? ?: return null
-        val current = s.child("current").value as Map<String, Long>? ?: return null
+        val goals = s.child("goals").value as? Map<String, Long> ?: return null
+        val current = s.child("current").value as? Map<String, Long> ?: return null
         return Stat(convertMap(goals), convertMap(current))
     }
 
