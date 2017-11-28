@@ -1,101 +1,185 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
+    android:padding="10dp"
+    android:fillViewport="false">
 
-<ScrollView
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
+    <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:gamesense="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/frameLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="edu.outside2154.gamesense.fragment.SettingsFragment">
 
-    <!-- TODO: Update blank fragment layout -->
+        <TextView
+            android:id="@+id/health_header"
+            android:layout_width="wrap_content"
+            android:layout_height="27dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="28dp"
+            android:text="Health"
+            android:textSize="20dp"
+            gamesense:layout_constraintEnd_toEndOf="parent"
+            gamesense:layout_constraintHorizontal_bias="0.0"
+            gamesense:layout_constraintStart_toStartOf="parent"
+            gamesense:layout_constraintTop_toTopOf="parent" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <Spinner
+            android:id="@+id/hth_spinner"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="16dp"
+            gamesense:layout_constraintEnd_toEndOf="parent"
+            gamesense:layout_constraintHorizontal_bias="0.0"
+            gamesense:layout_constraintStart_toStartOf="parent"
+            gamesense:layout_constraintTop_toBottomOf="@+id/health_header"
+            tools:layout_editor_absoluteY="71dp" />
+
+        <EditText
+            android:id="@+id/hth_hours"
+            android:layout_width="160dp"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginVertical="50dp"
-            android:orientation="vertical">
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:ems="10"
+            android:inputType="number"
+            gamesense:layout_constraintEnd_toStartOf="@+id/hth_hours_label"
+            gamesense:layout_constraintStart_toStartOf="parent"
+            gamesense:layout_constraintTop_toBottomOf="@+id/hth_spinner" />
 
-            <TextView
-                android:id="@+id/atk_header"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Attack"
-                android:textSize="30sp" />
+        <TextView
+            android:id="@+id/hth_hours_label"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:layout_marginEnd="44dp"
+            android:layout_marginTop="20dp"
+            android:text="hours/day"
+            android:textAlignment="viewStart"
+            gamesense:layout_constraintEnd_toEndOf="parent"
+            gamesense:layout_constraintTop_toBottomOf="@+id/hth_spinner" />
 
-            <Spinner
-                android:id="@+id/atk_spinner"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
 
-            <EditText
-                android:id="@+id/atk_hours"
-                android:layout_width="160dp"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:inputType="number" />
+        <TextView
+            android:id="@+id/attack_header"
+            android:layout_width="wrap_content"
+            android:layout_height="27dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="28dp"
+            android:text="Attack"
+            android:textSize="20dp"
+            gamesense:layout_constraintEnd_toEndOf="parent"
+            gamesense:layout_constraintHorizontal_bias="0.0"
+            gamesense:layout_constraintStart_toStartOf="parent"
+            gamesense:layout_constraintTop_toBottomOf="@+id/hth_hours" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:text="hours/day" />
+        <Spinner
+            android:id="@+id/atk_spinner"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="16dp"
+            gamesense:layout_constraintEnd_toEndOf="parent"
+            gamesense:layout_constraintHorizontal_bias="0.0"
+            gamesense:layout_constraintStart_toStartOf="parent"
+            gamesense:layout_constraintTop_toBottomOf="@+id/attack_header"
+            tools:layout_editor_absoluteY="71dp" />
 
-            <TextView
-                android:id="@+id/intel_header"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:text="Intelligence"
-                android:textSize="30sp" />
+        <EditText
+            android:id="@+id/atk_hours"
+            android:layout_width="160dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:ems="10"
+            android:inputType="number"
+            gamesense:layout_constraintEnd_toStartOf="@+id/atk_hours_label"
+            gamesense:layout_constraintStart_toStartOf="parent"
+            gamesense:layout_constraintTop_toBottomOf="@+id/atk_spinner" />
 
-            <Spinner
-                android:id="@+id/int_spinner"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/atk_hours_label"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:layout_marginEnd="44dp"
+            android:layout_marginTop="20dp"
+            android:text="hours/week"
+            android:textAlignment="viewStart"
+            gamesense:layout_constraintEnd_toEndOf="parent"
+            gamesense:layout_constraintTop_toBottomOf="@+id/atk_spinner" />
 
-            <EditText
-                android:id="@+id/int_hours"
-                android:layout_width="160dp"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:inputType="number" />
+        <TextView
+            android:id="@+id/intel_header"
+            android:layout_width="wrap_content"
+            android:layout_height="27dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="28dp"
+            android:text="Intelligence"
+            android:textSize="20dp"
+            gamesense:layout_constraintEnd_toEndOf="parent"
+            gamesense:layout_constraintHorizontal_bias="0.0"
+            gamesense:layout_constraintStart_toStartOf="parent"
+            gamesense:layout_constraintTop_toBottomOf="@+id/atk_hours" />
 
-            <TextView
-                android:id="@+id/textView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:text="hours/week" />
+        <Spinner
+            android:id="@+id/int_spinner"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="16dp"
+            gamesense:layout_constraintEnd_toEndOf="parent"
+            gamesense:layout_constraintHorizontal_bias="0.0"
+            gamesense:layout_constraintStart_toStartOf="parent"
+            gamesense:layout_constraintTop_toBottomOf="@+id/intel_header"
+            tools:layout_editor_absoluteY="71dp" />
 
-            <TextView
-                android:id="@+id/hth_header"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Health"
-                android:textSize="30sp" />
+        <EditText
+            android:id="@+id/int_hours"
+            android:layout_width="160dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:ems="10"
+            android:inputType="number"
+            gamesense:layout_constraintEnd_toStartOf="@+id/intel_hours_label"
+            gamesense:layout_constraintStart_toStartOf="parent"
+            gamesense:layout_constraintTop_toBottomOf="@+id/int_spinner" />
 
-            <Spinner
-                android:id="@+id/hth_spinner"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/intel_hours_label"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:layout_marginEnd="44dp"
+            android:layout_marginTop="20dp"
+            android:text="hours/week"
+            android:textAlignment="viewStart"
+            gamesense:layout_constraintEnd_toEndOf="parent"
+            gamesense:layout_constraintTop_toBottomOf="@+id/int_spinner" />
 
-            <EditText
-                android:id="@+id/hth_hours"
-                android:layout_width="160dp"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:inputType="number" />
+        <Button
+            android:id="@+id/submit_settings"
+            android:layout_width="325dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="Submit"
+            gamesense:layout_constraintBottom_toBottomOf="parent"
+            gamesense:layout_constraintEnd_toEndOf="parent"
+            gamesense:layout_constraintStart_toStartOf="parent"
+            gamesense:layout_constraintTop_toBottomOf="@+id/int_hours"
+            gamesense:layout_constraintVertical_bias="0.0" />
 
-            <TextView
-                android:id="@+id/textView2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:text="hours/week"
-                android:textAlignment="viewStart" />
-
-    </LinearLayout>
+</android.support.constraint.ConstraintLayout>
 </ScrollView>
-
-</LinearLayout>
