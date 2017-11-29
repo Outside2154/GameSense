@@ -32,7 +32,6 @@ import kotlinx.android.synthetic.main.fragment_notifications_row.*
  */
 class NotificationsFragment : Fragment(), Updatable, BundleUpdatable {
     // TODO: Rename and change types of parameters
-    private var notificationCount: Int? = null
     private var messages: Notifications? = null
     private var strings = mutableListOf<String>()
 
@@ -61,17 +60,12 @@ class NotificationsFragment : Fragment(), Updatable, BundleUpdatable {
 
     override fun updateBundle(bundle: Bundle) {
         bundle.run {
-            notificationCount = getSerializable("notificationCount") as Int?
             messages = getSerializable("notifications") as Notifications?
 
         }
     }
 
     override fun update() {
-        notificationCount?.let {
-
-        }
-
         messages?.let {
             val list: MutableList<Notification> = it.notifications
 

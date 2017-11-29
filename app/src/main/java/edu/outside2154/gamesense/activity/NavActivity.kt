@@ -32,7 +32,6 @@ class NavActivity : AppCompatActivity(), Updatable {
     fun makeBundle(): Bundle = Bundle().apply {
         putSerializable("player", player)
         putSerializable("boss", boss)
-        putInt("notificationCount", notifications.notificationCount)
         putSerializable("notifications", notifications)
     }
 
