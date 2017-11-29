@@ -1,7 +1,6 @@
-package edu.outside2154.gamesense
+package edu.outside2154.gamesense.model
 
-import edu.outside2154.gamesense.model.*
-import org.junit.Assert.assertEquals
+import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 
@@ -67,6 +66,16 @@ class ModelPlayerTest {
         val regenStat = Stat(mapOf("Sleeping" to 56.0), mapOf("Sleeping" to 14.0))
         player = PlayerLocalImpl(regenStat, atkStat, intStat, PLAYER_BASE_HEALTH, 0)
         boss = BossLocalImpl(BOSS_BASE_HEALTH, BOSS_BASE_ATTACK, 1)
+    }
+
+    @Test
+    fun testRegen() {
+        player.regenHealth()
+        assertEquals(100.0, player.health, EPS)
+
+        player.takeDamage(50.0)
+        player.regenHealth()
+        assertEquals(75.0, player.health, EPS)
     }
 
     @Test

@@ -9,7 +9,7 @@ import java.util.*
 private const val ES_USER = "6DF0201C"
 private const val ES_TIME = "1509321843"
 
-class ExtraSensoryFileTest {
+class ExtraSensoryFileImplTest {
     lateinit var esFile: File
 
     @Before
@@ -22,7 +22,7 @@ class ExtraSensoryFileTest {
     @Test
     fun testInfo() {
         val time = Date(ES_TIME.toLong() * 1000)
-        val info = ExtraSensoryFile(esFile, time, true).info ?:
+        val info = ExtraSensoryFileImpl(esFile, time, true).info ?:
                 throw AssertionError("Info is null.")
         assertEquals(time, info.creationTime)
         assertEquals(51, info.predictions.size)
@@ -31,7 +31,7 @@ class ExtraSensoryFileTest {
     }
 }
 
-class ExtraSensoryUserTest {
+class ExtraSensoryUserImplTest {
     lateinit var userDir: File
 
     @Before
@@ -42,7 +42,7 @@ class ExtraSensoryUserTest {
 
     @Test
     fun testFiles() {
-        val user = ExtraSensoryUser(userDir, ES_USER)
+        val user = ExtraSensoryUserImpl(userDir, ES_USER)
         val files = user.files
         assertEquals(1, files.size)
 

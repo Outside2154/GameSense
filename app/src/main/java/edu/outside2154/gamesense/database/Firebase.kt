@@ -36,7 +36,7 @@ interface FirebaseTransform<T> {
 
 open class FirebaseIdentity<T> : FirebaseTransform<T> {
     @Suppress("UNCHECKED_CAST")
-    override fun fromFirebase(s: DataSnapshot): T? = s.value as T?
+    override fun fromFirebase(s: DataSnapshot): T? = s.value as? T
     override fun toFirebase(value: T, ref: DatabaseReference) {
         ref.setValue(value)
     }
