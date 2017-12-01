@@ -63,7 +63,7 @@ class HomeFragment : Fragment(), Updatable, BundleUpdatable {
 
         var currentTime = System.currentTimeMillis()/1000
         var resetTimeDiff = currentTime - (timestamps?.lastResetTime ?: 0)
-        
+
         if ((timestamps?.lastResetTime ?: 0) != 0 && ONE_WEEK < resetTimeDiff) {
             if (boss?.dead == true) {
                 createNotification("You beat the boss last week! Congratulations!")
@@ -94,6 +94,8 @@ class HomeFragment : Fragment(), Updatable, BundleUpdatable {
 
             if (player?.dead == true)
                 createNotification("You're dead! Game over!")
+
+            timestamps?.lastBattleTime = currentTime.toInt()
         }
 
         // Update all progress bars
@@ -120,7 +122,6 @@ class HomeFragment : Fragment(), Updatable, BundleUpdatable {
             notification.read = false
 
             messages?.notifications?.add(notification)
-
         }
 
         messages?.let {
