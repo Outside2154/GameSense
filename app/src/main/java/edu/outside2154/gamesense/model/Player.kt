@@ -44,6 +44,8 @@ interface Player : Serializable {
      * Handles player and boss interaction during fight.
      */
     fun fight(boss: Boss): Triple<Int, Double, Double>
+
+    fun reset()
 }
 
 abstract class PlayerBaseImpl : Player {
@@ -81,6 +83,13 @@ abstract class PlayerBaseImpl : Player {
         takeDamage(boss.attack)
 
         return Triple(0, finalDamage, boss.attack)
+    }
+
+    override fun reset() {
+        health = PLAYER_BASE_HEALTH
+        regenStat.reset()
+        atkStat.reset()
+        intStat.reset()
     }
 }
 

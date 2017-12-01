@@ -26,6 +26,7 @@ class NavActivity : AppCompatActivity(), Updatable {
     private val androidId = getAndroidId(this)
     private val player: Player? by FromFirebaseAndUpdate(androidId, ::PlayerFirebaseImpl)
     private val boss: Boss? by FromFirebaseAndUpdate("$androidId/boss", ::BossFirebaseImpl)
+    private val timestamps: Timestamps? by FromFirebaseAndUpdate(androidId, ::TimestampsFirebaseImpl)
 
     private val notifications = Notifications()
 
@@ -33,6 +34,7 @@ class NavActivity : AppCompatActivity(), Updatable {
         putSerializable("player", player)
         putSerializable("boss", boss)
         putSerializable("notifications", notifications)
+        putSerializable("timestamps", timestamps)
     }
 
     override fun update() {
