@@ -26,14 +26,15 @@ class NavActivity : AppCompatActivity(), Updatable {
     private val androidId = getAndroidId(this)
     private val player: Player? by FromFirebaseAndUpdate(androidId, ::PlayerFirebaseImpl)
     private val boss: Boss? by FromFirebaseAndUpdate("$androidId/boss", ::BossFirebaseImpl)
+    private val timestamps: Timestamps? by FromFirebaseAndUpdate(androidId, ::TimestampsFirebaseImpl)
 
     private val notifications = Notifications()
 
     fun makeBundle(): Bundle = Bundle().apply {
         putSerializable("player", player)
         putSerializable("boss", boss)
-        putInt("notificationCount", notifications.notificationCount)
         putSerializable("notifications", notifications)
+        putSerializable("timestamps", timestamps)
     }
 
     override fun update() {
