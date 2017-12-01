@@ -4,6 +4,8 @@ import edu.outside2154.gamesense.database.BoundFirebaseProperty
 import edu.outside2154.gamesense.database.FirebaseRefSnap
 import edu.outside2154.gamesense.database.SelfBoundFirebaseProperty
 import edu.outside2154.gamesense.util.toDoublePercent
+import java.io.ObjectInputStream
+import java.io.ObjectOutputStream
 import java.io.Serializable
 import java.util.*
 
@@ -92,4 +94,20 @@ class PlayerFirebaseImpl(root: FirebaseRefSnap) : PlayerBaseImpl() {
     override var intStat: Stat by SelfBoundFirebaseProperty(root, Stat(mapOf(), mapOf()))
     override var health: Double by BoundFirebaseProperty(root, PLAYER_BASE_HEALTH)
     override var currency: Int by BoundFirebaseProperty(root, 0)
+
+    private fun writeObject(s: ObjectOutputStream) = s.run {
+        writeObject(regenStat)
+        writeObject(atkStat)
+        writeObject(intStat)
+        writeDouble(health)
+        writeInt(currency)
+    }
+
+    private fun readObject(s: ObjectInputStream) = s.run {
+        regenStat = readObject() as Stat
+        atkStat = readObject() as Stat
+        intStat = readObject() as Stat
+        health = readDouble()
+        currency = readInt()
+    }
 }
