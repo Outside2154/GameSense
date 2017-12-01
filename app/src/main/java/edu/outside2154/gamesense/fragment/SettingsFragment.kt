@@ -94,7 +94,7 @@ class SettingsFragment : Fragment(), Updatable, BundleUpdatable {
                 update()
                 Toast.makeText(getActivity(), "Goals have been updated!", Toast.LENGTH_SHORT).show()
             } else {
-                Toast.makeText(getActivity(), "Please select all options!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(getActivity(), "Please select an option!", Toast.LENGTH_SHORT).show()
             }
         }
         return v
@@ -103,7 +103,7 @@ class SettingsFragment : Fragment(), Updatable, BundleUpdatable {
     override fun update() {
             val androidId = getAndroidId(activity)
 
-            if(updateAtk == true) {
+            if(updateAtk) {
                 FirebaseDatabase.getInstance().reference.child("$androidId/atkStat/current/").removeValue()
                 FirebaseDatabase.getInstance().reference.child("$androidId/atkStat/goals/").removeValue()
                 var atkInit = mutableMapOf<String, Double>()
@@ -112,7 +112,7 @@ class SettingsFragment : Fragment(), Updatable, BundleUpdatable {
                 atkCurr.put(atkSpinner?.getSelectedItem().toString(), 0.0)
                 player?.atkStat = Stat(atkInit, atkCurr)
             }
-            if(updateHth == true) {
+            if(updateHth) {
                 FirebaseDatabase.getInstance().reference.child("$androidId/regenStat/current/").removeValue()
                 FirebaseDatabase.getInstance().reference.child("$androidId/regenStat/goals/").removeValue()
                 val hthInit = mutableMapOf<String, Double>()
@@ -121,7 +121,7 @@ class SettingsFragment : Fragment(), Updatable, BundleUpdatable {
                 hthCurr.put(hthSpinner?.getSelectedItem().toString(), 0.0)
                 player?.regenStat = Stat(hthInit, hthCurr)
             }
-            if(updateInt == true) {
+            if(updateInt) {
                 FirebaseDatabase.getInstance().reference.child("$androidId/intStat/current/").removeValue()
                 FirebaseDatabase.getInstance().reference.child("$androidId/intStat/goals/").removeValue()
                 val intInit = mutableMapOf<String, Double>()
