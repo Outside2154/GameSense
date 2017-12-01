@@ -7,6 +7,8 @@ import com.google.firebase.database.ValueEventListener
 import edu.outside2154.gamesense.database.BoundFirebaseProperty
 import edu.outside2154.gamesense.database.FirebaseRefSnap
 import edu.outside2154.gamesense.database.firebaseListen
+import java.io.ObjectInputStream
+import java.io.ObjectOutputStream
 import java.io.Serializable
 
 /**
@@ -26,6 +28,16 @@ abstract class NotificationBaseImpl : Notification {
 class NotificationFirebaseImpl(root: FirebaseRefSnap) : NotificationBaseImpl() {
     override var message: String by BoundFirebaseProperty(root, "")
     override var read: Boolean by BoundFirebaseProperty(root, false)
+
+    private fun writeObject(s: ObjectOutputStream) = s.run {
+        writeObject(message)
+        writeBoolean(read)
+    }
+
+    private fun readObject(s: ObjectInputStream) = s.run {
+        message = readObject() as String
+        read = readBoolean()
+    }
 }
 
 class Notifications() : Serializable {
