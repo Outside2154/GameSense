@@ -43,7 +43,9 @@ interface Player : Serializable {
     /**
      * Handles player and boss interaction during fight.
      */
-    fun fight(boss: Boss)
+    fun fight(boss: Boss): Triple<Int, Double, Double>
+
+    fun reset()
 }
 
 abstract class PlayerBaseImpl : Player {
@@ -66,17 +68,28 @@ abstract class PlayerBaseImpl : Player {
         health = maxOf(health - damage, 0.0)
     }
 
-    override fun fight(boss: Boss) {
-        if (boss.dead) return
+    override fun fight(boss: Boss): Triple<Int, Double, Double> {
+        regenHealth()
+
+        if (boss.dead) return Triple(1, 0.0, 0.0)
 
         // User attacks
         var finalDamage = pureDamage
         if (isCritical()) finalDamage *= PLAYER_CRIT_MULT
-        boss.takeDamage(finalDamage)
+        boss?.takeDamage(finalDamage)
 
         // Boss attacks
-        if (boss.dead) return
+        if (boss.dead) return Triple(1, finalDamage, 0.0)
         takeDamage(boss.attack)
+
+        return Triple(0, finalDamage, boss.attack)
+    }
+
+    override fun reset() {
+        health = PLAYER_BASE_HEALTH
+        regenStat = regenStat.reset()
+        atkStat = atkStat.reset()
+        intStat = intStat.reset()
     }
 }
 

@@ -42,22 +42,21 @@ class SettingsFragment : Fragment() {
         val v = inflater.inflate(R.layout.fragment_settings, container, false)
 
         val atkSpinner = v.findViewById<Spinner>(R.id.atk_spinner) as Spinner
-        val atkOptions = arrayOf<String>("Exercising", "Walking", "Running", "Hiking", "Lifting Weights", "Yoga")
+        val atkOptions = arrayOf<String>("Exercise", "Walking", "Running", "Stairs - going up", "At the gym", "Bicycling")
         val atkAdapter = ArrayAdapter<String>(context, android.R.layout.simple_spinner_dropdown_item, atkOptions)
 
         val intSpinner = v.findViewById<Spinner>(R.id.int_spinner) as Spinner
-        val intOptions = arrayOf<String>("Occupation: Studying/Working", "Reading", "Playing Musical Instrument", "Drawning", "Singing")
+        val intOptions = arrayOf<String>("At work", "Computer work", "Singing", "Cooking", "Grooming")
         val intAdapter = ArrayAdapter<String>(context, android.R.layout.simple_spinner_dropdown_item, intOptions)
 
         val hthSpinner = v.findViewById<Spinner>(R.id.hth_spinner) as Spinner
-        val hthOptions = arrayOf<String>("Sleeping", "Relaxing", "Eating", "Cleaning", "Social: With Friends/Family")
+        val hthOptions = arrayOf<String>("Sleeping", "Bathing - shower", "Eating", "Cleaning", "With friends")
         val hthAdapter = ArrayAdapter<String>(context, android.R.layout.simple_spinner_dropdown_item, hthOptions)
 
         atkSpinner.setAdapter(atkAdapter)
         intSpinner.setAdapter(intAdapter)
         hthSpinner.setAdapter(hthAdapter)
         return v
-
     }
 
     // TODO: Rename method, update argument and hook method into UI event
