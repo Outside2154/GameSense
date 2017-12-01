@@ -40,8 +40,9 @@ class Stat (initGoals : Map<String, Double>, currGoals : Map<String, Double>)
         return cappedCurrent.values.sum() / divisor
     }
 
-    fun reset() {
+    fun reset() : Stat {
         current = StatItems(current.items.mapValues { (_, v) -> v * 0.0 })
+        return this
     }
 
     @Suppress("UNCHECKED_CAST")

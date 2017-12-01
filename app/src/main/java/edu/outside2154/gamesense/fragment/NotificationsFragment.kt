@@ -61,13 +61,12 @@ class NotificationsFragment : Fragment(), Updatable, BundleUpdatable {
     override fun updateBundle(bundle: Bundle) {
         bundle.run {
             messages = getSerializable("notifications") as Notifications?
-
         }
     }
 
     override fun update() {
         messages?.let {
-            val list: MutableList<Notification> = it.notifications
+            val list: MutableList<Notification> = it.notifications.asReversed()
 
             for (item in list) {
                 if (item.message.isNotEmpty())

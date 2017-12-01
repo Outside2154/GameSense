@@ -87,9 +87,9 @@ abstract class PlayerBaseImpl : Player {
 
     override fun reset() {
         health = PLAYER_BASE_HEALTH
-        regenStat.reset()
-        atkStat.reset()
-        intStat.reset()
+        regenStat = regenStat.reset()
+        atkStat = atkStat.reset()
+        intStat = intStat.reset()
     }
 }
 
