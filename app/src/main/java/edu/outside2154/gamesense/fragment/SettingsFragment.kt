@@ -56,6 +56,7 @@ class SettingsFragment : Fragment(), Updatable, BundleUpdatable {
 
         val v = inflater.inflate(R.layout.fragment_settings, container, false)
 
+
         atkSpinner = v.findViewById<Spinner>(R.id.atk_spinner) as Spinner
         val atkOptions = arrayOf<String>("Exercising", "Walking", "Running", "Hiking", "Lifting Weights", "Yoga")
         val atkAdapter = ArrayAdapter<String>(context, android.R.layout.simple_spinner_dropdown_item, atkOptions)
@@ -66,6 +67,7 @@ class SettingsFragment : Fragment(), Updatable, BundleUpdatable {
 
         hthSpinner = v.findViewById<Spinner>(R.id.hth_spinner) as Spinner
         val hthOptions = arrayOf<String>("Sleeping", "Relaxing", "Eating", "Cleaning", "Social: With Friends/Family")
+
         val hthAdapter = ArrayAdapter<String>(context, android.R.layout.simple_spinner_dropdown_item, hthOptions)
 
         atkSpinner?.setAdapter(atkAdapter)
@@ -98,6 +100,7 @@ class SettingsFragment : Fragment(), Updatable, BundleUpdatable {
             }
         }
         return v
+
     }
 
     override fun update() {
