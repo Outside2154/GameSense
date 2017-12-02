@@ -102,33 +102,33 @@ class SettingsFragment : Fragment(), Updatable, BundleUpdatable {
 
     override fun update() {
             val androidId = getAndroidId(activity)
+                if (updateAtk) {
+                    FirebaseDatabase.getInstance().reference.child("$androidId/atkStat/current/").removeValue()
+                    FirebaseDatabase.getInstance().reference.child("$androidId/atkStat/goals/").removeValue()
+                    var atkInit = mutableMapOf<String, Double>()
+                    atkInit.put(atkSpinner?.getSelectedItem().toString(), atkGoal.toDouble())
+                    var atkCurr = mutableMapOf<String, Double>()
+                    atkCurr.put(atkSpinner?.getSelectedItem().toString(), 0.0)
+                    player?.atkStat = Stat(atkInit, atkCurr)
+                }
+                if (updateHth) {
+                    FirebaseDatabase.getInstance().reference.child("$androidId/regenStat/current/").removeValue()
+                    FirebaseDatabase.getInstance().reference.child("$androidId/regenStat/goals/").removeValue()
+                    val hthInit = mutableMapOf<String, Double>()
+                    hthInit.put(hthSpinner?.getSelectedItem().toString(), hthGoal.toDouble())
+                    val hthCurr = mutableMapOf<String, Double>()
+                    hthCurr.put(hthSpinner?.getSelectedItem().toString(), 0.0)
+                    player?.regenStat = Stat(hthInit, hthCurr)
+                }
+                if (updateInt) {
+                    FirebaseDatabase.getInstance().reference.child("$androidId/intStat/current/").removeValue()
+                    FirebaseDatabase.getInstance().reference.child("$androidId/intStat/goals/").removeValue()
+                    val intInit = mutableMapOf<String, Double>()
+                    intInit.put(intSpinner?.getSelectedItem().toString(), intGoal.toDouble())
+                    val intCurr = mutableMapOf<String, Double>()
+                    intCurr.put(intSpinner?.getSelectedItem().toString(), 0.0)
+                    player?.intStat = Stat(intInit, intCurr)
+                }
 
-            if(updateAtk) {
-                FirebaseDatabase.getInstance().reference.child("$androidId/atkStat/current/").removeValue()
-                FirebaseDatabase.getInstance().reference.child("$androidId/atkStat/goals/").removeValue()
-                var atkInit = mutableMapOf<String, Double>()
-                atkInit.put(atkSpinner?.getSelectedItem().toString(), atkGoal.toDouble())
-                var atkCurr = mutableMapOf<String, Double>()
-                atkCurr.put(atkSpinner?.getSelectedItem().toString(), 0.0)
-                player?.atkStat = Stat(atkInit, atkCurr)
-            }
-            if(updateHth) {
-                FirebaseDatabase.getInstance().reference.child("$androidId/regenStat/current/").removeValue()
-                FirebaseDatabase.getInstance().reference.child("$androidId/regenStat/goals/").removeValue()
-                val hthInit = mutableMapOf<String, Double>()
-                hthInit.put(hthSpinner?.getSelectedItem().toString(), hthGoal.toDouble())
-                val hthCurr = mutableMapOf<String, Double>()
-                hthCurr.put(hthSpinner?.getSelectedItem().toString(), 0.0)
-                player?.regenStat = Stat(hthInit, hthCurr)
-            }
-            if(updateInt) {
-                FirebaseDatabase.getInstance().reference.child("$androidId/intStat/current/").removeValue()
-                FirebaseDatabase.getInstance().reference.child("$androidId/intStat/goals/").removeValue()
-                val intInit = mutableMapOf<String, Double>()
-                intInit.put(intSpinner?.getSelectedItem().toString(), intGoal.toDouble())
-                val intCurr = mutableMapOf<String, Double>()
-                intCurr.put(intSpinner?.getSelectedItem().toString(), 0.0)
-                player?.intStat = Stat(intInit, intCurr)
-            }
     }
 }

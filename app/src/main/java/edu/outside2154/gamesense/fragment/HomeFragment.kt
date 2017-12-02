@@ -3,21 +3,22 @@ package edu.outside2154.gamesense.fragment
 import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 
 import edu.outside2154.gamesense.R
-import edu.outside2154.gamesense.database.BoundFirebaseProperty
-import edu.outside2154.gamesense.database.FirebaseRefSnap
-import edu.outside2154.gamesense.database.FromFirebaseAndUpdate
-import edu.outside2154.gamesense.database.firebaseListen
+import edu.outside2154.gamesense.database.*
 import edu.outside2154.gamesense.model.*
 import edu.outside2154.gamesense.util.BundleUpdatable
 import edu.outside2154.gamesense.util.Updatable
 import edu.outside2154.gamesense.util.getAndroidId
 import edu.outside2154.gamesense.util.toIntPercent
 import kotlinx.android.synthetic.main.fragment_home.*
+
+const val ONE_DAY = 86400
+const val ONE_WEEK = 604800
 
 /**
  * A simple [Fragment] subclass.
@@ -28,11 +29,11 @@ import kotlinx.android.synthetic.main.fragment_home.*
  * create an instance of this fragment.
  */
 class HomeFragment : Fragment(), Updatable, BundleUpdatable {
-    private val androidId = getAndroidId(activity) as FirebaseRefSnap
+    private lateinit var androidId : String
     private var player: Player? = null
     private var boss: Boss? = null
     private var messages: Notifications? = null
-    private var lastBattleTime: Int by BoundFirebaseProperty(androidId, 0)
+    private var timestamps: Timestamps? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,10 +41,8 @@ class HomeFragment : Fragment(), Updatable, BundleUpdatable {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-
-        return inflater.inflate(R.layout.fragment_home, container, false)
-    }
+                              savedInstanceState: Bundle?): View? =
+        inflater.inflate(R.layout.fragment_home, container, false)
 
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
@@ -56,17 +55,34 @@ class HomeFragment : Fragment(), Updatable, BundleUpdatable {
             player = getSerializable("player") as Player?
             boss = getSerializable("boss") as Boss?
             messages = getSerializable("notifications") as Notifications?
-
+            timestamps = getSerializable("timestamps") as Timestamps?
         }
     }
 
     override fun update() {
-        var timeDiff = System.currentTimeMillis()/1000 - lastBattleTime
 
-        if (lastBattleTime != 0 && timeDiff < 86400) {
+        var currentTime = System.currentTimeMillis()/1000
+        var resetTimeDiff = currentTime - (timestamps?.lastResetTime ?: 0)
+
+        if ((timestamps?.lastResetTime ?: 0) != 0 && ONE_WEEK < resetTimeDiff) {
+            if (boss?.dead == true) {
+                createNotification("You beat the boss last week! Congratulations!")
+                boss?.reset(true)
+            }
+            else {
+                createNotification("You lost against the boss last week! Better luck this week.")
+                boss?.reset(false)
+            }
+
+            player?.reset()
+
+            timestamps?.lastResetTime = currentTime.toInt()
+        }
+
+        var battleTimeDiff = currentTime - (timestamps?.lastBattleTime ?: 0)
+
+        if ((timestamps?.lastBattleTime ?: 0) != 0 && ONE_DAY < battleTimeDiff && player?.dead == false) {
             var fightData = player?.fight(boss!!)
-
-//            var fightData = Triple(0, 5.0, 10.0)
 
             if (fightData?.first == 1)
                 createNotification("Congratulations! You killed the boss!")
@@ -78,6 +94,8 @@ class HomeFragment : Fragment(), Updatable, BundleUpdatable {
 
             if (player?.dead == true)
                 createNotification("You're dead! Game over!")
+
+            timestamps?.lastBattleTime = currentTime.toInt()
         }
 
         // Update all progress bars
@@ -95,8 +113,8 @@ class HomeFragment : Fragment(), Updatable, BundleUpdatable {
         }
     }
 
-
     fun createNotification(message: String) {
+        var androidId = getAndroidId(activity)
 
         firebaseListen("$androidId/messages/message_" + messages?.notificationCount.toString()) {
             val notification = NotificationFirebaseImpl(it)
@@ -104,7 +122,6 @@ class HomeFragment : Fragment(), Updatable, BundleUpdatable {
             notification.read = false
 
             messages?.notifications?.add(notification)
-
         }
 
         messages?.let {
