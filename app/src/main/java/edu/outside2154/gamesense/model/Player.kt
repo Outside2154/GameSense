@@ -14,9 +14,9 @@ const val PLAYER_BASE_ATTACK = 100.0
 const val PLAYER_CRIT_MULT = 2.0
 
 interface Player : Serializable {
-    val regenStat: Stat
-    val atkStat: Stat
-    val intStat: Stat
+    var regenStat: Stat
+    var atkStat: Stat
+    var intStat: Stat
     val health: Double
     val currency: Int
 
