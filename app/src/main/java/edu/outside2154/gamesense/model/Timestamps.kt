@@ -2,11 +2,8 @@ package edu.outside2154.gamesense.model
 
 import edu.outside2154.gamesense.database.BoundFirebaseProperty
 import edu.outside2154.gamesense.database.FirebaseRefSnap
-<<<<<<< HEAD
-=======
 import java.io.ObjectInputStream
 import java.io.ObjectOutputStream
->>>>>>> master
 import java.io.Serializable
 
 interface Timestamps : Serializable {
@@ -22,8 +19,6 @@ abstract class TimestampsBaseImpl : Timestamps {
 class TimestampsFirebaseImpl(root: FirebaseRefSnap) : TimestampsBaseImpl() {
     override var lastBattleTime: Int by BoundFirebaseProperty(root, 0)
     override var lastResetTime: Int by BoundFirebaseProperty(root, 0)
-<<<<<<< HEAD
-=======
 
     private fun writeObject(s: ObjectOutputStream) = s.run {
         writeInt(lastBattleTime)
@@ -34,5 +29,4 @@ class TimestampsFirebaseImpl(root: FirebaseRefSnap) : TimestampsBaseImpl() {
         lastBattleTime = readInt()
         lastResetTime = readInt()
     }
->>>>>>> master
 }

@@ -56,19 +56,6 @@ class SettingsFragment : Fragment(), Updatable, BundleUpdatable {
 
         val v = inflater.inflate(R.layout.fragment_settings, container, false)
 
-<<<<<<< HEAD
-        val atkSpinner = v.findViewById<Spinner>(R.id.atk_spinner) as Spinner
-        val atkOptions = arrayOf<String>("Exercise", "Walking", "Running", "Stairs - going up", "At the gym", "Bicycling")
-        val atkAdapter = ArrayAdapter<String>(context, android.R.layout.simple_spinner_dropdown_item, atkOptions)
-
-        val intSpinner = v.findViewById<Spinner>(R.id.int_spinner) as Spinner
-        val intOptions = arrayOf<String>("At work", "Computer work", "Singing", "Cooking", "Grooming")
-        val intAdapter = ArrayAdapter<String>(context, android.R.layout.simple_spinner_dropdown_item, intOptions)
-
-        val hthSpinner = v.findViewById<Spinner>(R.id.hth_spinner) as Spinner
-        val hthOptions = arrayOf<String>("Sleeping", "Bathing - shower", "Eating", "Cleaning", "With friends")
-=======
-
         atkSpinner = v.findViewById<Spinner>(R.id.atk_spinner) as Spinner
         val atkOptions = arrayOf<String>("Exercising", "Walking", "Running", "Hiking", "Lifting Weights", "Yoga")
         val atkAdapter = ArrayAdapter<String>(context, android.R.layout.simple_spinner_dropdown_item, atkOptions)
@@ -79,8 +66,6 @@ class SettingsFragment : Fragment(), Updatable, BundleUpdatable {
 
         hthSpinner = v.findViewById<Spinner>(R.id.hth_spinner) as Spinner
         val hthOptions = arrayOf<String>("Sleeping", "Relaxing", "Eating", "Cleaning", "Social: With Friends/Family")
-
->>>>>>> master
         val hthAdapter = ArrayAdapter<String>(context, android.R.layout.simple_spinner_dropdown_item, hthOptions)
 
         atkSpinner?.setAdapter(atkAdapter)
