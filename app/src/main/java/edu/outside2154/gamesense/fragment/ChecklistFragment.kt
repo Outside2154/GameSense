@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import edu.outside2154.gamesense.R
 import edu.outside2154.gamesense.model.*
 import edu.outside2154.gamesense.util.BundleUpdatable
@@ -47,20 +48,39 @@ class ChecklistFragment : Fragment(), Updatable, BundleUpdatable {
         }
     }
 
+    private fun updateText(stat: Stat,
+                           activityValue: TextView,
+                           userAmtValue: TextView,
+                           goalAmtValue: TextView) {
+        try {
+            activityValue.text = stat.goals.items.keys.first().toString()
+            userAmtValue.text = stat.current.items.values.first().toString()
+            goalAmtValue.text = stat.goals.items.values.first().toString()
+        } catch (e: NoSuchElementException) {
+            activityValue.text = "No goal :("
+            userAmtValue.text = "0"
+            goalAmtValue.text = "0"
+        }
+    }
+
     override fun update() {
         // Update all progress bars
         player?.let {
-            health_activity_value.text = it.regenStat.goals.items.keys.first().toString()
-            attack_activity_value.text = it.atkStat.goals.items.keys.first().toString()
-            intel_activity_value.text = it.intStat.goals.items.keys.first().toString()
-
-            health_user_amt_value.text = it.regenStat.current.items.values.first().toString()
-            attack_user_amt_value.text = it.atkStat.current.items.values.first().toString()
-            intel_user_amt_value.text = it.intStat.current.items.values.first().toString()
-
-            health_goal_amt_value.text = it.regenStat.goals.items.values.first().toString()
-            attack_goal_amt_value.text = it.atkStat.goals.items.values.first().toString()
-            intel_goal_amt_value.text = it.intStat.goals.items.values.first().toString()
+            updateText(
+                    it.regenStat,
+                    health_activity_value,
+                    health_user_amt_value,
+                    health_goal_amt_value)
+            updateText(
+                    it.atkStat,
+                    attack_activity_value,
+                    attack_user_amt_value,
+                    attack_goal_amt_value)
+            updateText(
+                    it.intStat,
+                    intel_activity_value,
+                    intel_user_amt_value,
+                    intel_goal_amt_value)
 
             health_progress.progress = it.regenStat.calcStat()?.toIntPercent() ?: 0
             attack_progress.progress = it.atkStat.calcStat()?.toIntPercent() ?: 0
