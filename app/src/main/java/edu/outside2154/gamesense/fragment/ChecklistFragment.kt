@@ -62,7 +62,7 @@ class ChecklistFragment : Fragment(), Updatable, BundleUpdatable {
             attack_goal_amt_value.text = it.atkStat.goals.items.values.first().toString()
             intel_goal_amt_value.text = it.intStat.goals.items.values.first().toString()
 
-            health_progress.progress = it.health.toInt()
+            health_progress.progress = it.regenStat.calcStat()?.toIntPercent() ?: 0
             attack_progress.progress = it.atkStat.calcStat()?.toIntPercent() ?: 0
             intel_progress.progress = it.intStat.calcStat()?.toIntPercent() ?: 0
         }

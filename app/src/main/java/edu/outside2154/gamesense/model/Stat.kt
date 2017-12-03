@@ -3,6 +3,7 @@ package edu.outside2154.gamesense.model
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseReference
 import edu.outside2154.gamesense.database.FirebaseTransform
+import java.io.Serializable
 
 enum class StatType(val activities: Set<String>) {
     HEALTH(setOf("Sleeping", "Eating", "Walking")),
@@ -11,9 +12,9 @@ enum class StatType(val activities: Set<String>) {
 }
 
 class Stat (initGoals : Map<String, Double>, currGoals : Map<String, Double>)
-    : FirebaseTransform<Stat> {
+    : FirebaseTransform<Stat>, Serializable {
 
-    data class StatItems(val items: Map<String, Double>) {
+    data class StatItems(val items: Map<String, Double>) : Serializable {
         operator fun plus(other: StatItems): StatItems {
             return StatItems(items.mapValues { (k, v) ->
                 v + (other.items[k] ?: 0.0)

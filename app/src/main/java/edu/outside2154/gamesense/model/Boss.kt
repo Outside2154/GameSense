@@ -2,6 +2,8 @@ package edu.outside2154.gamesense.model
 
 import edu.outside2154.gamesense.database.BoundFirebaseProperty
 import edu.outside2154.gamesense.database.FirebaseRefSnap
+import java.io.ObjectInputStream
+import java.io.ObjectOutputStream
 import java.io.Serializable
 
 const val BOSS_BASE_HEALTH = 100.0
@@ -51,4 +53,16 @@ class BossFirebaseImpl(root: FirebaseRefSnap) : BossBaseImpl() {
     override var health: Double by BoundFirebaseProperty(root, BOSS_BASE_HEALTH)
     override var attack: Double by BoundFirebaseProperty(root, BOSS_BASE_ATTACK)
     override var level: Int by BoundFirebaseProperty(root, 0)
+
+    private fun writeObject(s: ObjectOutputStream) = s.run {
+        writeDouble(health)
+        writeDouble(attack)
+        writeInt(level)
+    }
+
+    private fun readObject(s: ObjectInputStream) = s.run {
+        health = readDouble()
+        attack = readDouble()
+        level = readInt()
+    }
 }
