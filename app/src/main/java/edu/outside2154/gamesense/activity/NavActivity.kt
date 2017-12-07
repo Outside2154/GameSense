@@ -10,6 +10,7 @@ import android.view.MenuItem
 
 import edu.outside2154.gamesense.R
 import edu.outside2154.gamesense.database.FromFirebaseAndUpdate
+import edu.outside2154.gamesense.database.firebaseListen
 import edu.outside2154.gamesense.fragment.ChecklistFragment
 import edu.outside2154.gamesense.fragment.HomeFragment
 import edu.outside2154.gamesense.fragment.NotificationsFragment
@@ -23,10 +24,9 @@ class NavActivity : AppCompatActivity(), Updatable {
     private lateinit var drawerToggle: ActionBarDrawerToggle
     private var fragment: Fragment? = null
 
-    private val androidId = getAndroidId(this)
-    private val player: Player? by FromFirebaseAndUpdate(androidId, ::PlayerFirebaseImpl)
-    private val boss: Boss? by FromFirebaseAndUpdate("$androidId/boss", ::BossFirebaseImpl)
-    private val timestamps: Timestamps? by FromFirebaseAndUpdate(androidId, ::TimestampsFirebaseImpl)
+    private var player: Player? = null
+    private var boss: Boss? = null
+    private var timestamps: Timestamps? = null
 
     private val notifications = Notifications()
 
@@ -46,6 +46,14 @@ class NavActivity : AppCompatActivity(), Updatable {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_nav)
+
+        val androidId = getAndroidId(this)
+        firebaseListen(androidId) {
+            player = PlayerFirebaseImpl(it)
+            boss = BossFirebaseImpl(it.child("boss"))
+            timestamps = TimestampsFirebaseImpl(it)
+            update()
+        }
 
         notifications.getNotifications(androidId, notifications)
 

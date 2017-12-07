@@ -61,55 +61,60 @@ class HomeFragment : Fragment(), Updatable, BundleUpdatable {
 
     override fun update() {
 
-        var currentTime = System.currentTimeMillis()/1000
-        var resetTimeDiff = currentTime - (timestamps?.lastResetTime ?: 0)
+        timestamps?.let { timestamps ->
+            var currentTime = System.currentTimeMillis() / 1000
+            var resetTimeDiff = currentTime - (timestamps.lastResetTime)
 
-        if ((timestamps?.lastResetTime ?: 0) != 0 && ONE_WEEK < resetTimeDiff) {
-            if (boss?.dead == true) {
-                createNotification("You beat the boss last week! Congratulations!")
-                boss?.reset(true)
+
+            if (timestamps.lastResetTime != 0 && ONE_WEEK < resetTimeDiff) {
+                if (boss?.dead == true) {
+                    createNotification("You beat the boss last week! Congratulations!")
+                    boss?.reset(true)
+                } else {
+                    createNotification("You lost against the boss last week! Better luck this week.")
+                    boss?.reset(false)
+                }
+
+                player?.reset()
+
+                timestamps.lastResetTime = currentTime.toInt()
             }
-            else {
-                createNotification("You lost against the boss last week! Better luck this week.")
-                boss?.reset(false)
-            }
-
-            player?.reset()
-
-            timestamps?.lastResetTime = currentTime.toInt()
-        }
-
-        var battleTimeDiff = currentTime - (timestamps?.lastBattleTime ?: 0)
-
-        if ((timestamps?.lastBattleTime ?: 0) != 0 && ONE_DAY < battleTimeDiff && player?.dead == false) {
-            var fightData = player?.fight(boss!!)
-
-            if (fightData?.first == 1)
-                createNotification("Congratulations! You killed the boss!")
-
-            else {
-                createNotification("You did " + fightData?.second.toString() + " damage to the boss!")
-                createNotification("The boss did " + fightData?.third.toString() + " damage to you!")
+            if (timestamps.lastResetTime == 0) {
+                timestamps.lastResetTime = currentTime.toInt()
             }
 
-            if (player?.dead == true)
-                createNotification("You're dead! Game over!")
+            var battleTimeDiff = currentTime - (timestamps.lastBattleTime)
 
-            timestamps?.lastBattleTime = currentTime.toInt()
-        }
+            if (ONE_DAY < battleTimeDiff && player?.dead == false) {
+                var fightData = player?.fight(boss!!)
 
-        // Update all progress bars
-        player?.let {
-            points_value.text = it.currency.toString()
-            hp_lb.progress = it.health.toInt()
-            atk_lb.progress = it.atkStat.calcStat()?.toIntPercent() ?: 0
-            int_lb.progress = it.intStat.calcStat()?.toIntPercent() ?: 0
-        }
+                if (fightData?.first == 1)
+                    createNotification("Congratulations! You killed the boss!")
+                else {
+                    createNotification("You did " + fightData?.second.toString() + " damage to the boss!")
+                    createNotification("The boss did " + fightData?.third.toString() + " damage to you!")
+                }
 
-        boss?.let {
-            boss_level_value.text = it.level.toString()
-            boss_hp_lb.progress = it.health.toInt()
-            boss_atk_lb.progress = it.attack.toInt()
+                if (player?.dead == true)
+                    createNotification("You're dead! Game over!")
+
+                timestamps.lastBattleTime = currentTime.toInt()
+            }
+
+            // Update all progress bars
+            player?.let {
+                points_value.text = it.currency.toString()
+                hp_lb.progress = it.health.toInt()
+                // do this in extrasensory
+                // atk_lb.progress = it.atkStat.calcStat()?.toIntPercent() ?: 0
+                // int_lb.progress = it.intStat.calcStat()?.toIntPercent() ?: 0
+            }
+
+            boss?.let {
+                boss_level_value.text = it.level.toString()
+                boss_hp_lb.progress = it.health.toInt()
+                boss_atk_lb.progress = it.attack.toInt()
+            }
         }
     }
 
