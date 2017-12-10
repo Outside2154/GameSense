@@ -12,6 +12,7 @@ import edu.outside2154.gamesense.model.*
 import edu.outside2154.gamesense.util.BundleUpdatable
 import edu.outside2154.gamesense.util.Updatable
 import edu.outside2154.gamesense.util.getAndroidId
+import edu.outside2154.gamesense.util.toIntPercent
 import kotlinx.android.synthetic.main.fragment_home.*
 
 const val ONE_DAY = 86400
@@ -103,8 +104,8 @@ class HomeFragment : Fragment(), Updatable, BundleUpdatable {
                 points_value.text = it.currency.toString()
                 hp_lb.progress = it.health.toInt()
                 // do this in extrasensory
-                // atk_lb.progress = it.atkStat.calcStat()?.toIntPercent() ?: 0
-                // int_lb.progress = it.intStat.calcStat()?.toIntPercent() ?: 0
+                 atk_lb.progress = it.atkStat.calcStat()?.toIntPercent() ?: 0
+                 int_lb.progress = it.intStat.calcStat()?.toIntPercent() ?: 0
             }
 
             boss?.let {

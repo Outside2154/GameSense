@@ -20,7 +20,6 @@ import kotlinx.android.synthetic.main.toolbar.*
 import java.util.*
 
 class NavActivity : AppCompatActivity(), Updatable {
-    private lateinit var extraSensory: ExtraSensory
     private lateinit var dataHandler: DataHandlerFirebaseImpl
     private lateinit var drawerToggle: ActionBarDrawerToggle
     private var fragment: Fragment? = null
@@ -31,19 +30,19 @@ class NavActivity : AppCompatActivity(), Updatable {
 
     private val notifications = Notifications()
 
-    fun makeBundle(): Bundle = Bundle().apply {
+    private fun makeBundle(): Bundle = Bundle().apply {
         putSerializable("player", player)
         putSerializable("boss", boss)
         putSerializable("notifications", notifications)
         putSerializable("timestamps", timestamps)
     }
 
-    fun updateStats() {
+    private fun updateStats() {
         val data = dataHandler.pullData()
         player?.let {
-            it.intStat.updateCurrent(data)
-            it.atkStat.updateCurrent(data)
-            it.regenStat.updateCurrent(data)
+            it.intStat += data
+            it.atkStat += data
+            it.regenStat += data
         }
     }
 
@@ -58,25 +57,22 @@ class NavActivity : AppCompatActivity(), Updatable {
         setContentView(R.layout.activity_nav)
 
         val androidId = getAndroidId(this)
-        firebaseListen(androidId) {
-            player = PlayerFirebaseImpl(it)
-            boss = BossFirebaseImpl(it.child("boss"))
-            timestamps = TimestampsFirebaseImpl(it)
+        val extraSensory = ExtraSensoryImpl(this)
+        firebaseListen(androidId) { root ->
+            player = PlayerFirebaseImpl(root)
+            boss = BossFirebaseImpl(root.child("boss"))
+            timestamps = TimestampsFirebaseImpl(root)
+
+            extraSensory.users?.let {
+                dataHandler = DataHandlerFirebaseImpl(it.first(), root, ::Date)
+                updateStats()
+                update()
+            }
+
             update()
         }
 
         notifications.getNotifications(androidId, notifications)
-
-        // Set up the extraSensory
-        extraSensory = ExtraSensoryImpl(this)
-        firebaseListen(androidId) {
-            root ->
-            extraSensory.users?.let {
-                dataHandler = DataHandlerFirebaseImpl(it.first(), root, ::Date)
-                updateStats()
-            }
-
-        }
 
         // Set a Toolbar to replace the ActionBar.
         setSupportActionBar(gs_toolbar)

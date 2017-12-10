@@ -2,6 +2,7 @@ package edu.outside2154.gamesense.util
 
 import android.content.Context
 import android.os.Environment
+import org.json.JSONArray
 import org.json.JSONObject
 import java.io.File
 import java.util.*
@@ -112,10 +113,14 @@ class ExtraSensoryFileImpl constructor(private val file: File,
      */
     override val info: ExtraSensoryInfo?
         get() {
-            val json = JSONObject(file.readText())
-            val jsonLabels = json.getJSONArray(JSON_FIELD_LABEL_NAMES) ?: return null
-            val jsonProbs = json.getJSONArray(JSON_FIELD_LABEL_PROBABILITIES) ?: return null
-            val jsonLoc = json.getJSONArray(JSON_FIELD_LOCATION_COORDINATES) ?: return null
+            val json = tryOrNull { JSONObject(file.readText()) }
+                    ?: return null
+            val jsonLabels = tryOrNull { json.getJSONArray(JSON_FIELD_LABEL_NAMES) }
+                    ?: return null
+            val jsonProbs = tryOrNull { json.getJSONArray(JSON_FIELD_LABEL_PROBABILITIES) }
+                    ?: return null
+            val jsonLoc = tryOrNull { json.getJSONArray(JSON_FIELD_LOCATION_COORDINATES) }
+                    ?: return null
 
             // Sanity check the JSON.
             if (jsonLabels.length() != jsonProbs.length()) return null

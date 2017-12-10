@@ -23,6 +23,11 @@ class Stat (initGoals : Map<String, Double>, currGoals : Map<String, Double>)
         current += StatItems(data)
     }
 
+    operator fun plus(data: Map<String, Double>): Stat {
+        updateCurrent(data)
+        return this
+    }
+
     fun calcStat(): Double? {
         val divisor = goals.items.values.sum()
         if (divisor == 0.0) return null
