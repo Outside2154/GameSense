@@ -18,7 +18,7 @@ abstract class DataHandlerBaseImpl(
     abstract var lastUpdateTime: Date
     private val freshData: Map<String, Double>
         get() = user.files
-                .filter { it.creationTime > lastUpdateTime }
+                .filter { it.creationTime.after(lastUpdateTime) }
                 .mapNotNull { it.info?.topPrediction }
                 .groupingBy { it }
                 .eachCount()

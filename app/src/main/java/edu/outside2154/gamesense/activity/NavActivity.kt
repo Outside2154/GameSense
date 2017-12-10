@@ -5,11 +5,9 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
 import android.view.MenuItem
 
 import edu.outside2154.gamesense.R
-import edu.outside2154.gamesense.database.FromFirebaseAndUpdate
 import edu.outside2154.gamesense.database.firebaseListen
 import edu.outside2154.gamesense.fragment.ChecklistFragment
 import edu.outside2154.gamesense.fragment.HomeFragment
@@ -19,8 +17,11 @@ import edu.outside2154.gamesense.model.*
 import edu.outside2154.gamesense.util.*
 import kotlinx.android.synthetic.main.activity_nav.*
 import kotlinx.android.synthetic.main.toolbar.*
+import java.util.*
 
 class NavActivity : AppCompatActivity(), Updatable {
+    private lateinit var extraSensory: ExtraSensory
+    private lateinit var dataHandler: DataHandlerFirebaseImpl
     private lateinit var drawerToggle: ActionBarDrawerToggle
     private var fragment: Fragment? = null
 
@@ -35,6 +36,15 @@ class NavActivity : AppCompatActivity(), Updatable {
         putSerializable("boss", boss)
         putSerializable("notifications", notifications)
         putSerializable("timestamps", timestamps)
+    }
+
+    fun updateStats() {
+        val data = dataHandler.pullData()
+        player?.let {
+            it.intStat.updateCurrent(data)
+            it.atkStat.updateCurrent(data)
+            it.regenStat.updateCurrent(data)
+        }
     }
 
     override fun update() {
@@ -56,6 +66,17 @@ class NavActivity : AppCompatActivity(), Updatable {
         }
 
         notifications.getNotifications(androidId, notifications)
+
+        // Set up the extraSensory
+        extraSensory = ExtraSensoryImpl(this)
+        firebaseListen(androidId) {
+            root ->
+            extraSensory.users?.let {
+                dataHandler = DataHandlerFirebaseImpl(it.first(), root, ::Date)
+                updateStats()
+            }
+
+        }
 
         // Set a Toolbar to replace the ActionBar.
         setSupportActionBar(gs_toolbar)

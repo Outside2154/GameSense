@@ -1,9 +1,7 @@
 package edu.outside2154.gamesense.fragment
 
-import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,7 +12,6 @@ import edu.outside2154.gamesense.model.*
 import edu.outside2154.gamesense.util.BundleUpdatable
 import edu.outside2154.gamesense.util.Updatable
 import edu.outside2154.gamesense.util.getAndroidId
-import edu.outside2154.gamesense.util.toIntPercent
 import kotlinx.android.synthetic.main.fragment_home.*
 
 const val ONE_DAY = 86400
