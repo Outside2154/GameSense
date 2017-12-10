@@ -62,7 +62,7 @@ class SettingsFragment : Fragment(), Updatable, BundleUpdatable {
         val atkAdapter = ArrayAdapter<String>(context, android.R.layout.simple_spinner_dropdown_item, atkOptions)
 
         intSpinner = v.findViewById<Spinner>(R.id.int_spinner) as Spinner
-        val intOptions = arrayOf<String>("Occupation: Studying/Working", "Reading", "Playing Musical Instrument", "Drawing", "Singing")
+        val intOptions = arrayOf<String>("Reading", "Playing Musical Instrument", "Drawing", "Singing")
         val intAdapter = ArrayAdapter<String>(context, android.R.layout.simple_spinner_dropdown_item, intOptions)
 
         hthSpinner = v.findViewById<Spinner>(R.id.hth_spinner) as Spinner

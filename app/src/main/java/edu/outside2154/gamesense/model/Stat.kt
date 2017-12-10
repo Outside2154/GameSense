@@ -5,12 +5,6 @@ import com.google.firebase.database.DatabaseReference
 import edu.outside2154.gamesense.database.FirebaseTransform
 import java.io.Serializable
 
-enum class StatType(val activities: Set<String>) {
-    HEALTH(setOf("Sleeping", "Eating", "Walking")),
-    INTELLIGENCE(setOf("Lab work", "Computer work", "In class")),
-    ATTACK(setOf("Exercise", "Running", "Bicycling"))
-}
-
 class Stat (initGoals : Map<String, Double>, currGoals : Map<String, Double>)
     : FirebaseTransform<Stat>, Serializable {
 
