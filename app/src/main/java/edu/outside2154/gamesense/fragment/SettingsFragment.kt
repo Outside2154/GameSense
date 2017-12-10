@@ -1,23 +1,19 @@
 package edu.outside2154.gamesense.fragment
 
-import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 
 import edu.outside2154.gamesense.R
-import edu.outside2154.gamesense.model.Boss
 import edu.outside2154.gamesense.model.Player
 import edu.outside2154.gamesense.model.Stat
 import edu.outside2154.gamesense.util.BundleUpdatable
 import edu.outside2154.gamesense.util.Updatable
 import edu.outside2154.gamesense.util.getAndroidId
-import kotlinx.android.synthetic.*
 
 /**
  * A simple [Fragment] subclass.
@@ -62,11 +58,11 @@ class SettingsFragment : Fragment(), Updatable, BundleUpdatable {
         val atkAdapter = ArrayAdapter<String>(context, android.R.layout.simple_spinner_dropdown_item, atkOptions)
 
         intSpinner = v.findViewById<Spinner>(R.id.int_spinner) as Spinner
-        val intOptions = arrayOf<String>("Reading", "Playing Musical Instrument", "Drawing", "Singing")
+        val intOptions = arrayOf<String>("Cooking", "Reading", "Playing Musical Instrument", "Drawing", "Singing")
         val intAdapter = ArrayAdapter<String>(context, android.R.layout.simple_spinner_dropdown_item, intOptions)
 
         hthSpinner = v.findViewById<Spinner>(R.id.hth_spinner) as Spinner
-        val hthOptions = arrayOf<String>("Sleeping", "Relaxing", "Eating", "Cleaning", "Social: With Friends/Family")
+        val hthOptions = arrayOf<String>("Outside", "Sleeping", "Relaxing", "Eating", "Cleaning")
 
         val hthAdapter = ArrayAdapter<String>(context, android.R.layout.simple_spinner_dropdown_item, hthOptions)
 

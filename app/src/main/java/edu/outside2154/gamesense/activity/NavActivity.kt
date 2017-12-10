@@ -5,11 +5,9 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
 import android.view.MenuItem
 
 import edu.outside2154.gamesense.R
-import edu.outside2154.gamesense.database.FromFirebaseAndUpdate
 import edu.outside2154.gamesense.database.firebaseListen
 import edu.outside2154.gamesense.fragment.ChecklistFragment
 import edu.outside2154.gamesense.fragment.HomeFragment
@@ -19,8 +17,10 @@ import edu.outside2154.gamesense.model.*
 import edu.outside2154.gamesense.util.*
 import kotlinx.android.synthetic.main.activity_nav.*
 import kotlinx.android.synthetic.main.toolbar.*
+import java.util.*
 
 class NavActivity : AppCompatActivity(), Updatable {
+    private lateinit var dataHandler: DataHandlerFirebaseImpl
     private lateinit var drawerToggle: ActionBarDrawerToggle
     private var fragment: Fragment? = null
 
@@ -30,11 +30,20 @@ class NavActivity : AppCompatActivity(), Updatable {
 
     private val notifications = Notifications()
 
-    fun makeBundle(): Bundle = Bundle().apply {
+    private fun makeBundle(): Bundle = Bundle().apply {
         putSerializable("player", player)
         putSerializable("boss", boss)
         putSerializable("notifications", notifications)
         putSerializable("timestamps", timestamps)
+    }
+
+    private fun updateStats() {
+        val data = dataHandler.pullData()
+        player?.let {
+            it.intStat += data
+            it.atkStat += data
+            it.regenStat += data
+        }
     }
 
     override fun update() {
@@ -48,10 +57,18 @@ class NavActivity : AppCompatActivity(), Updatable {
         setContentView(R.layout.activity_nav)
 
         val androidId = getAndroidId(this)
-        firebaseListen(androidId) {
-            player = PlayerFirebaseImpl(it)
-            boss = BossFirebaseImpl(it.child("boss"))
-            timestamps = TimestampsFirebaseImpl(it)
+        val extraSensory = ExtraSensoryImpl(this)
+        firebaseListen(androidId) { root ->
+            player = PlayerFirebaseImpl(root)
+            boss = BossFirebaseImpl(root.child("boss"))
+            timestamps = TimestampsFirebaseImpl(root)
+
+            extraSensory.users?.let {
+                dataHandler = DataHandlerFirebaseImpl(it.first(), root, ::Date)
+                updateStats()
+                update()
+            }
+
             update()
         }
 

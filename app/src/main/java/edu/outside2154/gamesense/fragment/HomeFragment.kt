@@ -1,9 +1,7 @@
 package edu.outside2154.gamesense.fragment
 
-import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -106,8 +104,8 @@ class HomeFragment : Fragment(), Updatable, BundleUpdatable {
                 points_value.text = it.currency.toString()
                 hp_lb.progress = it.health.toInt()
                 // do this in extrasensory
-                // atk_lb.progress = it.atkStat.calcStat()?.toIntPercent() ?: 0
-                // int_lb.progress = it.intStat.calcStat()?.toIntPercent() ?: 0
+                 atk_lb.progress = it.atkStat.calcStat()?.toIntPercent() ?: 0
+                 int_lb.progress = it.intStat.calcStat()?.toIntPercent() ?: 0
             }
 
             boss?.let {

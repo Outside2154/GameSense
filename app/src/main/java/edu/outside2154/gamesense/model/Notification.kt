@@ -11,10 +11,6 @@ import java.io.ObjectInputStream
 import java.io.ObjectOutputStream
 import java.io.Serializable
 
-/**
- * Created by TyDewes on 11/18/17.
- */
-
 interface Notification : Serializable {
     val message: String
     val read: Boolean

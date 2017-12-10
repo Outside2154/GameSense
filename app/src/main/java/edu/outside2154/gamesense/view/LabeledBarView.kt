@@ -2,7 +2,6 @@ package edu.outside2154.gamesense.view
 
 import android.content.Context
 import android.util.AttributeSet
-import android.util.TypedValue
 import android.view.Gravity
 import android.widget.LinearLayout
 import android.widget.ProgressBar

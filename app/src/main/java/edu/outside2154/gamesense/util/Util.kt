@@ -26,3 +26,16 @@ fun Double.toDoublePercent(): Double? = when {
     this > 1.0 -> null
     else -> (this * 100)
 }
+
+/**
+ * Tries [f], returning null if an exception is thrown.
+ * @param f The function to try.
+ * @return The return value of [f] if no exceptions are thrown, null otherwise
+ */
+fun <T> tryOrNull(f: () -> T): T? {
+    return try {
+        f()
+    } catch (e: Exception) {
+        null
+    }
+}
